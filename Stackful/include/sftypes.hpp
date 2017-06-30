@@ -6,11 +6,8 @@
 #include <sstream>		// stringstream
 #include <vector>
 
-// The size of our data type
+// The size of our basic number type
 typedef uint32_t SFInteger_t;
-
-// TODO: This should be a fixed size vector
-typedef std::vector<std::string> SFAtomMap_t;
 
 // Forward declarations
 class SFLiteral;
@@ -31,7 +28,7 @@ public:
 	SFInteger *IntegerClass();
 	SFList *ListClass();
 
-	virtual std::string str() = 0;
+	virtual std::string str() const = 0;
 
 protected:
 	SFLiteral(const SFType t) : type(t) {
@@ -40,6 +37,7 @@ protected:
 	const SFType type;
 };
 
+// The specialised value
 template<class T>
 class SFLiteralT : public SFLiteral {
 public:
@@ -56,7 +54,7 @@ public:
 	}
 	SFInteger(const SFInteger &v) : SFLiteralT(v.getValue(), Integer) {
 	}
-	std::string str() {
+	std::string str() const {
 		std::stringstream ss;
 		ss << value;
 		return ss.str();
@@ -90,7 +88,7 @@ public:
 	void ShallowCopy(const SFList *l) {
 		SFList_t::iterator it = l->begin();
 		for (; it != l->end(); it++) {
-			this->value->push_back(SFLiteral_p(*it));
+			value->push_back(SFLiteral_p(*it));
 		}
 	}
 	void ShallowCopy(const SFList &l) {
@@ -98,20 +96,23 @@ public:
 		ShallowCopy(&l);
 	}
 	~SFList() {
-		this->value->clear();
+		clear();
+	}
+	void clear() {
+		value->clear();
 	}
 	void push_back(SFLiteral *v) {
-		this->value->push_back(SFLiteral_p(v));
+		value->push_back(SFLiteral_p(v));
 	}
 	void push_back(SFInteger i) {
-		this->push_back(new SFInteger(i));
+		push_back(new SFInteger(i));
 	}
 	void push_back(const SFList l) {
 		SFList *n = new SFList(l);
 		push_back(n);
 		// n will be freed by the shared pointer
 	}
-	std::string str() {
+	std::string str() const {
 		std::stringstream ss;
 		SFList_t::iterator it = begin();
 		bool first = true;

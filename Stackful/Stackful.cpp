@@ -1,23 +1,43 @@
 // Stackful.cpp : Defines the entry point for the console application.
 //
 
+#ifdef _WIN32
 #include "stdafx.h"
+#endif
+#include <map>
 #include <iostream>
 
 #include "include/sftypes.hpp"
 
+typedef std::map<SFInteger_t, std::string> atomsById_t;
+typedef std::map<std::string, SFInteger_t> atomsByName_t;
+
 class SFState {
 public:
 	SFState() {
-		atomMap.push_back("nil");
-		atomMap.push_back("false");
-		atomMap.push_back("true");
+		// Initialize default atoms
+		getAtom("nil");
+		getAtom("false");
+		getAtom("true");
 	}
 	virtual ~SFState() {
 	}
+	size_t getAtom(std::string name) {
+		atomsByName_t::iterator it = atomsByName.find(name);
+		if (it != atomsByName.end()) {
+			return it->second;
+		}
+
+		size_t id = atomCounter++;
+		atomsById.emplace(id, name);
+		atomsByName.emplace(name, id);
+		return id;
+	}
 protected:
 	SFList ops;
-	SFAtomMap_t atomMap;
+	size_t atomCounter = 0;
+	atomsById_t atomsById;
+	atomsByName_t atomsByName;
 };
 
 int main()
