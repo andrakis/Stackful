@@ -12,5 +12,13 @@ It supports only two main data types:
 * Lists (which may contain Numbers or Lists)
 
 Everything else the VM requires will be implemented with these two basic constructs.
-This includes data types such as atoms and strings, the value of which points to
-an entry in the atom or string tables.
+
+Some additional data types implemented with these constructs (PROPOSAL):
+
+* `(0, 123)` - The literal number `123`
+
+* `(1, (65, 66, 67))` - a string of `ABC`
+
+* `(2, 42)` - A reference to the atom table, item 42
+
+* `(3, (2061584302, 1076407828))` - a double precision float of `12.34`

@@ -15,7 +15,6 @@ typedef uint32_t SFInteger_t;
 
 // TODO: This should be a fixed size vector
 typedef std::vector<std::string> SFAtomMap_t;
-typedef std::map<SFInteger_t, std::string> SFStringMap_t;
 
 // Forward declarations
 class SFLiteral;
@@ -192,7 +191,6 @@ public:
 protected:
 	SFList ops;
 	SFAtomMap_t atomMap;
-	SFStringMap_t stringMap;
 };
 
 int main()
