@@ -175,7 +175,7 @@ public:
 	SFLiteral_p at(const SFList_t::size_type _Pos) const {
 		return value->at(_Pos);
 	}
-	SFLiteral_p set(const SFList_t::size_type _Pos, const SFLiteral_p &v) {
+	void set(const SFList_t::size_type _Pos, const SFLiteral_p &v) {
 		value->at(_Pos) = v;
 	}
 	bool isEqual(const SFList *other_list) const {
