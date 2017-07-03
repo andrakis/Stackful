@@ -128,7 +128,7 @@ public:
 			std::cout << "List::clear() called when empty!" << std::endl;
 		value->clear();
 	}
-	SFLiteral_p pop_back() {
+	SFLiteral_p pop_back() throw(std::runtime_error) {
 		if (size() == 0)
 			throw std::runtime_error("pop_back(): List is empty");
 		SFLiteral_p p = value->at(size() - 1);

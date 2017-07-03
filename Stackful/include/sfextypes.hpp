@@ -42,10 +42,10 @@ public:
 		this->parent = parent;
 		this->topmost = parent.get()->getTopmost();
 	}
-	SFLiteral_p get(const SFList_p &key) const {
+	SFLiteral_p get(const SFList_p &key) const throw(std::runtime_error) {
 		return get(key.get());
 	}
-	SFLiteral_p get(const SFList &key) const {
+	SFLiteral_p get(const SFList &key) const throw(std::runtime_error) {
 		SFList_t::iterator find = getByKey(key);
 		if (find == end())
 			throw std::runtime_error("Key not found: " + key.str());
