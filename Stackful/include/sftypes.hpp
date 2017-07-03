@@ -2,6 +2,7 @@
 
 #include <exception>
 #include <inttypes.h>	// uint32_t
+#include <iostream>
 #include <memory>		// shared_ptr
 #include <sstream>		// stringstream
 #include <vector>
@@ -112,7 +113,7 @@ public:
 	void ShallowCopy(const SFList *l) {
 		SFList_t::iterator it = l->begin();
 		for (; it != l->end(); it++) {
-			value->push_back(SFLiteral_p(*it));
+			value->push_back(*it);
 		}
 	}
 	void ShallowCopy(const SFList &l) {
@@ -123,6 +124,8 @@ public:
 		clear();
 	}
 	void clear() {
+		if (size() == 0)
+			std::cout << "List::clear() called when empty!" << std::endl;
 		value->clear();
 	}
 	SFLiteral_p pop_back() {
@@ -167,7 +170,13 @@ public:
 	SFList_t::iterator begin() const { return value->begin(); }
 	SFList_t::iterator end() const { return value->end(); }
 	SFLiteral_p operator[](SFList_t::size_type _Pos) const {
+		return at(_Pos);
+	}
+	SFLiteral_p at(const SFList_t::size_type _Pos) const {
 		return value->at(_Pos);
+	}
+	SFLiteral_p set(const SFList_t::size_type _Pos, const SFLiteral_p &v) {
+		value->at(_Pos) = v;
 	}
 	bool isEqual(const SFList *other_list) const {
 		if (size() != other_list->size())

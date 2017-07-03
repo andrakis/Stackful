@@ -32,6 +32,8 @@ public:
 	// Construct with ops and given parent (use shared ptr)
 	SFClosure(const SFClosure_p &parent, const SFList &ops) : SFList(ops), parent(parent), topmost(parent.get()->getTopmost()) {
 	}
+	~SFClosure() {
+	}
 	SFClosure_p getParent() const { return parent; }
 	SFClosure_p getTopmost() const {
 		return topmost;
@@ -60,11 +62,11 @@ public:
 		SFList *newKeyValue = new SFList();
 		newKeyValue->push_back(key);
 		newKeyValue->push_back(value);
-		SFList_p newKeyValue_p(newKeyValue);
+		SFLiteral_p newKeyValue_p(newKeyValue);
 		if (find == end()) {
 			this->push_back(newKeyValue_p);
 		} else {
-			*find = newKeyValue_p;
+			find->swap(newKeyValue_p);
 		}
 	}
 protected:

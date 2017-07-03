@@ -8,6 +8,7 @@
 #include <iostream>
 #include <map>
 #include <stack>
+#include <string>
 
 #include "include/sfatoms.hpp"
 #include "include/sftypes.hpp"
@@ -77,8 +78,7 @@ std::string tostring(const SFLiteral &l) {
 	return l.str();
 }
 
-int main()
-{
+void test() {
 	SFInteger i1(1);
 	SFInteger i2(5);
 	SFInteger i3(i1 ^ i2);
@@ -102,7 +102,7 @@ int main()
 
 	l4.push_back(l1);
 
-	SFState state;
+	//SFState state;
 
 	std::cout << l4.str() << std::endl;
 	std::cout << "String test: " << tolist("Testing ABC").str() << std::endl;
@@ -111,7 +111,7 @@ int main()
 	SFList str2 = tolist("Foobar whee");
 	SFList str3 = tolist("Var humbug");
 
-	std::cout << "String test 1: " << tostring(str1 == str2) <<  std::endl;
+	std::cout << "String test 1: " << tostring(str1 == str2) << std::endl;
 	std::cout << "String test 2: " << tostring(str1 == str3) << std::endl;
 
 	SFClosure c;
@@ -126,11 +126,15 @@ int main()
 	assert(c.size() == 1);
 	std::cout << "Closure test: " << c.get(pKey)->str() << std::endl;
 	try {
-		std::cout << "Closure test: " << c.get(str3) << std::endl;
+		std::cout << "Closure test failure: " << c.get(str3) << std::endl;
 	} catch (std::runtime_error e) {
 		std::cout << "Closure test OK" << std::endl;
 	}
+}
 
+int main()
+{
+	test();
     return 0;
 }
 
