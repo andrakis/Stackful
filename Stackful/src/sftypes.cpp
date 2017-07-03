@@ -2,6 +2,7 @@
 #include "../include/sftypes.hpp"
 
 SFLiteral::~SFLiteral() {
+	return;
 	std::cout << "A ";
 	if (this->type == Integer) std::cout << "number " << this->IntegerClass()->getValue();
 	else if (this->type == List) std::cout << "list";

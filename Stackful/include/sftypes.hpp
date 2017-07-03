@@ -169,10 +169,7 @@ public:
 	SFLiteral_p operator[](SFList_t::size_type _Pos) const {
 		return value->at(_Pos);
 	}
-protected:
-	// Compare every item in the list. May result in recursive calls.
-	bool literalEquals(const SFLiteral &other) const {
-		const SFList *other_list = other.ListClass();
+	bool isEqual(const SFList *other_list) const {
 		if (size() != other_list->size())
 			return false;
 		SFList_t::iterator our_it = begin();
@@ -184,6 +181,12 @@ protected:
 				return false;
 		}
 		return true;
+	}
+protected:
+	// Compare every item in the list. May result in recursive calls.
+	bool literalEquals(const SFLiteral &other) const {
+		const SFList *other_list = other.ListClass();
+		return isEqual(other_list);
 	}
 };
 

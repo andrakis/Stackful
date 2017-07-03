@@ -11,6 +11,18 @@
 
 #include "include/sfatoms.hpp"
 #include "include/sftypes.hpp"
+#include "include/sfextypes.hpp"
+
+SFList tolist(const std::string &str) {
+	SFList l = new SFList();
+	std::string::const_iterator it = str.begin();
+	for (; it != str.end(); it++) {
+		// Generally a char
+		auto curr = *it;
+		l.push_back(curr);
+	}
+	return l;
+}
 
 enum ExtendedType {
 	Atom,
@@ -40,65 +52,6 @@ protected:
 
 typedef std::shared_ptr<SFState> SFState_p;
 
-// Specialized types
-class SFOpChain;
-class SFClosure;
-
-typedef std::shared_ptr<SFOpChain> SFOpChain_p;
-typedef std::shared_ptr<SFClosure> SFClosure_p;
-
-// A closure, which is a list of sublists, which make up a key/value store.
-// Each item in the list is composed of:
-//		[key, value]
-//	Where key is a list of integers representing a string.
-//	And value is an SFLiteral_p
-class SFClosure : public SFList {
-public:
-	// Empty constructor with no parent
-	SFClosure() : SFList(), parent(nullptr) {
-	}
-	// Copy constructor
-	SFClosure(const SFClosure &copy) : SFList(copy), parent(copy.getParent()) {
-	}
-	// Construct with ops and no parent
-	SFClosure(const SFList &ops) : SFList(ops), parent(nullptr) {
-	}
-	// Construct with no ops and given parent (use shared ptr)
-	SFClosure(const SFClosure_p &parent) : SFList(), parent(parent) {
-	}
-	// Construct with ops and given parent (use shared ptr)
-	SFClosure(const SFClosure_p &parent, const SFList &ops) : SFList(ops), parent(parent) {
-	}
-	SFClosure_p getParent() const { return parent; }
-	void setParent(const SFClosure_p &parent) {
-		this->parent = parent;
-	}
-protected:
-	SFClosure_p parent;
-};
-
-// An OpChain, containing a Closure and operations to run.
-class SFOpChain : public SFList {
-public:
-	// An empty OpChain
-	SFOpChain() : SFList(), parent(nullptr), closure(new SFClosure()) {
-	}
-	// Copy constructor
-	SFOpChain(const SFOpChain &copy) : SFList(copy), parent(copy.getParent()), closure(copy.getClosure()) {
-	}
-	// Initialize with given parent
-	SFOpChain(const SFOpChain_p &parent) : SFList(), parent(parent), closure(new SFClosure()) {
-	}
-	// Initialize with given parent and ops
-	SFOpChain(const SFOpChain_p &parent, const SFList_p &ops) : SFList(ops.get()), parent(parent), closure(parent.get()->getClosure()) {
-	}
-	SFOpChain_p getParent() const { return parent; };
-	SFClosure_p getClosure() const { return closure; }
-protected:
-	SFOpChain_p parent;
-	SFClosure_p closure;
-};
-
 class SFInterpreter {
 public:
 	SFInterpreter() {
@@ -118,6 +71,10 @@ protected:
 
 std::string tostring(bool value) {
 	return value ? "true" : "false";
+}
+
+std::string tostring(const SFLiteral &l) {
+	return l.str();
 }
 
 int main()
@@ -148,6 +105,32 @@ int main()
 	SFState state;
 
 	std::cout << l4.str() << std::endl;
+	std::cout << "String test: " << tolist("Testing ABC").str() << std::endl;
+
+	SFList str1 = tolist("Foobar whee");
+	SFList str2 = tolist("Foobar whee");
+	SFList str3 = tolist("Var humbug");
+
+	std::cout << "String test 1: " << tostring(str1 == str2) <<  std::endl;
+	std::cout << "String test 2: " << tostring(str1 == str3) << std::endl;
+
+	SFClosure c;
+	SFList *vKey = new SFList(tolist("Test"));
+	SFList_p pKey(vKey);
+	SFLiteral_p pValue(new SFList(str2));
+	SFLiteral_p pValue2(new SFList(str3));
+	c.set(pKey, pValue);
+	std::cout << "Closure test: " << c.get(pKey)->str() << std::endl;
+	// Ensure this only results in 1 item
+	c.set(pKey, pValue2);
+	assert(c.size() == 1);
+	std::cout << "Closure test: " << c.get(pKey)->str() << std::endl;
+	try {
+		std::cout << "Closure test: " << c.get(str3) << std::endl;
+	} catch (std::runtime_error e) {
+		std::cout << "Closure test OK" << std::endl;
+	}
+
     return 0;
 }
 
