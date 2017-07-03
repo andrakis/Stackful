@@ -126,7 +126,8 @@ void test() {
 	assert(c.size() == 1);
 	std::cout << "Closure test: " << c.get(pKey)->str() << std::endl;
 	try {
-		std::cout << "Closure test failure: " << c.get(str3) << std::endl;
+		SFLiteral_p not_exist(c.get(str3));
+		std::cout << "Closure test failure: " << not_exist << std::endl;
 	} catch (std::runtime_error e) {
 		std::cout << "Closure test OK" << std::endl;
 	}
