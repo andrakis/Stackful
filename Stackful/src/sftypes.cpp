@@ -10,43 +10,53 @@ SFLiteral::~SFLiteral() {
 
 SFInteger* SFLiteral::IntegerClass () {
 	if (this->type != Integer)
-		throw std::exception("Not a number");
+		throw std::runtime_error("Not a number");
 	return static_cast<SFInteger*>(this);
+}
+const SFInteger* SFLiteral::IntegerClass () const {
+	if (this->type != Integer)
+		throw std::runtime_error("Not a number");
+	return static_cast<const SFInteger*>(this);
 }
 SFList* SFLiteral::ListClass() {
 	if (this->type != List)
-		throw std::exception("Not a list");
+		throw std::runtime_error("Not a list");
 	return static_cast<SFList*>(this);
 }
+const SFList* SFLiteral::ListClass() const {
+	if (this->type != List)
+		throw std::runtime_error("Not a list");
+	return static_cast<const SFList*>(this);
+}
 
-SFInteger operator + (const SFInteger a, const SFInteger b) {
+SFInteger operator + (const SFInteger &a, const SFInteger &b) {
 	return SFInteger(a.getValue() + b.getValue());
 }
-SFInteger operator - (const SFInteger a, const SFInteger b) {
+SFInteger operator - (const SFInteger &a, const SFInteger &b) {
 	return SFInteger(a.getValue() - b.getValue());
 }
-SFInteger operator * (const SFInteger a, const SFInteger b) {
+SFInteger operator * (const SFInteger &a, const SFInteger &b) {
 	return SFInteger(a.getValue() * b.getValue());
 }
-SFInteger operator / (const SFInteger a, const SFInteger b) {
+SFInteger operator / (const SFInteger &a, const SFInteger &b) {
 	return SFInteger(a.getValue() / b.getValue());
 }
-SFInteger operator | (const SFInteger a, const SFInteger b) {
+SFInteger operator | (const SFInteger &a, const SFInteger &b) {
 	return SFInteger(a.getValue() | b.getValue());
 }
-SFInteger operator & (const SFInteger a, const SFInteger b) {
+SFInteger operator & (const SFInteger &a, const SFInteger &b) {
 	return SFInteger(a.getValue() & b.getValue());
 }
-SFInteger operator ^ (const SFInteger a, const SFInteger b) {
+SFInteger operator ^ (const SFInteger &a, const SFInteger &b) {
 	return SFInteger(a.getValue() ^ b.getValue());
 }
-SFInteger operator ! (const SFInteger a) {
+SFInteger operator ! (const SFInteger &a) {
 	return SFInteger(!a.getValue());
 }
-SFInteger operator << (const SFInteger a, const SFInteger b) {
+SFInteger operator << (const SFInteger &a, const SFInteger &b) {
 	return SFInteger(a.getValue() << b.getValue());
 }
-SFInteger operator >> (const SFInteger a, const SFInteger b) {
+SFInteger operator >> (const SFInteger &a, const SFInteger &b) {
 	return SFInteger(a.getValue() >> b.getValue());
 }
 
