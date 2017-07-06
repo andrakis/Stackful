@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <iostream>
 #include <map>
+#include <regex>
 #include <stack>
 #include <string>
 
@@ -65,6 +66,33 @@ std::string tostring(const SFLiteral &l) {
 	return l.str();
 }
 
+std::regex functionArityRegex(R"~(([a-z][a-z0-9_]+)\/?(\*|\d+)$)~");
+SFFunctionArity_t getFunctionArity(const std::string &name, const int np) {
+	std::sregex_iterator iter(name.begin(), name.end(), functionArityRegex);
+	std::sregex_iterator end;
+	if (iter == end) {
+		return SFFunctionArity_t(name, np);
+	}
+
+	auto fnName = (*iter)[1];
+	auto fnArity = (*iter)[2];
+	if(fnArity == "*")
+		return SFFunctionArity_t(fnName, '*');
+	return SFFunctionArity_t(fnName, std::stoi(fnArity));
+}
+
+std::string fastr(const SFFunctionArity_t fa) {
+	std::stringstream s;
+	s << std::get<0>(fa);
+	s << "/";
+	char arity = std::get<1>(fa);
+	if (arity == '*')
+		s << "*";
+	else
+		s << (int)arity;
+	return s.str();
+}
+
 void test() {
 	SFInteger i1(1);
 	SFInteger i2(5);
@@ -106,10 +134,10 @@ void test() {
 	SFList_p pKey(vKey);
 	SFLiteral_p pValue(new SFList(str2));
 	SFLiteral_p pValue2(new SFList(str3));
-	c.set(pKey, pValue);
+	c.set(vKey, pValue);
 	std::cout << "Closure test: " << c.get(pKey)->str() << std::endl;
 	// Ensure this only results in 1 item
-	c.set(pKey, pValue2);
+	c.set(vKey, pValue2);
 	assert(c.size() == 1);
 	std::cout << "Closure test: " << c.get(pKey)->str() << std::endl;
 #ifndef NDEBUG
@@ -130,6 +158,14 @@ void test() {
 	printParams.push_back(sfvar((SFInteger_t)2));
 	printParams.push_back(sfvar((SFInteger_t)3));
 	print(printParams, SFClosure_p(new SFClosure(c)));
+
+	std::string fa1 = "foo";
+	std::string fa2 = "foo/*";
+	std::string fa3 = "foo/2";
+
+	std::cout << "FA1: " << fa1 << " = " << fastr(getFunctionArity(fa1, 2)) << std::endl;
+	std::cout << "FA2: " << fa2 << " = " << fastr(getFunctionArity(fa2, 0)) << std::endl;
+	std::cout << "FA2: " << fa3 << " = " << fastr(getFunctionArity(fa3, 0)) << std::endl;
 }
 
 int main()

@@ -2,6 +2,7 @@
 
 #include <map>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include "sfextypes.hpp"
@@ -10,6 +11,8 @@
 typedef SFLiteral_p(*SFBuiltin_f)(SFList&, SFClosure_p);
 typedef std::map<std::string, SFBuiltin_f> SFBuiltinMapString_t;
 typedef std::map<SFInteger_t, SFBuiltin_f> SFBuiltinMapAtom_t;
+
+typedef std::tuple<std::string, char> SFFunctionArity_t;
 
 // Builtin function param list
 typedef std::vector<std::string> SFBuiltinParams_t;

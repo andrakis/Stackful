@@ -60,12 +60,12 @@ public:
 		const SFList &list = find->get()->ListClass();
 		return list[1];
 	}
-	void set(const SFList_p &key, const SFLiteral_p &value) {
+	void set(const SFList &key, const SFLiteral_p &value) {
 		if (trySet(key, value))
 			return;
 		setImmediate(key, value);
 	}
-	void setImmediate(const SFList_p &key, const SFLiteral_p &value) {
+	void setImmediate(const SFList &key, const SFLiteral_p &value) {
 		SFList_t::iterator find = getByKey(key);
 		SFList *newKeyValue = new SFList();
 		newKeyValue->push_back(key);
@@ -95,10 +95,10 @@ protected:
 		}
 		return find;
 	}
-	bool hasKey(const SFList_p &key) const {
+	bool hasKey(const SFList &key) const {
 		return getByKey(key) != end();
 	}
-	bool trySet(const SFList_p &key, const SFLiteral_p &value) {
+	bool trySet(const SFList &key, const SFLiteral_p &value) {
 		if (hasKey(key)) {
 			setImmediate(key, value);
 			return true;

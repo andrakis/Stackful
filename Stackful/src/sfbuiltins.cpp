@@ -4,8 +4,10 @@
 
 #include <iostream>
 #include <map>
-#include <string>
+#include <regex>
 #include <sstream>
+#include <string>
+#include <tuple>
 #include <vector>
 
 #include "../include/sfatoms.hpp"
@@ -67,6 +69,20 @@ void setupBuiltins() {
 		}
 		std::cout << s.str() << std::endl;
 		return SFLiteral_p(new SFList(sfvar(atomNil)));
+	});
+
+	addBuiltin("var", params("Name", "Value"), [](SFList &parameters, SFClosure_p closure) {
+		closure.get()->setImmediate(parameters[0].get()->ListClass(), parameters[1]);
+		return parameters[1];
+	});
+
+	addBuiltin("set", params("Name", "Value"), [](SFList &parameters, SFClosure_p closure) {
+		closure.get()->set(parameters[0].get()->ListClass(), parameters[1]);
+		return parameters[1];
+	});
+
+	addBuiltin("get", params("Name"), [](SFList &parameters, SFClosure_p closure) {
+		return closure.get()->get(parameters[0].get()->ListClass());
 	});
 }
 

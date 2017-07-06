@@ -66,3 +66,4 @@ SFList operator + (const SFList &a, const SFList &b) {
 	result.ShallowCopy(&b);
 	return result;
 }
+
