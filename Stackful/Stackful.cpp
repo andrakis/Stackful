@@ -16,7 +16,7 @@
 #include "include/sftypes.hpp"
 #include "include/sfextypes.hpp"
 
-SFList tolist(const std::string &str) {
+SFList xtolist(const std::string &str) {
 	SFList l;
 	std::string::const_iterator it = str.begin();
 	for (; it != str.end(); it++) {
@@ -122,15 +122,15 @@ void test() {
 	std::cout << l4.str() << std::endl;
 	std::cout << "String test: " << sfvar("Testing ABC").str() << std::endl;
 
-	SFList str1 = tolist("Foobar whee");
-	SFList str2 = tolist("Foobar whee");
-	SFList str3 = tolist("Var humbug");
+	SFList str1 = xtolist("Foobar whee");
+	SFList str2 = xtolist("Foobar whee");
+	SFList str3 = xtolist("Var humbug");
 
 	std::cout << "String test 1: " << tostring(str1 == str2) << std::endl;
 	std::cout << "String test 2: " << tostring(str1 == str3) << std::endl;
 
 	SFClosure c;
-	SFList *vKey = new SFList(tolist("Test"));
+	SFList *vKey = new SFList(xtolist("Test"));
 	SFList_p pKey(vKey);
 	SFLiteral_p pValue(new SFList(str2));
 	SFLiteral_p pValue2(new SFList(str3));

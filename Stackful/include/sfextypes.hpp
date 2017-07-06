@@ -132,7 +132,7 @@ protected:
 };
 
 SFList sfvar(const std::string &str);
-SFList sfvar(const double value);
+SFList sfvarfloat(const double value);
 SFList sfvar(const SFInteger_t value);
 SFList sfatom(const std::string &s);
 ExtendedType identifyLiteral(const SFList &l);

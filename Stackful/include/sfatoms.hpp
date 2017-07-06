@@ -3,6 +3,8 @@
 #include <map>
 #include <string>
 
-size_t getAtom(std::string name);
-std::string getAtom(size_t id);
-extern size_t atomNil, atomFalse, atomTrue;
+#include "sftypes.hpp"
+
+SFInteger_t getAtom(std::string name);
+std::string getAtom(SFInteger_t id);
+extern SFInteger_t atomNil, atomFalse, atomTrue;

@@ -31,7 +31,7 @@ SFList sfvar(const std::string &str) {
 	return sfvariable(String, tolist(str));
 }
 
-SFList sfvar(const double value) {
+SFList sfvarfloat(const double value) {
 	doublebits b;
 	b.valueDouble = value;
 	SFList *l = new SFList();
