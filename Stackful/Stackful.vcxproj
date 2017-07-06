@@ -204,9 +204,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="include\sfatoms.hpp" />
     <ClInclude Include="include\sfbuiltins.hpp" />
     <ClInclude Include="include\sfextypes.hpp" />
