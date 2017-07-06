@@ -240,3 +240,6 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/Stackful/Profiling/Stackful.tlog
+/Stackful/Profiling
+/Profiling

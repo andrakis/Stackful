@@ -11,11 +11,12 @@
 #include <string>
 
 #include "include/sfatoms.hpp"
+#include "include/sfbuiltins.hpp"
 #include "include/sftypes.hpp"
 #include "include/sfextypes.hpp"
 
 SFList tolist(const std::string &str) {
-	SFList l = new SFList();
+	SFList l;
 	std::string::const_iterator it = str.begin();
 	for (; it != str.end(); it++) {
 		// Generally a char
@@ -25,26 +26,12 @@ SFList tolist(const std::string &str) {
 	return l;
 }
 
-enum ExtendedType {
-	Atom,
-	Number,
-	Float,
-	String,
-	OpChain
-};
-
 class SFState {
 public:
 	SFState() {
 	}
 	virtual ~SFState() {
 		std::cout << "A state has died" << std::endl;
-	}
-	ExtendedType identifyLiteral(const SFList &l) {
-		if (l.size() != 2)
-			throw std::runtime_error(std::string("Invalid literal: ") + l.str());
-		SFInteger *firstElement = l[0]->IntegerClass();
-		return (ExtendedType)firstElement->getValue();
 	}
 protected:
 	SFList ops;
@@ -105,7 +92,7 @@ void test() {
 	//SFState state;
 
 	std::cout << l4.str() << std::endl;
-	std::cout << "String test: " << tolist("Testing ABC").str() << std::endl;
+	std::cout << "String test: " << sfvar("Testing ABC").str() << std::endl;
 
 	SFList str1 = tolist("Foobar whee");
 	SFList str2 = tolist("Foobar whee");
@@ -125,12 +112,24 @@ void test() {
 	c.set(pKey, pValue2);
 	assert(c.size() == 1);
 	std::cout << "Closure test: " << c.get(pKey)->str() << std::endl;
+#ifndef NDEBUG
 	try {
 		SFLiteral_p not_exist(c.get(str3));
 		std::cout << "Closure test failure: " << not_exist << std::endl;
 	} catch (std::runtime_error e) {
 		std::cout << "Closure test OK" << std::endl;
 	}
+#endif
+
+	setupBuiltins();
+	SFBuiltin_f print = getBuiltin("print/*");
+	SFList printParams;
+	// "Test" 1 2 3
+	printParams.push_back(sfvar("Test"));
+	printParams.push_back(sfvar((SFInteger_t)1));
+	printParams.push_back(sfvar((SFInteger_t)2));
+	printParams.push_back(sfvar((SFInteger_t)3));
+	print(printParams, SFClosure_p(new SFClosure(c)));
 }
 
 int main()

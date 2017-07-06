@@ -10,6 +10,14 @@ class SFClosure;
 typedef std::shared_ptr<SFOpChain> SFOpChain_p;
 typedef std::shared_ptr<SFClosure> SFClosure_p;
 
+enum ExtendedType {
+	Atom,
+	Number,
+	Float,
+	String,
+	OpChain
+};
+
 // A closure, which is a list of sublists, which make up a key/value store.
 // Each item in the list is composed of:
 //		[key, value]
@@ -122,3 +130,11 @@ protected:
 	SFOpChain_p parent;
 	SFClosure_p closure;
 };
+
+SFList sfvar(const std::string &str);
+SFList sfvar(const double value);
+SFList sfvar(const SFInteger_t value);
+SFList sfatom(const std::string &s);
+ExtendedType identifyLiteral(const SFList &l);
+std::string varstr(const SFList &l);
+

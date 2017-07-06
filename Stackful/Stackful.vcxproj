@@ -208,6 +208,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\sfatoms.hpp" />
+    <ClInclude Include="include\sfbuiltins.hpp" />
     <ClInclude Include="include\sfextypes.hpp" />
     <ClInclude Include="include\sftypes.hpp" />
     <ClInclude Include="stdafx.h" />
@@ -215,6 +216,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\sfatoms.cpp" />
+    <ClCompile Include="src\sfbuiltins.cpp" />
+    <ClCompile Include="src\sfextypes.cpp" />
     <ClCompile Include="src\sftypes.cpp" />
     <ClCompile Include="Stackful.cpp" />
     <ClCompile Include="stdafx.cpp" />

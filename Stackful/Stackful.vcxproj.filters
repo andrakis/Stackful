@@ -33,6 +33,9 @@
     <ClInclude Include="include\sfextypes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\sfbuiltins.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -45,6 +48,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\sfatoms.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sfbuiltins.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sfextypes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
