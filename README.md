@@ -24,6 +24,7 @@ Some additional data types implemented with these constructs (PROPOSAL):
 
 * `(3, (65, 66, 67))` - a string of `ABC`
 
+
 Compilation
 -----------
 
@@ -33,11 +34,12 @@ Compilation
 
 * GCC
 
-   `g++ -std=c++11 *.cpp src/*.cpp -o stackful`
+   `g++ -std=c++11 *.cpp src/*.cpp -o stackful -fpermissive`
 
    Most compilers will require the `std=` option for correct compilation.
-  
-    
+
+   TODO: Determine why GCC requires `-fpermissive`.
+
 
 Why Stackful?
 -------------
