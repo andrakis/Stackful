@@ -7,7 +7,6 @@
 #include <assert.h>
 #include <iostream>
 #include <map>
-#include <regex>
 #include <stack>
 #include <string>
 
@@ -66,33 +65,6 @@ std::string tostring(const SFLiteral &l) {
 	return l.str();
 }
 
-std::regex functionArityRegex(R"~(([a-z][a-z0-9_]+)\/?(\*|\d+)$)~");
-SFFunctionArity_t getFunctionArity(const std::string &name, const int np) {
-	std::sregex_iterator iter(name.begin(), name.end(), functionArityRegex);
-	std::sregex_iterator end;
-	if (iter == end) {
-		return SFFunctionArity_t(name, np);
-	}
-
-	auto fnName = (*iter)[1];
-	auto fnArity = (*iter)[2];
-	if(fnArity == "*")
-		return SFFunctionArity_t(fnName, '*');
-	return SFFunctionArity_t(fnName, std::stoi(fnArity));
-}
-
-std::string fastr(const SFFunctionArity_t fa) {
-	std::stringstream s;
-	s << std::get<0>(fa);
-	s << "/";
-	char arity = std::get<1>(fa);
-	if (arity == '*')
-		s << "*";
-	else
-		s << (int)arity;
-	return s.str();
-}
-
 void test() {
 	SFInteger i1(1);
 	SFInteger i2(5);
@@ -129,7 +101,7 @@ void test() {
 	std::cout << "String test 1: " << tostring(str1 == str2) << std::endl;
 	std::cout << "String test 2: " << tostring(str1 == str3) << std::endl;
 
-	SFClosure c;
+	SFXClosure c;
 	SFList *vKey = new SFList(xtolist("Test"));
 	SFList_p pKey(vKey);
 	SFLiteral_p pValue(new SFList(str2));
@@ -151,13 +123,14 @@ void test() {
 
 	setupBuiltins();
 	SFBuiltin_f print = getBuiltin("print/*");
-	SFList printParams;
+	SFXList printParams;
 	// "Test" 1 2 3
-	printParams.push_back(sfvar("Test"));
-	printParams.push_back(sfvar((SFInteger_t)1));
-	printParams.push_back(sfvar((SFInteger_t)2));
-	printParams.push_back(sfvar((SFInteger_t)3));
-	print(printParams, SFClosure_p(new SFClosure(c)));
+	printParams.push_back(SFLiteral_p(new SFXString("Test")));
+	printParams.push_back(SFLiteral_p(new SFXInteger(1)));
+	printParams.push_back(SFLiteral_p(new SFXInteger(2)));
+	printParams.push_back(SFLiteral_p(new SFXInteger(3)));
+	printParams.push_back(SFLiteral_p(new SFXFloat(12.34)));
+	print(printParams, SFClosure_p(new SFXClosure(c)));
 
 	std::string fa1 = "foo";
 	std::string fa2 = "foo/*";
@@ -166,6 +139,10 @@ void test() {
 	std::cout << "FA1: " << fa1 << " = " << fastr(getFunctionArity(fa1, 2)) << std::endl;
 	std::cout << "FA2: " << fa2 << " = " << fastr(getFunctionArity(fa2, 0)) << std::endl;
 	std::cout << "FA2: " << fa3 << " = " << fastr(getFunctionArity(fa3, 0)) << std::endl;
+
+	// Test var, get
+	// ((var A "foobar")
+	//  (print "A:" (get 'A')))
 }
 
 int main()

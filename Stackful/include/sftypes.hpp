@@ -16,8 +16,8 @@ class SFInteger;
 class SFList;
 
 enum SFType {
-	Integer,
-	List
+	Basic_Integer,
+	Basic_List
 };
 
 // The generic literal value
@@ -70,9 +70,9 @@ protected:
 // Generic number class
 class SFInteger : public SFLiteralT<const SFInteger_t> {
 public:
-	SFInteger(const SFInteger_t v) : SFLiteralT(v, Integer) {
+	SFInteger(const SFInteger_t v) : SFLiteralT(v, Basic_Integer) {
 	}
-	SFInteger(const SFInteger &v) : SFLiteralT(v.getValue(), Integer) {
+	SFInteger(const SFInteger &v) : SFLiteralT(v.getValue(), Basic_Integer) {
 	}
 	std::string str() const {
 		std::stringstream ss;
@@ -102,12 +102,12 @@ typedef std::vector<SFLiteral_p> SFList_t;
 // A list that may contain numbers or other lists
 class SFList : public SFLiteralT<SFList_t*> {
 public:
-	SFList() : SFLiteralT(new SFList_t(), List) {
+	SFList() : SFLiteralT(new SFList_t(), Basic_List) {
 	}
-	SFList(const SFList &l) : SFLiteralT(new SFList_t(), List) {
+	SFList(const SFList &l) : SFLiteralT(new SFList_t(), Basic_List) {
 		ShallowCopy(l);
 	}
-	SFList(const SFList *l) : SFLiteralT(new SFList_t(), List) {
+	SFList(const SFList *l) : SFLiteralT(new SFList_t(), Basic_List) {
 		ShallowCopy(l);
 	}
 	void ShallowCopy(const SFList *l) {
@@ -125,12 +125,12 @@ public:
 	}
 	void clear() {
 		if (size() == 0)
-			std::cout << "List::clear() called when empty!" << std::endl;
+			std::cout << "Basic_List::clear() called when empty!" << std::endl;
 		value->clear();
 	}
 	SFLiteral_p pop_back() throw(std::runtime_error) {
 		if (size() == 0)
-			throw std::runtime_error("pop_back(): List is empty");
+			throw std::runtime_error("pop_back(): Basic_List is empty");
 		SFLiteral_p p = value->at(size() - 1);
 		value->pop_back();
 		return p;

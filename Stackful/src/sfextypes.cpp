@@ -4,11 +4,6 @@
 #include "../include/sfatoms.hpp"
 #include "../include/sfextypes.hpp"
 
-union doublebits {
-	double valueDouble;
-	SFInteger_t valueInteger[sizeof(double) / sizeof(SFInteger_t)];
-};
-
 SFLiteral_p tolist(const std::string &str) {
 	SFList *l = new SFList();
 	std::string::const_iterator it = str.begin();
@@ -28,21 +23,15 @@ SFList sfvariable(const SFInteger_t type, SFLiteral_p value) {
 }
 
 SFList sfvar(const std::string &str) {
-	return sfvariable(String, tolist(str));
+	return SFXString(str);
 }
 
 SFList sfvarfloat(const double value) {
-	doublebits b;
-	b.valueDouble = value;
-	SFList *l = new SFList();
-	for (auto i = 0; i < sizeof(double) / sizeof(SFInteger_t); i++) {
-		l->push_back(b.valueInteger[i]);
-	}
-	return sfvariable(Float, SFLiteral_p(l));
+	return SFXFloat(value);
 }
 
 SFList sfvar(const SFInteger_t value) {
-	return sfvariable(Number, SFLiteral_p(new SFInteger(value)));
+	return sfvariable(Integer, SFLiteral_p(new SFInteger(value)));
 }
 
 SFList sfatom(const std::string &s) {
@@ -57,34 +46,49 @@ ExtendedType identifyLiteral(const SFList &l) {
 }
 
 std::string varstr(const SFList &l) {
-	switch (identifyLiteral(l)) {
-		case Atom:
-			return getAtom(l[1].get()->IntegerClass()->getValue());
-		case Number:
-			return l[1].get()->str();
-		case String:
-		{
-			std::stringstream s;
-			const SFList &v = l[1].get()->ListClass();
-			for (size_t i = 0; i < v.size(); i++) {
-				char c = (char)v[i].get()->IntegerClass()->getValue();
-				s << c;
-			}
-			return s.str();
-		}
-		case Float:
-		{
-			doublebits b;
-			const SFList &v = l[1].get()->ListClass();
-			for (size_t i = 0; i < v.size(); i++) {
-				b.valueInteger[i] = v[i].get()->IntegerClass()->getValue();
-			}
-			return std::to_string(b.valueDouble);
-		}
-		case OpChain:
-			// TODO: Nicer
-			return l[1].get()->str();
-		default:
-			throw std::runtime_error("Unknown value type");
-	}
+	return l.str();
+}
+
+SFXFunctionCall::SFXFunctionCall(const std::string &fn) : SFExtended(FunctionCall)
+{
+	this->push_back(getAtom(fn));
+	this->push_back(SFList());
+}
+
+SFXFunctionCall::SFXFunctionCall(const std::string &fn, SFLiteral_p p1) : SFExtended(FunctionCall)
+{
+	this->push_back(getAtom(fn));
+	SFList *params = new SFList();
+	params->push_back(p1);
+	this->push_back(SFLiteral_p(params));
+}
+
+SFXFunctionCall::SFXFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2) : SFExtended(FunctionCall)
+{
+	this->push_back(getAtom(fn));
+	SFList *params = new SFList();
+	params->push_back(p1);
+	params->push_back(p2);
+	this->push_back(SFLiteral_p(params));
+}
+
+SFXFunctionCall::SFXFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2, SFLiteral_p p3) : SFExtended(FunctionCall)
+{
+	this->push_back(getAtom(fn));
+	SFList *params = new SFList();
+	params->push_back(p1);
+	params->push_back(p2);
+	params->push_back(p3);
+	this->push_back(SFLiteral_p(params));
+}
+
+SFXFunctionCall::SFXFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2, SFLiteral_p p3, SFLiteral_p p4) : SFExtended(FunctionCall)
+{
+	this->push_back(getAtom(fn));
+	SFList *params = new SFList();
+	params->push_back(p1);
+	params->push_back(p2);
+	params->push_back(p3);
+	params->push_back(p4);
+	this->push_back(SFLiteral_p(params));
 }

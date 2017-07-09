@@ -19,6 +19,34 @@ SFInteger_t builtinCounter = 0;
 SFBuiltinMapAtom_t builtinsByAtom;
 SFBuiltinMapString_t builtinsByString;
 
+std::regex functionArityRegex(R"~(([a-z][a-z0-9_]+)\/?(\*|\d+)$)~");
+SFFunctionArity_t getFunctionArity(const std::string &name, const int np) {
+	std::sregex_iterator iter(name.begin(), name.end(), functionArityRegex);
+	std::sregex_iterator end;
+	if (iter == end) {
+		return SFFunctionArity_t(name, np);
+	}
+
+	auto fnName = (*iter)[1];
+	auto fnArity = (*iter)[2];
+	if(fnArity == "*")
+		return SFFunctionArity_t(fnName, '*');
+	return SFFunctionArity_t(fnName, std::stoi(fnArity));
+}
+
+std::string fastr(const SFFunctionArity_t fa) {
+	std::stringstream s;
+	s << std::get<0>(fa);
+	s << "/";
+	char arity = std::get<1>(fa);
+	if (arity == '*')
+		s << "*";
+	else
+		s << (int)arity;
+	return s.str();
+}
+
+
 SFBuiltinParams_t params() {
 	return SFBuiltinParams_t();
 }
@@ -65,7 +93,8 @@ void setupBuiltins() {
 				first = false;
 			else
 				s << " ";
-			s << varstr(parameters[i].get()->ListClass());
+			SFLiteral_p p = parameters[i];
+			s << p.get()->str();
 		}
 		std::cout << s.str() << std::endl;
 		return SFLiteral_p(new SFList(sfvar(atomNil)));

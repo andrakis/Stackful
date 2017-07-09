@@ -4,28 +4,28 @@
 SFLiteral::~SFLiteral() {
 	return;
 	std::cout << "A ";
-	if (this->type == Integer) std::cout << "number " << this->IntegerClass()->getValue();
-	else if (this->type == List) std::cout << "list";
+	if (this->type == Basic_Integer) std::cout << "number " << this->IntegerClass()->getValue();
+	else if (this->type == Basic_List) std::cout << "list";
 	std::cout << " has died" << std::endl;
 }
 
 SFInteger* SFLiteral::IntegerClass () {
-	if (this->type != Integer)
+	if (this->type != Basic_Integer)
 		throw std::runtime_error("Not a number");
 	return static_cast<SFInteger*>(this);
 }
 const SFInteger* SFLiteral::IntegerClass () const {
-	if (this->type != Integer)
+	if (this->type != Basic_Integer)
 		throw std::runtime_error("Not a number");
 	return static_cast<const SFInteger*>(this);
 }
 SFList* SFLiteral::ListClass() {
-	if (this->type != List)
+	if (this->type != Basic_List)
 		throw std::runtime_error("Not a list");
 	return static_cast<SFList*>(this);
 }
 const SFList* SFLiteral::ListClass() const {
-	if (this->type != List)
+	if (this->type != Basic_List)
 		throw std::runtime_error("Not a list");
 	return static_cast<const SFList*>(this);
 }
