@@ -34,12 +34,9 @@ Compilation
 
 * GCC
 
-   `g++ -std=c++11 *.cpp src/*.cpp -o stackful -fpermissive`
+   `g++ -std=c++11 *.cpp src/*.cpp -O2 -o stackful`
 
    Most compilers will require the `std=` option for correct compilation.
-
-   TODO: Determine why GCC requires `-fpermissive`.
-
 
 Why Stackful?
 -------------
