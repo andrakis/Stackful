@@ -4,11 +4,11 @@
 
 #include "sftypes.hpp"
 
-class SFXOpChain;
-class SFXClosure;
+class SFOpChain;
+class SFClosure;
 
-typedef std::shared_ptr<SFXOpChain> SFOpChain_p;
-typedef std::shared_ptr<SFXClosure> SFClosure_p;
+typedef std::shared_ptr<SFOpChain> SFOpChain_p;
+typedef std::shared_ptr<SFClosure> SFClosure_p;
 
 enum ExtendedType {
 	Atom,
@@ -21,7 +21,7 @@ enum ExtendedType {
 	Closure
 };
 
-class SFExtended : public SFList {
+class SFExtended : public SFBasicList {
 public:
 	ExtendedType getExtendedType() const {
 		return extendedType;
@@ -33,20 +33,20 @@ public:
 		return _str();
 	}
 	virtual std::string extLiteral() const = 0;
-	SFExtended(const SFExtended &copy) : SFList(copy), extendedType(copy.getExtendedType()) {
+	SFExtended(const SFExtended &copy) : SFBasicList(copy), extendedType(copy.getExtendedType()) {
 	}
 protected:
-	SFExtended(ExtendedType extType) : SFList(), extendedType(extType) {
+	SFExtended(ExtendedType extType) : SFBasicList(), extendedType(extType) {
 	}
-	SFExtended(ExtendedType extType, const SFList &copy) : SFList(copy), extendedType(extType) {
+	SFExtended(ExtendedType extType, const SFBasicList &copy) : SFBasicList(copy), extendedType(extType) {
 	}
 	const ExtendedType extendedType;
 	virtual std::string _str() const = 0;
 };
 
-class SFXAtom : public SFExtended {
+class SFAtom : public SFExtended {
 public:
-	SFXAtom(const std::string &name) : SFExtended(Atom) {
+	SFAtom(const std::string &name) : SFExtended(Atom) {
 		push_back(Atom);
 		push_back(getAtom(name));
 	}
@@ -59,9 +59,9 @@ protected:
 	}
 };
 
-class SFXInteger : public SFExtended {
+class SFInteger : public SFExtended {
 public:
-	SFXInteger(const SFInteger_t val) : SFExtended(Integer) {
+	SFInteger(const SFInteger_t val) : SFExtended(Integer) {
 		push_back(Integer);
 		push_back(val);
 	}
@@ -74,17 +74,17 @@ protected:
 	}
 };
 
-class SFXFloat : public SFExtended {
+class SFFloat : public SFExtended {
 public:
 	union doublebits {
 		double valueDouble;
 		SFInteger_t valueInteger[sizeof(double) / sizeof(SFInteger_t)];
 	};
-	SFXFloat(double value) : SFExtended(Float) {
+	SFFloat(double value) : SFExtended(Float) {
 		push_back(Float);
 		doublebits b;
 		b.valueDouble = value;
-		SFList *l = new SFList();
+		SFBasicList *l = new SFBasicList();
 		for (auto i = 0; i < sizeof(double) / sizeof(SFInteger_t); i++) {
 			l->push_back(b.valueInteger[i]);
 		}
@@ -96,7 +96,7 @@ public:
 protected:
 	std::string _str() const {
 		doublebits b;
-		const SFList &v = operator[](1).get()->ListClass();
+		const SFBasicList &v = operator[](1).get()->ListClass();
 		for (size_t i = 0; i < v.size(); i++) {
 			b.valueInteger[i] = v[i].get()->IntegerClass()->getValue();
 		}
@@ -107,7 +107,7 @@ protected:
 class SFXString : public SFExtended {
 public:
 	SFXString(const std::string &str) : SFExtended(String) {
-		SFList *l = new SFList();
+		SFBasicList *l = new SFBasicList();
 		std::string::const_iterator it = str.begin();
 		for (; it != str.end(); it++) {
 			// Generally a char
@@ -124,7 +124,7 @@ protected:
 	std::string _str() const {
 		std::stringstream s;
 
-		const SFList &v = operator[](1).get()->ListClass();
+		const SFBasicList &v = operator[](1).get()->ListClass();
 		for (size_t i = 0; i < v.size(); i++) {
 			char c = (char)v[i].get()->IntegerClass()->getValue();
 			s << c;
@@ -133,11 +133,11 @@ protected:
 	}
 };
 
-class SFXList : public SFExtended {
+class SFList : public SFExtended {
 public:
-	SFXList() : SFExtended(List) {
+	SFList() : SFExtended(List) {
 	}
-	SFXList(const SFXList &copy) : SFExtended(List, copy) {
+	SFList(const SFList &copy) : SFExtended(List, copy) {
 	}
 	std::string extLiteral() const {
 		return str();
@@ -165,24 +165,24 @@ protected:
 //		[key, value]
 //	Where key is a list of integers representing a string.
 //	And value is an SFLiteral_p
-class SFXClosure : public SFExtended {
+class SFClosure : public SFExtended {
 public:
 	// Empty constructor with no parent
-	SFXClosure() : SFExtended(Closure), parent(nullptr), topmost(nullptr) {
+	SFClosure() : SFExtended(Closure), parent(nullptr), topmost(nullptr) {
 	}
 	// Copy constructor
-	SFXClosure(const SFXClosure &copy) : SFExtended(Closure, copy), parent(copy.getParent()), topmost(copy.getTopmost()) {
+	SFClosure(const SFClosure &copy) : SFExtended(Closure, copy), parent(copy.getParent()), topmost(copy.getTopmost()) {
 	}
 	// Construct with ops and no parent
-	SFXClosure(const SFList &ops) : SFExtended(Closure, ops), parent(nullptr), topmost(nullptr) {
+	SFClosure(const SFBasicList &ops) : SFExtended(Closure, ops), parent(nullptr), topmost(nullptr) {
 	}
 	// Construct with no ops and given parent (use shared ptr)
-	SFXClosure(const SFClosure_p &parent) : SFExtended(Closure), parent(parent), topmost(parent.get()->getTopmost()) {
+	SFClosure(const SFClosure_p &parent) : SFExtended(Closure), parent(parent), topmost(parent.get()->getTopmost()) {
 	}
 	// Construct with ops and given parent (use shared ptr)
-	SFXClosure(const SFClosure_p &parent, const SFList &ops) : SFExtended(Closure, ops), parent(parent), topmost(parent.get()->getTopmost()) {
+	SFClosure(const SFClosure_p &parent, const SFBasicList &ops) : SFExtended(Closure, ops), parent(parent), topmost(parent.get()->getTopmost()) {
 	}
-	~SFXClosure() {
+	~SFClosure() {
 	}
 	SFClosure_p getParent() const { return parent; }
 	SFClosure_p getTopmost() const {
@@ -195,21 +195,21 @@ public:
 	SFLiteral_p get(const SFList_p &key) const throw(std::runtime_error) {
 		return get(key.get());
 	}
-	SFLiteral_p get(const SFList &key) const throw(std::runtime_error) {
+	SFLiteral_p get(const SFBasicList &key) const throw(std::runtime_error) {
 		SFList_t::iterator find = getByKey(key);
 		if (find == end())
 			throw std::runtime_error("Key not found: " + key.str());
-		const SFList &list = find->get()->ListClass();
+		const SFBasicList &list = find->get()->ListClass();
 		return list[1];
 	}
-	void set(const SFList &key, const SFLiteral_p &value) {
+	void set(const SFBasicList &key, const SFLiteral_p &value) {
 		if (trySet(key, value))
 			return;
 		setImmediate(key, value);
 	}
-	void setImmediate(const SFList &key, const SFLiteral_p &value) {
+	void setImmediate(const SFBasicList &key, const SFLiteral_p &value) {
 		SFList_t::iterator find = getByKey(key);
-		SFList *newKeyValue = new SFList();
+		SFBasicList *newKeyValue = new SFBasicList();
 		newKeyValue->push_back(key);
 		newKeyValue->push_back(value);
 		SFLiteral_p newKeyValue_p(newKeyValue);
@@ -229,21 +229,21 @@ protected:
 		return getByKey(key.get());
 	}
 
-	SFList_t::iterator getByKey(const SFList &key) const {
+	SFList_t::iterator getByKey(const SFBasicList &key) const {
 		SFList_t::iterator find = this->value->begin();
 		for (; find != end(); find++) {
 			// [key, value]
-			const SFList &list = find->get()->ListClass();
+			const SFBasicList &list = find->get()->ListClass();
 			// check key
 			if (list[0].get()->ListClass()->isEqual(&key))
 				break;
 		}
 		return find;
 	}
-	bool hasKey(const SFList &key) const {
+	bool hasKey(const SFBasicList &key) const {
 		return getByKey(key) != end();
 	}
-	bool trySet(const SFList &key, const SFLiteral_p &value) {
+	bool trySet(const SFBasicList &key, const SFLiteral_p &value) {
 		if (hasKey(key)) {
 			setImmediate(key, value);
 			return true;
@@ -259,19 +259,19 @@ protected:
 };
 
 // An OpChain, containing a Closure and operations to run.
-class SFXOpChain : public SFExtended {
+class SFOpChain : public SFExtended {
 public:
 	// An empty OpChain
-	SFXOpChain() : SFExtended(Closure), parent(nullptr), closure(new SFXClosure()) {
+	SFOpChain() : SFExtended(Closure), parent(nullptr), closure(new SFClosure()) {
 	}
 	// Copy constructor
-	SFXOpChain(const SFXOpChain &copy) : SFExtended(Closure, copy), parent(copy.getParent()), closure(copy.getClosure()) {
+	SFOpChain(const SFOpChain &copy) : SFExtended(Closure, copy), parent(copy.getParent()), closure(copy.getClosure()) {
 	}
 	// Initialize with given parent
-	SFXOpChain(const SFOpChain_p &parent) : SFExtended(Closure), parent(parent), closure(new SFXClosure()) {
+	SFOpChain(const SFOpChain_p &parent) : SFExtended(Closure), parent(parent), closure(new SFClosure()) {
 	}
 	// Initialize with given parent and ops
-	SFXOpChain(const SFOpChain_p &parent, const SFList_p &ops) : SFExtended(Closure, ops.get()), parent(parent), closure(parent.get()->getClosure()) {
+	SFOpChain(const SFOpChain_p &parent, const SFList_p &ops) : SFExtended(Closure, ops.get()), parent(parent), closure(parent.get()->getClosure()) {
 	}
 	SFOpChain_p getParent() const { return parent; };
 	SFClosure_p getClosure() const { return closure; }
@@ -286,22 +286,22 @@ protected:
 	SFClosure_p closure;
 };
 
-SFList sfvar(const std::string &str);
-SFList sfvarfloat(const double value);
-SFList sfvar(const SFInteger_t value);
-SFList sfatom(const std::string &s);
-ExtendedType identifyLiteral(const SFList &l);
-std::string varstr(const SFList &l);
+SFBasicList sfvar(const std::string &str);
+SFBasicList sfvarfloat(const double value);
+SFBasicList sfvar(const SFInteger_t value);
+SFBasicList sfatom(const std::string &s);
+ExtendedType identifyLiteral(const SFBasicList &l);
+std::string varstr(const SFBasicList &l);
 
-class SFXFunctionCall : public SFExtended {
+class SFFunctionCall : public SFExtended {
 public:
-	SFXFunctionCall(const SFXFunctionCall &copy) : SFExtended(FunctionCall, copy) {
+	SFFunctionCall(const SFFunctionCall &copy) : SFExtended(FunctionCall, copy) {
 	}
-	SFXFunctionCall(const std::string &fn);
-	SFXFunctionCall(const std::string &fn, SFLiteral_p p1);
-	SFXFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2);
-	SFXFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2, SFLiteral_p p3);
-	SFXFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2, SFLiteral_p p3, SFLiteral_p p4);
+	SFFunctionCall(const std::string &fn);
+	SFFunctionCall(const std::string &fn, SFLiteral_p p1);
+	SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2);
+	SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2, SFLiteral_p p3);
+	SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2, SFLiteral_p p3, SFLiteral_p p4);
 	std::string extLiteral() const {
 		return str();
 	}

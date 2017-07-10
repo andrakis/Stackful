@@ -12,8 +12,8 @@ typedef uint32_t SFInteger_t;
 
 // Forward declarations
 class SFLiteral;
-class SFInteger;
-class SFList;
+class SFBasicInteger;
+class SFBasicList;
 
 enum SFType {
 	Basic_Integer,
@@ -26,10 +26,10 @@ public:
 	virtual ~SFLiteral();
 	SFType getType() const { return type; }
 
-	SFInteger *IntegerClass();
-	SFList *ListClass();
-	const SFInteger *IntegerClass() const;
-	const SFList *ListClass() const;
+	SFBasicInteger *IntegerClass();
+	SFBasicList *ListClass();
+	const SFBasicInteger *IntegerClass() const;
+	const SFBasicList *ListClass() const;
 
 	virtual std::string str() const = 0;
 
@@ -68,11 +68,11 @@ protected:
 };
 
 // Generic number class
-class SFInteger : public SFLiteralT<const SFInteger_t> {
+class SFBasicInteger : public SFLiteralT<const SFInteger_t> {
 public:
-	SFInteger(const SFInteger_t v) : SFLiteralT(v, Basic_Integer) {
+	SFBasicInteger(const SFInteger_t v) : SFLiteralT(v, Basic_Integer) {
 	}
-	SFInteger(const SFInteger &v) : SFLiteralT(v.getValue(), Basic_Integer) {
+	SFBasicInteger(const SFBasicInteger &v) : SFLiteralT(v.getValue(), Basic_Integer) {
 	}
 	std::string str() const {
 		std::stringstream ss;
@@ -85,42 +85,42 @@ protected:
 	}
 };
 
-SFInteger operator + (const SFInteger &a, const SFInteger &b);
-SFInteger operator - (const SFInteger &a, const SFInteger &b);
-SFInteger operator * (const SFInteger &a, const SFInteger &b);
-SFInteger operator / (const SFInteger &a, const SFInteger &b);
-SFInteger operator | (const SFInteger &a, const SFInteger &b);
-SFInteger operator & (const SFInteger &a, const SFInteger &b);
-SFInteger operator ^ (const SFInteger &a, const SFInteger &b);
-SFInteger operator ! (const SFInteger &a);
-SFInteger operator << (const SFInteger &a, const SFInteger &b);
-SFInteger operator >> (const SFInteger &a, const SFInteger &b);
+SFBasicInteger operator + (const SFBasicInteger &a, const SFBasicInteger &b);
+SFBasicInteger operator - (const SFBasicInteger &a, const SFBasicInteger &b);
+SFBasicInteger operator * (const SFBasicInteger &a, const SFBasicInteger &b);
+SFBasicInteger operator / (const SFBasicInteger &a, const SFBasicInteger &b);
+SFBasicInteger operator | (const SFBasicInteger &a, const SFBasicInteger &b);
+SFBasicInteger operator & (const SFBasicInteger &a, const SFBasicInteger &b);
+SFBasicInteger operator ^ (const SFBasicInteger &a, const SFBasicInteger &b);
+SFBasicInteger operator ! (const SFBasicInteger &a);
+SFBasicInteger operator << (const SFBasicInteger &a, const SFBasicInteger &b);
+SFBasicInteger operator >> (const SFBasicInteger &a, const SFBasicInteger &b);
 
 typedef std::shared_ptr<SFLiteral> SFLiteral_p;
 typedef std::vector<SFLiteral_p> SFList_t;
 
 // A list that may contain numbers or other lists
-class SFList : public SFLiteralT<SFList_t*> {
+class SFBasicList : public SFLiteralT<SFList_t*> {
 public:
-	SFList() : SFLiteralT(new SFList_t(), Basic_List) {
+	SFBasicList() : SFLiteralT(new SFList_t(), Basic_List) {
 	}
-	SFList(const SFList &l) : SFLiteralT(new SFList_t(), Basic_List) {
+	SFBasicList(const SFBasicList &l) : SFLiteralT(new SFList_t(), Basic_List) {
 		ShallowCopy(l);
 	}
-	SFList(const SFList *l) : SFLiteralT(new SFList_t(), Basic_List) {
+	SFBasicList(const SFBasicList *l) : SFLiteralT(new SFList_t(), Basic_List) {
 		ShallowCopy(l);
 	}
-	void ShallowCopy(const SFList *l) {
+	void ShallowCopy(const SFBasicList *l) {
 		SFList_t::iterator it = l->begin();
 		for (; it != l->end(); it++) {
 			value->push_back(*it);
 		}
 	}
-	void ShallowCopy(const SFList &l) {
+	void ShallowCopy(const SFBasicList &l) {
 		// Pass to above function
 		ShallowCopy(&l);
 	}
-	~SFList() {
+	~SFBasicList() {
 		clear();
 	}
 	void clear() {
@@ -141,11 +141,11 @@ public:
 	void push_back(SFLiteral *v) {
 		value->push_back(SFLiteral_p(v));
 	}
-	void push_back(const SFInteger i) {
-		push_back(new SFInteger(i));
+	void push_back(const SFBasicInteger i) {
+		push_back(new SFBasicInteger(i));
 	}
-	void push_back(const SFList l) {
-		SFList *n = new SFList(l);
+	void push_back(const SFBasicList l) {
+		SFBasicList *n = new SFBasicList(l);
 		push_back(n);
 		// n will be freed by the shared pointer
 	}
@@ -178,7 +178,7 @@ public:
 	void set(const SFList_t::size_type _Pos, const SFLiteral_p &v) {
 		value->at(_Pos) = v;
 	}
-	bool isEqual(const SFList *other_list) const {
+	bool isEqual(const SFBasicList *other_list) const {
 		if (size() != other_list->size())
 			return false;
 		SFList_t::iterator our_it = begin();
@@ -194,12 +194,12 @@ public:
 protected:
 	// Compare every item in the list. May result in recursive calls.
 	bool literalEquals(const SFLiteral &other) const {
-		const SFList *other_list = other.ListClass();
+		const SFBasicList *other_list = other.ListClass();
 		return isEqual(other_list);
 	}
 };
 
-typedef std::shared_ptr<SFList> SFList_p;
+typedef std::shared_ptr<SFBasicList> SFList_p;
 
-SFList operator + (const SFList &a, const SFList &b);
+SFBasicList operator + (const SFBasicList &a, const SFBasicList &b);
 

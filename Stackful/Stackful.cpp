@@ -15,8 +15,8 @@
 #include "include/sftypes.hpp"
 #include "include/sfextypes.hpp"
 
-SFList xtolist(const std::string &str) {
-	SFList l;
+SFBasicList xtolist(const std::string &str) {
+	SFBasicList l;
 	std::string::const_iterator it = str.begin();
 	for (; it != str.end(); it++) {
 		// Generally a char
@@ -34,8 +34,8 @@ public:
 		std::cout << "A state has died" << std::endl;
 	}
 protected:
-	SFList ops;
-	SFLiteral_p value = SFLiteral_p(new SFInteger(getAtom("nil")));
+	SFBasicList ops;
+	SFLiteral_p value = SFLiteral_p(new SFBasicInteger(getAtom("nil")));
 };
 
 typedef std::shared_ptr<SFState> SFState_p;
@@ -66,21 +66,21 @@ std::string tostring(const SFLiteral &l) {
 }
 
 void test() {
-	SFInteger i1(1);
-	SFInteger i2(5);
-	SFInteger i3(i1 ^ i2);
-	SFList l1;
+	SFBasicInteger i1(1);
+	SFBasicInteger i2(5);
+	SFBasicInteger i3(i1 ^ i2);
+	SFBasicList l1;
 
 	l1.push_back(i1);
 	l1.push_back(i2);
 	l1.push_back(i3);
 
-	SFList l2(l1);
-	SFList l3(l1 + l2);
-	SFList l4(l1);
+	SFBasicList l2(l1);
+	SFBasicList l3(l1 + l2);
+	SFBasicList l4(l1);
 
 	assert((i1 == i2) == false);
-	assert((i1 == SFInteger(1)) == true);
+	assert((i1 == SFBasicInteger(1)) == true);
 	assert((l1 == l2) == true);
 	assert((l2 == l3) == false);
 
@@ -94,18 +94,18 @@ void test() {
 	std::cout << l4.str() << std::endl;
 	std::cout << "String test: " << sfvar("Testing ABC").str() << std::endl;
 
-	SFList str1 = xtolist("Foobar whee");
-	SFList str2 = xtolist("Foobar whee");
-	SFList str3 = xtolist("Var humbug");
+	SFBasicList str1 = xtolist("Foobar whee");
+	SFBasicList str2 = xtolist("Foobar whee");
+	SFBasicList str3 = xtolist("Var humbug");
 
 	std::cout << "String test 1: " << tostring(str1 == str2) << std::endl;
 	std::cout << "String test 2: " << tostring(str1 == str3) << std::endl;
 
-	SFXClosure c;
-	SFList *vKey = new SFList(xtolist("Test"));
+	SFClosure c;
+	SFBasicList *vKey = new SFBasicList(xtolist("Test"));
 	SFList_p pKey(vKey);
-	SFLiteral_p pValue(new SFList(str2));
-	SFLiteral_p pValue2(new SFList(str3));
+	SFLiteral_p pValue(new SFBasicList(str2));
+	SFLiteral_p pValue2(new SFBasicList(str3));
 	c.set(vKey, pValue);
 	std::cout << "Closure test: " << c.get(pKey)->str() << std::endl;
 	// Ensure this only results in 1 item
@@ -123,14 +123,14 @@ void test() {
 
 	setupBuiltins();
 	SFBuiltin_f print = getBuiltin("print/*");
-	SFXList printParams;
+	SFList printParams;
 	// "Test" 1 2 3
 	printParams.push_back(SFLiteral_p(new SFXString("Test")));
-	printParams.push_back(SFLiteral_p(new SFXInteger(1)));
-	printParams.push_back(SFLiteral_p(new SFXInteger(2)));
-	printParams.push_back(SFLiteral_p(new SFXInteger(3)));
-	printParams.push_back(SFLiteral_p(new SFXFloat(12.34)));
-	print(printParams, SFClosure_p(new SFXClosure(c)));
+	printParams.push_back(SFLiteral_p(new SFInteger(1)));
+	printParams.push_back(SFLiteral_p(new SFInteger(2)));
+	printParams.push_back(SFLiteral_p(new SFInteger(3)));
+	printParams.push_back(SFLiteral_p(new SFFloat(12.34)));
+	print(printParams, SFClosure_p(new SFClosure(c)));
 
 	std::string fa1 = "foo";
 	std::string fa2 = "foo/*";

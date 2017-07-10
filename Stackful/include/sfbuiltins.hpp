@@ -8,7 +8,7 @@
 #include "sfextypes.hpp"
 
 // Standard builtin function signature
-typedef SFLiteral_p(*SFBuiltin_f)(SFList&, SFClosure_p);
+typedef SFLiteral_p(*SFBuiltin_f)(SFBasicList&, SFClosure_p);
 typedef std::map<std::string, SFBuiltin_f> SFBuiltinMapString_t;
 typedef std::map<SFInteger_t, SFBuiltin_f> SFBuiltinMapAtom_t;
 

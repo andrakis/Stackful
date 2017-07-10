@@ -9,60 +9,60 @@ SFLiteral::~SFLiteral() {
 	std::cout << " has died" << std::endl;
 }
 
-SFInteger* SFLiteral::IntegerClass () {
+SFBasicInteger* SFLiteral::IntegerClass () {
 	if (this->type != Basic_Integer)
 		throw std::runtime_error("Not a number");
-	return static_cast<SFInteger*>(this);
+	return static_cast<SFBasicInteger*>(this);
 }
-const SFInteger* SFLiteral::IntegerClass () const {
+const SFBasicInteger* SFLiteral::IntegerClass () const {
 	if (this->type != Basic_Integer)
 		throw std::runtime_error("Not a number");
-	return static_cast<const SFInteger*>(this);
+	return static_cast<const SFBasicInteger*>(this);
 }
-SFList* SFLiteral::ListClass() {
+SFBasicList* SFLiteral::ListClass() {
 	if (this->type != Basic_List)
 		throw std::runtime_error("Not a list");
-	return static_cast<SFList*>(this);
+	return static_cast<SFBasicList*>(this);
 }
-const SFList* SFLiteral::ListClass() const {
+const SFBasicList* SFLiteral::ListClass() const {
 	if (this->type != Basic_List)
 		throw std::runtime_error("Not a list");
-	return static_cast<const SFList*>(this);
+	return static_cast<const SFBasicList*>(this);
 }
 
-SFInteger operator + (const SFInteger &a, const SFInteger &b) {
-	return SFInteger(a.getValue() + b.getValue());
+SFBasicInteger operator + (const SFBasicInteger &a, const SFBasicInteger &b) {
+	return SFBasicInteger(a.getValue() + b.getValue());
 }
-SFInteger operator - (const SFInteger &a, const SFInteger &b) {
-	return SFInteger(a.getValue() - b.getValue());
+SFBasicInteger operator - (const SFBasicInteger &a, const SFBasicInteger &b) {
+	return SFBasicInteger(a.getValue() - b.getValue());
 }
-SFInteger operator * (const SFInteger &a, const SFInteger &b) {
-	return SFInteger(a.getValue() * b.getValue());
+SFBasicInteger operator * (const SFBasicInteger &a, const SFBasicInteger &b) {
+	return SFBasicInteger(a.getValue() * b.getValue());
 }
-SFInteger operator / (const SFInteger &a, const SFInteger &b) {
-	return SFInteger(a.getValue() / b.getValue());
+SFBasicInteger operator / (const SFBasicInteger &a, const SFBasicInteger &b) {
+	return SFBasicInteger(a.getValue() / b.getValue());
 }
-SFInteger operator | (const SFInteger &a, const SFInteger &b) {
-	return SFInteger(a.getValue() | b.getValue());
+SFBasicInteger operator | (const SFBasicInteger &a, const SFBasicInteger &b) {
+	return SFBasicInteger(a.getValue() | b.getValue());
 }
-SFInteger operator & (const SFInteger &a, const SFInteger &b) {
-	return SFInteger(a.getValue() & b.getValue());
+SFBasicInteger operator & (const SFBasicInteger &a, const SFBasicInteger &b) {
+	return SFBasicInteger(a.getValue() & b.getValue());
 }
-SFInteger operator ^ (const SFInteger &a, const SFInteger &b) {
-	return SFInteger(a.getValue() ^ b.getValue());
+SFBasicInteger operator ^ (const SFBasicInteger &a, const SFBasicInteger &b) {
+	return SFBasicInteger(a.getValue() ^ b.getValue());
 }
-SFInteger operator ! (const SFInteger &a) {
-	return SFInteger(!a.getValue());
+SFBasicInteger operator ! (const SFBasicInteger &a) {
+	return SFBasicInteger(!a.getValue());
 }
-SFInteger operator << (const SFInteger &a, const SFInteger &b) {
-	return SFInteger(a.getValue() << b.getValue());
+SFBasicInteger operator << (const SFBasicInteger &a, const SFBasicInteger &b) {
+	return SFBasicInteger(a.getValue() << b.getValue());
 }
-SFInteger operator >> (const SFInteger &a, const SFInteger &b) {
-	return SFInteger(a.getValue() >> b.getValue());
+SFBasicInteger operator >> (const SFBasicInteger &a, const SFBasicInteger &b) {
+	return SFBasicInteger(a.getValue() >> b.getValue());
 }
 
-SFList operator + (const SFList &a, const SFList &b) {
-	SFList result(a);
+SFBasicList operator + (const SFBasicList &a, const SFBasicList &b) {
+	SFBasicList result(a);
 	result.ShallowCopy(&b);
 	return result;
 }

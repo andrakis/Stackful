@@ -85,7 +85,7 @@ void addBuiltin(std::string name, SFBuiltinParams_t parameters, SFBuiltin_f fn) 
 }
 
 void setupBuiltins() {
-	addBuiltin("print/*", params(), [](SFList &parameters, SFClosure_p closure) {
+	addBuiltin("print/*", params(), [](SFBasicList &parameters, SFClosure_p closure) {
 		std::stringstream s;
 		bool first = true;
 		for (size_t i = 0; i < parameters.size(); i++) {
@@ -97,20 +97,20 @@ void setupBuiltins() {
 			s << p.get()->str();
 		}
 		std::cout << s.str() << std::endl;
-		return SFLiteral_p(new SFList(sfvar(atomNil)));
+		return SFLiteral_p(new SFBasicList(sfvar(atomNil)));
 	});
 
-	addBuiltin("var", params("Name", "Value"), [](SFList &parameters, SFClosure_p closure) {
+	addBuiltin("var", params("Name", "Value"), [](SFBasicList &parameters, SFClosure_p closure) {
 		closure.get()->setImmediate(parameters[0].get()->ListClass(), parameters[1]);
 		return parameters[1];
 	});
 
-	addBuiltin("set", params("Name", "Value"), [](SFList &parameters, SFClosure_p closure) {
+	addBuiltin("set", params("Name", "Value"), [](SFBasicList &parameters, SFClosure_p closure) {
 		closure.get()->set(parameters[0].get()->ListClass(), parameters[1]);
 		return parameters[1];
 	});
 
-	addBuiltin("get", params("Name"), [](SFList &parameters, SFClosure_p closure) {
+	addBuiltin("get", params("Name"), [](SFBasicList &parameters, SFClosure_p closure) {
 		return closure.get()->get(parameters[0].get()->ListClass());
 	});
 }
