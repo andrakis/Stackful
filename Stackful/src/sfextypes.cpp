@@ -52,13 +52,13 @@ std::string varstr(const SFBasicList &l) {
 
 SFFunctionCall::SFFunctionCall(const std::string &fn) : SFExtended(FunctionCall)
 {
-	this->push_back(getAtom(fn));
+	this->push_back(new SFAtom(fn));
 	this->push_back(SFBasicList());
 }
 
 SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1) : SFExtended(FunctionCall)
 {
-	this->push_back(getAtom(fn));
+	this->push_back(new SFAtom(fn));
 	SFBasicList *params = new SFBasicList();
 	params->push_back(p1);
 	this->push_back(SFLiteral_p(params));
@@ -66,7 +66,7 @@ SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1) : SFExtend
 
 SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2) : SFExtended(FunctionCall)
 {
-	this->push_back(getAtom(fn));
+	this->push_back(new SFAtom(fn));
 	SFBasicList *params = new SFBasicList();
 	params->push_back(p1);
 	params->push_back(p2);
@@ -75,7 +75,7 @@ SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_
 
 SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2, SFLiteral_p p3) : SFExtended(FunctionCall)
 {
-	this->push_back(getAtom(fn));
+	this->push_back(new SFAtom(fn));
 	SFBasicList *params = new SFBasicList();
 	params->push_back(p1);
 	params->push_back(p2);
@@ -85,7 +85,7 @@ SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_
 
 SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2, SFLiteral_p p3, SFLiteral_p p4) : SFExtended(FunctionCall)
 {
-	this->push_back(getAtom(fn));
+	this->push_back(new SFAtom(fn));
 	SFBasicList *params = new SFBasicList();
 	params->push_back(p1);
 	params->push_back(p2);
@@ -97,7 +97,7 @@ SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_
 std::string SFFunctionCall::_str() const {
 	std::stringstream ss;
 	ss << "{FunctionCall: ";
-	ss << getAtom(this->getFunction()->IntegerClass()->getValue());
+	ss << this->getFunction()->str();
 	ss << this->getArguments()->str();
 	ss << "}";
 	return ss.str();
