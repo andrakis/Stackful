@@ -35,6 +35,7 @@ public:
 	virtual std::string extLiteral() const = 0;
 	SFExtended(const SFExtended &copy) : SFBasicList(copy), extendedType(copy.getExtendedType()) {
 	}
+	typedef SFList_t::iterator iterator;
 protected:
 	SFExtended(ExtendedType extType) : SFBasicList(), extendedType(extType) {
 	}
@@ -51,11 +52,12 @@ public:
 		push_back(getAtom(name));
 	}
 	std::string extLiteral() const {
-		return "'" + getAtom(operator[](1).get()->IntegerClass()->getValue()) + "'";
+		return "'" + getAtom(operator[](1)->IntegerClass()->getValue()) + "'";
 	}
 protected:
 	std::string _str() const {
-		return getAtom(operator[](1).get()->IntegerClass()->getValue());
+		std::string r = getAtom(operator[](1)->IntegerClass()->getValue());
+		return r;
 	}
 };
 
@@ -104,9 +106,9 @@ protected:
 	}
 };
 
-class SFXString : public SFExtended {
+class SFString : public SFExtended {
 public:
-	SFXString(const std::string &str) : SFExtended(String) {
+	SFString(const std::string &str) : SFExtended(String) {
 		SFBasicList *l = new SFBasicList();
 		std::string::const_iterator it = str.begin();
 		for (; it != str.end(); it++) {
@@ -279,9 +281,7 @@ public:
 		return str();
 	}
 protected:
-	std::string str() const {
-		return "OPCHAIN";
-	}
+	std::string _str() const;
 	SFOpChain_p parent;
 	SFClosure_p closure;
 };
@@ -305,8 +305,12 @@ public:
 	std::string extLiteral() const {
 		return str();
 	}
-protected:
-	std::string _str() const {
-		return "FunctionCall";
+	SFLiteral_p getFunction() const {
+		return at(0);
 	}
+	SFLiteral_p getArguments() const {
+		return at(1);
+	}
+protected:
+	std::string _str() const;
 };

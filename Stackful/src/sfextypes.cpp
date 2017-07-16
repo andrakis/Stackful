@@ -1,4 +1,5 @@
 #include <exception>
+#include <sstream>
 #include <string>
 
 #include "../include/sfatoms.hpp"
@@ -23,7 +24,7 @@ SFBasicList sfvariable(const SFInteger_t type, SFLiteral_p value) {
 }
 
 SFBasicList sfvar(const std::string &str) {
-	return SFXString(str);
+	return SFString(str);
 }
 
 SFBasicList sfvarfloat(const double value) {
@@ -91,4 +92,30 @@ SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_
 	params->push_back(p3);
 	params->push_back(p4);
 	this->push_back(SFLiteral_p(params));
+}
+
+std::string SFFunctionCall::_str() const {
+	std::stringstream ss;
+	ss << "{FunctionCall: ";
+	ss << getAtom(this->getFunction()->IntegerClass()->getValue());
+	ss << this->getArguments()->str();
+	ss << "}";
+	return ss.str();
+}
+
+std::string SFOpChain::_str() const {
+	std::stringstream ss;
+	bool first = true;
+	ss << "{OpChain: [";
+	SFOpChain::iterator it = this->begin();
+	for (; it != this->end(); it++) {
+		SFLiteral_p item = *it;
+		if (first)
+			first = false;
+		else
+			ss << ", ";
+		ss << item.get()->str();
+	}
+	ss << "]}";
+	return ss.str();
 }

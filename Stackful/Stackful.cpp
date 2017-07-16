@@ -125,7 +125,7 @@ void test() {
 	SFBuiltin_f print = getBuiltin("print/*");
 	SFList printParams;
 	// "Test" 1 2 3
-	printParams.push_back(SFLiteral_p(new SFXString("Test")));
+	printParams.push_back(SFLiteral_p(new SFString("Test")));
 	printParams.push_back(SFLiteral_p(new SFInteger(1)));
 	printParams.push_back(SFLiteral_p(new SFInteger(2)));
 	printParams.push_back(SFLiteral_p(new SFInteger(3)));
@@ -143,6 +143,14 @@ void test() {
 	// Test var, get
 	// ((var A "foobar")
 	//  (print "A:" (get 'A')))
+	SFOpChain ocTest;
+	SFFunctionCall *fcVar = new SFFunctionCall("var", SFLiteral_p(new SFAtom("A")), SFLiteral_p(new SFString("foobar")));
+	SFFunctionCall *fcGet = new SFFunctionCall("get", SFLiteral_p(new SFAtom("A")));
+	SFFunctionCall *fcPrint = new SFFunctionCall("print", SFLiteral_p(new SFString("A:")), SFLiteral_p(fcGet));
+	ocTest.push_back(SFLiteral_p(fcVar));
+	ocTest.push_back(SFLiteral_p(fcPrint));
+
+	std::cout << ocTest.str() << std::endl;
 }
 
 int main()
