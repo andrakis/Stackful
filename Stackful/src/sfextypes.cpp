@@ -114,7 +114,7 @@ std::string SFOpChain::_str() const {
 			first = false;
 		else
 			ss << ", ";
-		ss << item.get()->str();
+		ss << item->str();
 	}
 	ss << "]}";
 	return ss.str();

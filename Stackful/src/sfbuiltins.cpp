@@ -94,24 +94,24 @@ void setupBuiltins() {
 			else
 				s << " ";
 			SFLiteral_p p = parameters[i];
-			s << p.get()->str();
+			s << p->str();
 		}
 		std::cout << s.str() << std::endl;
 		return SFLiteral_p(new SFBasicList(sfvar(atomNil)));
 	});
 
 	addBuiltin("var", params("Name", "Value"), [](SFBasicList &parameters, SFClosure_p closure) {
-		closure.get()->setImmediate(parameters[0].get()->ListClass(), parameters[1]);
+		closure->setImmediate(parameters[0]->ListClass(), parameters[1]);
 		return parameters[1];
 	});
 
 	addBuiltin("set", params("Name", "Value"), [](SFBasicList &parameters, SFClosure_p closure) {
-		closure.get()->set(parameters[0].get()->ListClass(), parameters[1]);
+		closure->set(parameters[0]->ListClass(), parameters[1]);
 		return parameters[1];
 	});
 
 	addBuiltin("get", params("Name"), [](SFBasicList &parameters, SFClosure_p closure) {
-		return closure.get()->get(parameters[0].get()->ListClass());
+		return closure->get(parameters[0]->ListClass());
 	});
 }
 

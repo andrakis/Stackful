@@ -72,7 +72,7 @@ public:
 	}
 protected:
 	std::string _str() const {
-		return operator[](1).get()->str();
+		return operator[](1)->str();
 	}
 };
 
@@ -98,9 +98,9 @@ public:
 protected:
 	std::string _str() const {
 		doublebits b;
-		const SFBasicList &v = operator[](1).get()->ListClass();
+		const SFBasicList &v = operator[](1)->ListClass();
 		for (size_t i = 0; i < v.size(); i++) {
-			b.valueInteger[i] = v[i].get()->IntegerClass()->getValue();
+			b.valueInteger[i] = v[i]->IntegerClass()->getValue();
 		}
 		return std::to_string(b.valueDouble);
 	}
@@ -126,9 +126,9 @@ protected:
 	std::string _str() const {
 		std::stringstream s;
 
-		const SFBasicList &v = operator[](1).get()->ListClass();
+		const SFBasicList &v = operator[](1)->ListClass();
 		for (size_t i = 0; i < v.size(); i++) {
-			char c = (char)v[i].get()->IntegerClass()->getValue();
+			char c = (char)v[i]->IntegerClass()->getValue();
 			s << c;
 		}
 		return s.str();
@@ -179,10 +179,10 @@ public:
 	SFClosure(const SFBasicList &ops) : SFExtended(Closure, ops), parent(nullptr), topmost(nullptr) {
 	}
 	// Construct with no ops and given parent (use shared ptr)
-	SFClosure(const SFClosure_p &parent) : SFExtended(Closure), parent(parent), topmost(parent.get()->getTopmost()) {
+	SFClosure(const SFClosure_p &parent) : SFExtended(Closure), parent(parent), topmost(parent->getTopmost()) {
 	}
 	// Construct with ops and given parent (use shared ptr)
-	SFClosure(const SFClosure_p &parent, const SFBasicList &ops) : SFExtended(Closure, ops), parent(parent), topmost(parent.get()->getTopmost()) {
+	SFClosure(const SFClosure_p &parent, const SFBasicList &ops) : SFExtended(Closure, ops), parent(parent), topmost(parent->getTopmost()) {
 	}
 	~SFClosure() {
 	}
@@ -192,7 +192,7 @@ public:
 	}
 	void setParent(const SFClosure_p &parent) {
 		this->parent = parent;
-		this->topmost = parent.get()->getTopmost();
+		this->topmost = parent->getTopmost();
 	}
 	SFLiteral_p get(const SFList_p &key) const throw(std::runtime_error) {
 		return get(key.get());
@@ -237,7 +237,7 @@ protected:
 			// [key, value]
 			const SFBasicList &list = find->get()->ListClass();
 			// check key
-			if (list[0].get()->ListClass()->isEqual(&key))
+			if (list[0]->ListClass()->isEqual(&key))
 				break;
 		}
 		return find;
@@ -250,7 +250,7 @@ protected:
 			setImmediate(key, value);
 			return true;
 		}
-		if (parent.get() != nullptr && parent.get()->trySet(key, value))
+		if (parent.get() != nullptr && parent->trySet(key, value))
 			return true;
 		return false;
 	}
@@ -273,7 +273,7 @@ public:
 	SFOpChain(const SFOpChain_p &parent) : SFExtended(Closure), parent(parent), closure(new SFClosure()) {
 	}
 	// Initialize with given parent and ops
-	SFOpChain(const SFOpChain_p &parent, const SFList_p &ops) : SFExtended(Closure, ops.get()), parent(parent), closure(parent.get()->getClosure()) {
+	SFOpChain(const SFOpChain_p &parent, const SFList_p &ops) : SFExtended(Closure, ops.get()), parent(parent), closure(parent->getClosure()) {
 	}
 	SFOpChain_p getParent() const { return parent; };
 	SFClosure_p getClosure() const { return closure; }
