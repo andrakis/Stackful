@@ -23,9 +23,11 @@
           <itemPath>Stackful/src/sfatoms.cpp</itemPath>
           <itemPath>Stackful/src/sfbuiltins.cpp</itemPath>
           <itemPath>Stackful/src/sfextypes.cpp</itemPath>
+          <itemPath>Stackful/src/sfinterp.cpp</itemPath>
           <itemPath>Stackful/src/sftypes.cpp</itemPath>
         </logicalFolder>
         <itemPath>Stackful/Stackful.cpp</itemPath>
+        <itemPath>Stackful/stdafx.h</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -72,7 +74,11 @@
       </item>
       <item path="Stackful/src/sfextypes.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="Stackful/src/sfinterp.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="Stackful/src/sftypes.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/stdafx.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -112,7 +118,11 @@
       </item>
       <item path="Stackful/src/sfextypes.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="Stackful/src/sfinterp.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="Stackful/src/sftypes.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/stdafx.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

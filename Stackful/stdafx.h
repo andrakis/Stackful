@@ -3,13 +3,15 @@
 // are changed infrequently
 //
 
+#if defined(_WIN32) || defined(_WIN64)
+// Required on Windows to build under MinGW, otherwise one receives an error
+// in the link stage about multiple definition of `vsnprintf`.
+// See: https://stackoverflow.com/questions/43294488/mingw-g-multiple-definition-of-vsnprintf-when-using-to-string
+#define __USE_MINGW_ANSI_STDIO 0
+
 #pragma once
 
 #include "targetver.h"
 
-#include <stdio.h>
-#include <tchar.h>
+#endif
 
-
-
-// TODO: reference additional headers your program requires here

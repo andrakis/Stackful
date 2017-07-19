@@ -221,6 +221,7 @@
     <ClCompile Include="src\sfatoms.cpp" />
     <ClCompile Include="src\sfbuiltins.cpp" />
     <ClCompile Include="src\sfextypes.cpp" />
+    <ClCompile Include="src\sfinterp.cpp" />
     <ClCompile Include="src\sftypes.cpp" />
     <ClCompile Include="Stackful.cpp" />
     <ClCompile Include="stdafx.cpp" />

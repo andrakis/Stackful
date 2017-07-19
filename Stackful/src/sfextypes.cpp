@@ -1,3 +1,5 @@
+#include "../stdafx.h"
+
 #include <exception>
 #include <sstream>
 #include <string>
