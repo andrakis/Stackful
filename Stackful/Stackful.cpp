@@ -140,17 +140,8 @@ void test() {
 	std::cout << "FA2: " << fa2 << " = " << fastr(getFunctionArity(fa2, 0)) << std::endl;
 	std::cout << "FA2: " << fa3 << " = " << fastr(getFunctionArity(fa3, 0)) << std::endl;
 
-	// Test var, get
-	// ((var A "foobar")
-	//  (print "A:" (get 'A')))
-	SFOpChain ocTest;
-	SFFunctionCall *fcVar = new SFFunctionCall("var", SFLiteral_p(new SFAtom("A")), SFLiteral_p(new SFString("foobar")));
-	SFFunctionCall *fcGet = new SFFunctionCall("get", SFLiteral_p(new SFAtom("A")));
-	SFFunctionCall *fcPrint = new SFFunctionCall("print", SFLiteral_p(new SFString("A:")), SFLiteral_p(fcGet));
-	ocTest.push_back(SFLiteral_p(fcVar));
-	ocTest.push_back(SFLiteral_p(fcPrint));
-
-	std::cout << ocTest.str() << std::endl;
+	void interp_test();
+	interp_test();
 }
 
 int main()

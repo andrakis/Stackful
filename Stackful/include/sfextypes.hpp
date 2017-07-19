@@ -3,6 +3,7 @@
 // Extended types
 
 #include "sftypes.hpp"
+#include "sfatoms.hpp"
 
 class SFOpChain;
 class SFClosure;
@@ -280,10 +281,24 @@ public:
 	std::string extLiteral() const {
 		return str();
 	}
+	SFExtended *get () const {
+		if(pos >= size())
+			return nullptr;
+		SFLiteral_p p(at(pos));
+		return dynamic_cast<SFExtended*>(p.get());
+	}
+	SFExtended *next () {
+		pos++;
+		return get();
+	}
+	void rewind () {
+		pos = -1;
+	}
 protected:
 	std::string _str() const;
 	SFOpChain_p parent;
 	SFClosure_p closure;
+	size_t pos = -1;
 };
 
 SFBasicList sfvar(const std::string &str);
