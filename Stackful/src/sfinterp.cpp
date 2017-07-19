@@ -7,7 +7,7 @@ class SFInterpreter {
 public:
 	SFInterpreter () { }
 	~SFInterpreter () { }
-	SFLiteral_p run(SFOpChain &chain) const throw() {
+	SFLiteral_p run(SFOpChain &chain) const throw(std::runtime_error) {
 		SFLiteral_p value(new SFAtom("nil"));
 		while(chain.next() != nullptr) {
 			SFExtended *i = chain.get();
@@ -44,5 +44,6 @@ void interp_test () {
 
 	std::cout << ocTest.str() << std::endl;
 	SFInterpreter si;
-	std::cout << "Result: " << si.run(ocTest)->str() << std::endl;
+	SFLiteral_p result = si.run(ocTest);
+	std::cout << "Result: " << result->str() << std::endl;
 }
