@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Stackful/Stackful.o \
 	${OBJECTDIR}/Stackful/src/sfatoms.o \
 	${OBJECTDIR}/Stackful/src/sfbuiltins.o \
+	${OBJECTDIR}/Stackful/src/sfdebug.o \
 	${OBJECTDIR}/Stackful/src/sfextypes.o \
 	${OBJECTDIR}/Stackful/src/sfinterp.o \
 	${OBJECTDIR}/Stackful/src/sftypes.o
@@ -61,11 +62,11 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/stackful.exe
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/stackful.exe
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/stackful.exe: ${OBJECTFILES}
-	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/stackful ${OBJECTFILES} ${LDLIBSOPTIONS}
+${CND_DISTDIR}/${CND_CONF}/stackful.exe: ${OBJECTFILES}
+	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/stackful ${OBJECTFILES} ${LDLIBSOPTIONS} -s
 
 ${OBJECTDIR}/Stackful/Stackful.o: Stackful/Stackful.cpp
 	${MKDIR} -p ${OBJECTDIR}/Stackful
@@ -81,6 +82,11 @@ ${OBJECTDIR}/Stackful/src/sfbuiltins.o: Stackful/src/sfbuiltins.cpp
 	${MKDIR} -p ${OBJECTDIR}/Stackful/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfbuiltins.o Stackful/src/sfbuiltins.cpp
+
+${OBJECTDIR}/Stackful/src/sfdebug.o: Stackful/src/sfdebug.cpp
+	${MKDIR} -p ${OBJECTDIR}/Stackful/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfdebug.o Stackful/src/sfdebug.cpp
 
 ${OBJECTDIR}/Stackful/src/sfextypes.o: Stackful/src/sfextypes.cpp
 	${MKDIR} -p ${OBJECTDIR}/Stackful/src

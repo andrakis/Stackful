@@ -16,12 +16,14 @@
         <logicalFolder name="include" displayName="include" projectFiles="true">
           <itemPath>Stackful/include/sfatoms.hpp</itemPath>
           <itemPath>Stackful/include/sfbuiltins.hpp</itemPath>
+          <itemPath>Stackful/include/sfdebug.h</itemPath>
           <itemPath>Stackful/include/sfextypes.hpp</itemPath>
           <itemPath>Stackful/include/sftypes.hpp</itemPath>
         </logicalFolder>
         <logicalFolder name="src" displayName="src" projectFiles="true">
           <itemPath>Stackful/src/sfatoms.cpp</itemPath>
           <itemPath>Stackful/src/sfbuiltins.cpp</itemPath>
+          <itemPath>Stackful/src/sfdebug.cpp</itemPath>
           <itemPath>Stackful/src/sfextypes.cpp</itemPath>
           <itemPath>Stackful/src/sfinterp.cpp</itemPath>
           <itemPath>Stackful/src/sftypes.cpp</itemPath>
@@ -57,12 +59,18 @@
         <ccTool>
           <standard>8</standard>
         </ccTool>
+        <linkerTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/stackful</output>
+          <stripSymbols>true</stripSymbols>
+        </linkerTool>
       </compileType>
       <item path="Stackful/Stackful.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Stackful/include/sfatoms.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Stackful/include/sfbuiltins.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/include/sfdebug.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Stackful/include/sfextypes.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -71,6 +79,8 @@
       <item path="Stackful/src/sfatoms.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Stackful/src/sfbuiltins.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sfdebug.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Stackful/src/sfextypes.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -108,6 +118,8 @@
       </item>
       <item path="Stackful/include/sfbuiltins.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Stackful/include/sfdebug.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Stackful/include/sfextypes.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Stackful/include/sftypes.hpp" ex="false" tool="3" flavor2="0">
@@ -115,6 +127,8 @@
       <item path="Stackful/src/sfatoms.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Stackful/src/sfbuiltins.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sfdebug.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Stackful/src/sfextypes.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -15,7 +15,7 @@ It supports only two main data types:
 
 Everything else the VM requires will be implemented with these two basic constructs.
 
-Some additional data types implemented with these constructs (PROPOSAL):
+Some additional data types implemented with these constructs (PARTIALLY IMPLEMENTED):
 
 * `(0, 42)` - A reference to the atom table, item 42
 
@@ -61,7 +61,7 @@ Continuous testing is performed for the following environments:
 
    * `CXXFLAGS=-s` - strip all possible symbols from output file
 
-   ***Note***: The output file will be `dist/($CONF)/MinGW-Windows/stackful`. This may not match your system.
+   ***Note***: The output file will be `dist/($CONF)/stackful`.
 
 
 Why Stackful?

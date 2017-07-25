@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Stackful/Stackful.o \
 	${OBJECTDIR}/Stackful/src/sfatoms.o \
 	${OBJECTDIR}/Stackful/src/sfbuiltins.o \
+	${OBJECTDIR}/Stackful/src/sfdebug.o \
 	${OBJECTDIR}/Stackful/src/sfextypes.o \
 	${OBJECTDIR}/Stackful/src/sfinterp.o \
 	${OBJECTDIR}/Stackful/src/sftypes.o
@@ -81,6 +82,11 @@ ${OBJECTDIR}/Stackful/src/sfbuiltins.o: Stackful/src/sfbuiltins.cpp
 	${MKDIR} -p ${OBJECTDIR}/Stackful/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfbuiltins.o Stackful/src/sfbuiltins.cpp
+
+${OBJECTDIR}/Stackful/src/sfdebug.o: Stackful/src/sfdebug.cpp
+	${MKDIR} -p ${OBJECTDIR}/Stackful/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfdebug.o Stackful/src/sfdebug.cpp
 
 ${OBJECTDIR}/Stackful/src/sfextypes.o: Stackful/src/sfextypes.cpp
 	${MKDIR} -p ${OBJECTDIR}/Stackful/src
