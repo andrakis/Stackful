@@ -212,6 +212,7 @@
   <ItemGroup>
     <ClInclude Include="include\sfatoms.hpp" />
     <ClInclude Include="include\sfbuiltins.hpp" />
+    <ClInclude Include="include\sfdebug.h" />
     <ClInclude Include="include\sfextypes.hpp" />
     <ClInclude Include="include\sftypes.hpp" />
     <ClInclude Include="stdafx.h" />
@@ -220,6 +221,7 @@
   <ItemGroup>
     <ClCompile Include="src\sfatoms.cpp" />
     <ClCompile Include="src\sfbuiltins.cpp" />
+    <ClCompile Include="src\sfdebug.cpp" />
     <ClCompile Include="src\sfextypes.cpp" />
     <ClCompile Include="src\sfinterp.cpp" />
     <ClCompile Include="src\sftypes.cpp" />

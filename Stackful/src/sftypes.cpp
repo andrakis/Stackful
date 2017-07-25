@@ -5,10 +5,10 @@ namespace stackful {
 
 	SFLiteral::~SFLiteral() {
 		return;
-		std::cout << "A ";
-		if (this->type == Basic_Integer) std::cout << "number " << this->IntegerClass()->getValue();
-		else if (this->type == Basic_List) std::cout << "list";
-		std::cout << " has died" << std::endl;
+		debug << "A ";
+		if (this->type == Basic_Integer) debug << "number " << this->IntegerClass()->getValue();
+		else if (this->type == Basic_List) debug << "list";
+		debug << " has died" << std::endl;
 	}
 
 	SFBasicInteger* SFLiteral::IntegerClass() {

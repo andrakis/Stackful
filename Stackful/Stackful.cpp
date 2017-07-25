@@ -12,6 +12,9 @@
 #include "include/sfbuiltins.hpp"
 #include "include/sftypes.hpp"
 #include "include/sfextypes.hpp"
+#include "include/sfdebug.h"
+
+using namespace stackful;
 
 SFBasicList xtolist(const std::string &str) {
 	SFBasicList l;
@@ -29,7 +32,7 @@ public:
 	SFState() {
 	}
 	virtual ~SFState() {
-		std::cout << "A state has died" << std::endl;
+		debug << "A state has died" << std::endl;
 	}
 protected:
 	SFBasicList ops;
@@ -83,21 +86,21 @@ void test() {
 	assert((l2 == l3) == false);
 
 	l3.pop_back();
-	std::cout << l3.str() << std::endl;
+	debug << l3.str() << std::endl;
 
 	l4.push_back(l1);
 
 	//SFState state;
 
-	std::cout << l4.str() << std::endl;
-	std::cout << "String test: " << sfvar("Testing ABC").str() << std::endl;
+	debug << l4.str() << std::endl;
+	debug << "String test: " << sfvar("Testing ABC").str() << std::endl;
 
 	SFBasicList str1 = xtolist("Foobar whee");
 	SFBasicList str2 = xtolist("Foobar whee");
 	SFBasicList str3 = xtolist("Var humbug");
 
-	std::cout << "String test 1: " << tostring(str1 == str2) << std::endl;
-	std::cout << "String test 2: " << tostring(str1 == str3) << std::endl;
+	debug << "String test 1: " << tostring(str1 == str2) << std::endl;
+	debug << "String test 2: " << tostring(str1 == str3) << std::endl;
 
 	SFClosure c;
 	SFBasicList *vKey = new SFBasicList(xtolist("Test"));
@@ -105,21 +108,21 @@ void test() {
 	SFLiteral_p pValue(new SFBasicList(str2));
 	SFLiteral_p pValue2(new SFBasicList(str3));
 	c.set(vKey, pValue);
-	std::cout << "Closure test: " << c.get(pKey)->str() << std::endl;
+	debug << "Closure test: " << c.get(pKey)->str() << std::endl;
 	// Ensure this only results in 1 item
 	c.set(vKey, pValue2);
 	assert(c.size() == 1);
-	std::cout << "Closure test: " << c.get(pKey)->str() << std::endl;
+	debug << "Closure test: " << c.get(pKey)->str() << std::endl;
 #ifndef NDEBUG
 	try {
 		SFLiteral_p not_exist(c.get(str3));
-		std::cout << "Closure test failure: " << not_exist << std::endl;
+		debug << "Closure test failure: " << not_exist << std::endl;
 	} catch (std::runtime_error e) {
-		std::cout << "Closure test OK" << std::endl;
+		debug << "Closure test OK" << std::endl;
 	}
 #endif
 
-	setupBuiltins();
+	stackful::setupBuiltins();
 	SFBuiltin_f print = getBuiltin("print/*");
 	SFList printParams;
 	// "Test" 1 2 3
@@ -134,9 +137,9 @@ void test() {
 	std::string fa2 = "foo/*";
 	std::string fa3 = "foo/2";
 
-	std::cout << "FA1: " << fa1 << " = " << fastr(getFunctionArity(fa1, 2)) << std::endl;
-	std::cout << "FA2: " << fa2 << " = " << fastr(getFunctionArity(fa2, 0)) << std::endl;
-	std::cout << "FA2: " << fa3 << " = " << fastr(getFunctionArity(fa3, 0)) << std::endl;
+	debug << "FA1: " << fa1 << " = " << fastr(getFunctionArity(fa1, 2)) << std::endl;
+	debug << "FA2: " << fa2 << " = " << fastr(getFunctionArity(fa2, 0)) << std::endl;
+	debug << "FA2: " << fa3 << " = " << fastr(getFunctionArity(fa3, 0)) << std::endl;
 
 	void interp_test();
 	interp_test();
@@ -144,6 +147,7 @@ void test() {
 
 int main()
 {
+	debug.setEnabled(false);
 	test();
     return 0;
 }

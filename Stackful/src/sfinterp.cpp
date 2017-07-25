@@ -13,7 +13,7 @@ public:
 		SFLiteral_p value(new SFAtom("nil"));
 		while(chain.next() != nullptr) {
 			SFExtended *i = chain.get();
-			std::cout << "Instruction: " << i->str() << std::endl;
+			debug << "Instruction: " << i->str() << std::endl;
 			switch(i->getExtendedType()) {
 				case FunctionCall:
 				{
@@ -44,8 +44,8 @@ void interp_test () {
 	ocTest.push_back(SFLiteral_p(fcVar));
 	ocTest.push_back(SFLiteral_p(fcPrint));
 
-	std::cout << ocTest.str() << std::endl;
+	debug << ocTest.str() << std::endl;
 	SFInterpreter si;
 	SFLiteral_p result = si.run(ocTest);
-	std::cout << "Result: " << result->str() << std::endl;
+	debug << "Result: " << result->str() << std::endl;
 }

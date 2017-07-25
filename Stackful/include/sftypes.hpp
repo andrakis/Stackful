@@ -7,6 +7,8 @@
 #include <sstream>		// stringstream
 #include <vector>
 
+#include "sfdebug.h"
+
 namespace stackful {
 
 	// The size of our basic number type
@@ -127,7 +129,7 @@ namespace stackful {
 		}
 		void clear() {
 			if (size() == 0)
-				std::cout << "Basic_List::clear() called when empty!" << std::endl;
+				debug << "Basic_List::clear() called when empty!" << std::endl;
 			value->clear();
 		}
 		SFLiteral_p pop_back() throw(std::runtime_error) {
