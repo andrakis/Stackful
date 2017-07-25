@@ -147,7 +147,6 @@ void test() {
 
 int main()
 {
-	debug.setEnabled(false);
 	test();
     return 0;
 }
