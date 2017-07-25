@@ -3,6 +3,8 @@
 #include <exception>
 #include <iostream>
 
+using namespace stackful;
+
 class SFInterpreter {
 public:
 	SFInterpreter () { }

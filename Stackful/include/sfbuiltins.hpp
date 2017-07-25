@@ -7,25 +7,29 @@
 
 #include "sfextypes.hpp"
 
-// Standard builtin function signature
-typedef SFLiteral_p(*SFBuiltin_f)(SFBasicList&, SFClosure_p);
-typedef std::map<std::string, SFBuiltin_f> SFBuiltinMapString_t;
-typedef std::map<SFInteger_t, SFBuiltin_f> SFBuiltinMapAtom_t;
+namespace stackful {
 
-typedef std::tuple<std::string, char> SFFunctionArity_t;
+	// Standard builtin function signature
+	typedef SFLiteral_p(*SFBuiltin_f)(SFBasicList&, SFClosure_p);
+	typedef std::map<std::string, SFBuiltin_f> SFBuiltinMapString_t;
+	typedef std::map<SFInteger_t, SFBuiltin_f> SFBuiltinMapAtom_t;
 
-// Builtin function param list
-typedef std::vector<std::string> SFBuiltinParams_t;
+	typedef std::tuple<std::string, char> SFFunctionArity_t;
 
-SFBuiltinParams_t params();
-SFBuiltinParams_t params(std::string);
-SFBuiltinParams_t params(std::string,std::string);
-SFBuiltinParams_t params(std::string,std::string,std::string);
-SFBuiltinParams_t params(std::string,std::string,std::string,std::string);
+	// Builtin function param list
+	typedef std::vector<std::string> SFBuiltinParams_t;
 
-void setupBuiltins();
-SFBuiltin_f getBuiltin(const SFInteger_t atomId);
-SFBuiltin_f getBuiltin(const std::string &name);
+	SFBuiltinParams_t params();
+	SFBuiltinParams_t params(std::string);
+	SFBuiltinParams_t params(std::string, std::string);
+	SFBuiltinParams_t params(std::string, std::string, std::string);
+	SFBuiltinParams_t params(std::string, std::string, std::string, std::string);
 
-SFFunctionArity_t getFunctionArity(const std::string &name, const int np);
-std::string fastr(const SFFunctionArity_t fa);
+	void setupBuiltins();
+	SFBuiltin_f getBuiltin(const SFInteger_t atomId);
+	SFBuiltin_f getBuiltin(const std::string &name);
+
+	SFFunctionArity_t getFunctionArity(const std::string &name, const int np);
+	std::string fastr(const SFFunctionArity_t fa);
+
+}

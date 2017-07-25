@@ -14,13 +14,15 @@
 #include "../include/sfbuiltins.hpp"
 #include "../include/sfextypes.hpp"
 
+using namespace stackful;
+
 SFInteger_t builtinCounter = 0;
 
 SFBuiltinMapAtom_t builtinsByAtom;
 SFBuiltinMapString_t builtinsByString;
 
 std::regex functionArityRegex(R"~(([a-z][a-z0-9_]+)\/?(\*|\d+)$)~");
-SFFunctionArity_t getFunctionArity(const std::string &name, const int np) {
+SFFunctionArity_t stackful::getFunctionArity(const std::string &name, const int np) {
 	std::sregex_iterator iter(name.begin(), name.end(), functionArityRegex);
 	std::sregex_iterator end;
 	if (iter == end) {
@@ -34,7 +36,7 @@ SFFunctionArity_t getFunctionArity(const std::string &name, const int np) {
 	return SFFunctionArity_t(fnName, std::stoi(fnArity));
 }
 
-std::string fastr(const SFFunctionArity_t fa) {
+std::string stackful::fastr(const SFFunctionArity_t fa) {
 	std::stringstream s;
 	s << std::get<0>(fa);
 	s << "/";
@@ -47,28 +49,28 @@ std::string fastr(const SFFunctionArity_t fa) {
 }
 
 
-SFBuiltinParams_t params() {
+SFBuiltinParams_t stackful::params() {
 	return SFBuiltinParams_t();
 }
-SFBuiltinParams_t params(std::string p1) {
+SFBuiltinParams_t stackful::params(std::string p1) {
 	SFBuiltinParams_t p;
 	p.push_back(p1);
 	return p;
 }
-SFBuiltinParams_t params(std::string p1, std::string p2) {
+SFBuiltinParams_t stackful::params(std::string p1, std::string p2) {
 	SFBuiltinParams_t p;
 	p.push_back(p1);
 	p.push_back(p2);
 	return p;
 }
-SFBuiltinParams_t params(std::string p1, std::string p2, std::string p3) {
+SFBuiltinParams_t stackful::params(std::string p1, std::string p2, std::string p3) {
 	SFBuiltinParams_t p;
 	p.push_back(p1);
 	p.push_back(p2);
 	p.push_back(p3);
 	return p;
 }
-SFBuiltinParams_t params(std::string p1, std::string p2, std::string p3, std::string p4) {
+stackful::SFBuiltinParams_t params(std::string p1, std::string p2, std::string p3, std::string p4) {
 	SFBuiltinParams_t p;
 	p.push_back(p1);
 	p.push_back(p2);
@@ -84,7 +86,7 @@ void addBuiltin(std::string name, SFBuiltinParams_t parameters, SFBuiltin_f fn) 
 	builtinsByString.emplace(name, fn);
 }
 
-void setupBuiltins() {
+void stackful::setupBuiltins() {
 	addBuiltin("print/*", params(), [](SFBasicList &parameters, SFClosure_p closure) {
 		std::stringstream s;
 		bool first = true;
@@ -115,10 +117,10 @@ void setupBuiltins() {
 	});
 }
 
-SFBuiltin_f getBuiltin(const SFInteger_t atomId) {
+SFBuiltin_f stackful::getBuiltin(const SFInteger_t atomId) {
 	return builtinsByAtom[atomId];
 }
 
-SFBuiltin_f getBuiltin(const std::string &name) {
+SFBuiltin_f stackful::getBuiltin(const std::string &name) {
 	return builtinsByString[name];
 }
