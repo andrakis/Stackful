@@ -3,7 +3,6 @@
 
 #include "stdafx.h"
 #include <assert.h>
-#include <iostream>
 #include <map>
 #include <stack>
 #include <string>
@@ -113,7 +112,7 @@ void test() {
 	c.set(vKey, pValue2);
 	assert(c.size() == 1);
 	debug << "Closure test: " << c.get(pKey)->str() << std::endl;
-#ifndef NDEBUG
+#ifdef _DEBUG
 	try {
 		SFLiteral_p not_exist(c.get(str3));
 		debug << "Closure test failure: " << not_exist << std::endl;
@@ -147,6 +146,9 @@ void test() {
 
 int main()
 {
+#ifdef _DEBUG
+	debug.setEnabled(true);
+#endif
 	test();
     return 0;
 }

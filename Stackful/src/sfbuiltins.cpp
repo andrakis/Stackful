@@ -98,7 +98,7 @@ void stackful::setupBuiltins() {
 			SFLiteral_p p = parameters[i];
 			s << p->str();
 		}
-		debug << s.str() << std::endl;
+		std::cout << s.str() << std::endl;
 		return SFLiteral_p(new SFBasicList(sfvar(atomNil)));
 	});
 

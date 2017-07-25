@@ -1,7 +1,6 @@
 #include "../include/sfextypes.hpp"
 
 #include <exception>
-#include <iostream>
 
 using namespace stackful;
 

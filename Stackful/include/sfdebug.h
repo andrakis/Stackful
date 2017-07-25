@@ -7,7 +7,7 @@ namespace stackful {
 	class SFDebug
 	{
 	public:
-		SFDebug() : enabled(true) { }
+		SFDebug() : enabled(false) { }
 		~SFDebug() { }
 
 		// Generic << operator
