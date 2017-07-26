@@ -130,6 +130,7 @@ void test() {
 	printParams.push_back(SFLiteral_p(new SFInteger(2)));
 	printParams.push_back(SFLiteral_p(new SFInteger(3)));
 	printParams.push_back(SFLiteral_p(new SFFloat(12.34)));
+	debug << "(print " << printParams.extLiteral() << std::endl;
 	print(printParams, SFClosure_p(new SFClosure(c)));
 
 	std::string fa1 = "foo";
