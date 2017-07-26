@@ -112,7 +112,7 @@ void test() {
 	c.set(vKey, pValue2);
 	assert(c.size() == 1);
 	debug << "Closure test: " << c.get(pKey)->str() << std::endl;
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(_DEBUG_EXCEPTIONS)
 	try {
 		SFLiteral_p not_exist(c.get(str3));
 		debug << "Closure test failure: " << not_exist << std::endl;

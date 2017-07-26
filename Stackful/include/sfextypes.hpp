@@ -39,6 +39,9 @@ namespace stackful {
 		SFExtended(const SFExtended &copy) : SFBasicList(copy), extendedType(copy.getExtendedType()) {
 		}
 		typedef SFList_t::iterator iterator;
+		bool isExtended() const {
+			return true;
+		}
 	protected:
 		SFExtended(ExtendedType extType) : SFBasicList(), extendedType(extType) {
 		}
@@ -145,20 +148,31 @@ namespace stackful {
 		SFList(const SFList &copy) : SFExtended(List, copy) {
 		}
 		std::string extLiteral() const {
-			return str();
+			return _literal(true);
 		}
 	protected:
+		SFList(ExtendedType type) : SFExtended(type) { }
+		SFList(ExtendedType type, const SFList &copy) : SFExtended(type, copy) {
+		}
 		std::string _str() const {
+			return _literal(false);
+		}
+
+		std::string _literal(bool literal) const {
 			std::stringstream s;
 			s << "[";
 			bool first = true;
 			auto it = begin();
 			for (; it != end(); it++) {
+				SFLiteral_p item = *it;
 				if (first)
 					first = false;
 				else
 					s << ", ";
-				s << it->get()->str();
+				if (item->isExtended() && literal)
+					s << item->ExtClass()->extLiteral();
+				else
+					s << item->str();
 			}
 			s << "]";
 			return s.str();
@@ -310,9 +324,9 @@ namespace stackful {
 	ExtendedType identifyLiteral(const SFBasicList &l);
 	std::string varstr(const SFBasicList &l);
 
-	class SFFunctionCall : public SFExtended {
+	class SFFunctionCall : public SFList {
 	public:
-		SFFunctionCall(const SFFunctionCall &copy) : SFExtended(FunctionCall, copy) {
+		SFFunctionCall(const SFFunctionCall &copy) : SFList(FunctionCall, copy) {
 		}
 		SFFunctionCall(const std::string &fn);
 		SFFunctionCall(const std::string &fn, SFLiteral_p p1);
@@ -320,13 +334,13 @@ namespace stackful {
 		SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2, SFLiteral_p p3);
 		SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2, SFLiteral_p p3, SFLiteral_p p4);
 		std::string extLiteral() const {
-			return str();
+			return _literal(true);
 		}
-		SFLiteral_p getFunction() const {
-			return at(0);
+		SFExtended *getFunction() const {
+			return at(0)->ExtClass();
 		}
-		SFLiteral_p getArguments() const {
-			return at(1);
+		SFExtended *getArguments() const {
+			return at(1)->ExtClass();
 		}
 	protected:
 		std::string _str() const;

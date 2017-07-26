@@ -19,6 +19,9 @@ namespace stackful {
 	class SFBasicInteger;
 	class SFBasicList;
 
+	// Extended forward declarations
+	class SFExtended;
+
 	enum SFType {
 		Basic_Integer,
 		Basic_List
@@ -32,8 +35,10 @@ namespace stackful {
 
 		SFBasicInteger *IntegerClass();
 		SFBasicList *ListClass();
+		SFExtended *ExtClass();
 		const SFBasicInteger *IntegerClass() const;
 		const SFBasicList *ListClass() const;
+		const SFExtended *ExtClass() const;
 
 		virtual std::string str() const = 0;
 
@@ -45,6 +50,10 @@ namespace stackful {
 			if (this->getType() != other.getType())
 				return false;
 			return _isequal(other);
+		}
+
+		virtual bool isExtended() const {
+			return false;
 		}
 
 	protected:

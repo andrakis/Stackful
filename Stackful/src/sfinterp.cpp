@@ -11,6 +11,8 @@ public:
 	SFLiteral_p run(SFOpChain &chain) const throw(std::runtime_error) {
 		SFLiteral_p value(new SFAtom("nil"));
 		while(chain.next() != nullptr) {
+			// Not const, as the instruction might be updated if it
+			// references a function with incorrect arity.
 			SFExtended *i = chain.get();
 			debug << "Instruction: " << i->str() << std::endl;
 			switch(i->getExtendedType()) {
