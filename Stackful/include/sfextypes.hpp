@@ -290,7 +290,7 @@ namespace stackful {
 		SFOpChain(const SFOpChain_p &parent) : SFExtended(Closure), parent(parent), closure(new SFClosure()) {
 		}
 		// Initialize with given parent and ops
-		SFOpChain(const SFOpChain_p &parent, const SFList_p &ops) : SFExtended(Closure, ops.get()), parent(parent), closure(parent->getClosure()) {
+		SFOpChain(const SFOpChain_p &parent, const SFOpChain *ops) : SFExtended(OpChain, ops), parent(parent), closure(parent->getClosure()) {
 		}
 		SFOpChain_p getParent() const { return parent; };
 		SFClosure_p getClosure() const { return closure; }
