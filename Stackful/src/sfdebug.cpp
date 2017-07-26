@@ -1,4 +1,4 @@
-#include "..\include\sfdebug.h"
+#include "../include/sfdebug.h"
 
 using namespace stackful;
 
