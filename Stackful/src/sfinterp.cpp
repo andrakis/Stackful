@@ -55,7 +55,8 @@ namespace stackful {
 						break;
 					}
 					default:
-						throw(std::runtime_error("Unknown type"));
+						value.swap(SFLiteral_p(i));
+						break;
 				}
 			}
 			return value;

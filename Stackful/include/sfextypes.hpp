@@ -345,4 +345,8 @@ namespace stackful {
 	protected:
 		std::string _str() const;
 	};
+
+	class SFFunctionDefinitionBase : public SFExtended {
+
+	};
 }
