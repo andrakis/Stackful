@@ -130,7 +130,7 @@ void test() {
 	printParams.push_back(SFLiteral_p(new SFInteger(2)));
 	printParams.push_back(SFLiteral_p(new SFInteger(3)));
 	printParams.push_back(SFLiteral_p(new SFFloat(12.34)));
-	debug << "(print " << printParams.extLiteral() << std::endl;
+	debug << "(print " << printParams.extLiteral() << ")" << std::endl;
 	print(printParams, SFClosure_p(new SFClosure(c)));
 
 	std::string fa1 = "foo";
@@ -140,9 +140,6 @@ void test() {
 	debug << "FA1: " << fa1 << " = " << fastr(getFunctionArity(fa1, 2)) << std::endl;
 	debug << "FA2: " << fa2 << " = " << fastr(getFunctionArity(fa2, 0)) << std::endl;
 	debug << "FA2: " << fa3 << " = " << fastr(getFunctionArity(fa3, 0)) << std::endl;
-
-	void interp_test();
-	interp_test();
 }
 
 int main()
@@ -150,7 +147,11 @@ int main()
 #ifdef _DEBUG
 	debug.setEnabled(true);
 #endif
+#ifdef TESTS
 	test();
+#endif
+	void interp_test();
+	interp_test();
     return 0;
 }
 
