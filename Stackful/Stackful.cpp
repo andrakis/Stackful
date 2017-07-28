@@ -144,9 +144,7 @@ void test() {
 
 int main()
 {
-#ifdef _DEBUG
 	debug.setEnabled(true);
-#endif
 #ifdef TESTS
 	test();
 #endif

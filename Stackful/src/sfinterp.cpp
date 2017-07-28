@@ -25,7 +25,10 @@ namespace stackful {
 			while (chain.next() != nullptr) {
 				// Not const, as the instruction might be updated if it
 				// references a function with incorrect arity.
-				SFExtended *i = chain.get();
+				SFLiteral_p p = chain.get();
+				if(false == p->isExtended())
+					throw std::runtime_error("Invalid operation");
+				SFExtended *i = static_cast<SFExtended*>(p.get());
 				debug << "Instruction: " << i->str() << std::endl;
 				switch (i->getExtendedType()) {
 					case OpChain:
@@ -55,7 +58,7 @@ namespace stackful {
 						break;
 					}
 					default:
-						value.swap(SFLiteral_p(i));
+						value.swap(p);
 						break;
 				}
 			}

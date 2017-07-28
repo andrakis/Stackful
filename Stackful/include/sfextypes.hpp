@@ -297,13 +297,12 @@ namespace stackful {
 		std::string extLiteral() const {
 			return str();
 		}
-		SFExtended *get() const {
+		SFLiteral_p get() const {
 			if (pos >= size())
 				return nullptr;
-			SFLiteral_p p(at(pos));
-			return dynamic_cast<SFExtended*>(p.get());
+			return at(pos);
 		}
-		SFExtended *next() {
+		SFLiteral_p next() {
 			pos++;
 			return get();
 		}
