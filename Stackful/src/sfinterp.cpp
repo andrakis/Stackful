@@ -1,4 +1,6 @@
+#include "../include/sfinterp.hpp"
 #include "../include/sfextypes.hpp"
+#include "../include/sfdebug.hpp"
 
 #include <exception>
 #include <string>
@@ -15,64 +17,55 @@ namespace stackful {
 		"while", "call", "try", "eval", "apply", "next", "recurse"
 	});
 
-	class SFInterpreter {
-	public:
-		SFInterpreter() : debugMode(true) { }
-		~SFInterpreter() { }
-		SFLiteral_p run(SFOpChain_p &chain_p) throw(std::runtime_error) {
-			SFLiteral_p value(new SFAtom("nil"));
-			SFOpChain &chain = *chain_p;
-			while (chain.next() != nullptr) {
-				// Not const, as the instruction might be updated if it
-				// references a function with incorrect arity.
-				SFLiteral_p p = chain.get();
-				if(false == p->isExtended())
-					throw std::runtime_error("Invalid operation");
-				SFExtended *i = static_cast<SFExtended*>(p.get());
-				debug << "Instruction: " << i->str() << std::endl;
-				switch (i->getExtendedType()) {
-					case OpChain:
-					{
-						SFOpChain *op = static_cast<SFOpChain*>(i);
-						SFOpChain *sub = new SFOpChain(chain_p, op);
-						SFOpChain_p sub_p(sub);
-						SFLiteral_p result = run(sub_p);
-						value.swap(result);
-						break;
-					}
-					case FunctionCall:
-					{
-						SFFunctionCall *fncall = static_cast<SFFunctionCall*>(i);
-						SFLiteral_p result = do_functioncall(chain, fncall);
-						value.swap(result);
-						if (value.get() != nullptr && value->isExtended()) {
-							SFExtended *valueExt = value->ExtClass();
-							if (valueExt->getExtendedType() == OpChain) {
-								SFOpChain *op = static_cast<SFOpChain*>(value.get());
-								SFOpChain *sub = new SFOpChain(chain_p, op);
-								SFOpChain_p sub_p(sub);
-								SFLiteral_p result = run(sub_p);
-								value.swap(result);
-							}
-						}
-						break;
-					}
-					default:
-						value.swap(p);
-						break;
+	SFLiteral_p SFInterpreter::run(SFOpChain_p &chain_p) throw(std::runtime_error) {
+		SFLiteral_p value(new SFAtom("nil"));
+		SFOpChain &chain = *chain_p;
+		while (chain.next() != nullptr) {
+			// Not const, as the instruction might be updated if it
+			// references a function with incorrect arity.
+			SFLiteral_p p = chain.get();
+			if(false == p->isExtended())
+				throw std::runtime_error("Invalid operation");
+			SFExtended *i = static_cast<SFExtended*>(p.get());
+			debug << "Instruction: " << i->str() << std::endl;
+			switch (i->getExtendedType()) {
+				case OpChain:
+				{
+					SFOpChain *op = static_cast<SFOpChain*>(i);
+					SFOpChain *sub = new SFOpChain(chain_p, op);
+					SFOpChain_p sub_p(sub);
+					SFLiteral_p result = run(sub_p);
+					value.swap(result);
+					break;
 				}
+				case FunctionCall:
+				{
+					SFFunctionCall *fncall = static_cast<SFFunctionCall*>(i);
+					SFLiteral_p result = do_functioncall(chain, fncall);
+					value.swap(result);
+					if (value.get() != nullptr && value->isExtended()) {
+						SFExtended *valueExt = value->ExtClass();
+						if (valueExt->getExtendedType() == OpChain) {
+							SFOpChain *op = static_cast<SFOpChain*>(value.get());
+							SFOpChain *sub = new SFOpChain(chain_p, op);
+							SFOpChain_p sub_p(sub);
+							SFLiteral_p result = run(sub_p);
+							value.swap(result);
+						}
+					}
+					break;
+				}
+				default:
+					value.swap(p);
+					break;
 			}
-			return value;
 		}
-		SFInteger_t getDepth() const { return depth; }
-		bool getDebug() { return debugMode; }
-	protected:
-		SFInteger_t depth = 0;
-		SFLiteral_p do_functioncall(SFOpChain &chain, SFExtended *i) const {
-			return SFLiteral_p(new SFAtom("todo"));
-		}
-		bool debugMode;
-	};
+		return value;
+	}
+
+	SFLiteral_p SFInterpreter::do_functioncall(SFOpChain &chain, SFExtended *i) const {
+		return SFLiteral_p(new SFAtom("todo"));
+	}
 }
 
 void interp_test () {

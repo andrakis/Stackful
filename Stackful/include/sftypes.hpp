@@ -7,7 +7,7 @@
 #include <sstream>		// stringstream
 #include <vector>
 
-#include "sfdebug.h"
+#include "sfdebug.hpp"
 
 namespace stackful {
 

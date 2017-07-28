@@ -21,7 +21,9 @@ namespace stackful {
 		List,
 		FunctionCall,
 		OpChain,
-		Closure
+		Closure,
+		FunctionDefinition,
+		FunctionDefinitionNative
 	};
 
 	class SFExtended : public SFBasicList {
@@ -345,7 +347,23 @@ namespace stackful {
 		std::string _str() const;
 	};
 
-	class SFFunctionDefinitionBase : public SFExtended {
+	typedef std::map<int, SFLiteral_p> SFClosureKeyValue;
+	typedef std::map<SFInteger_t,SFClosureKeyValue> SFClosureFunctionsByAtom;
 
+	typedef std::string SFFnDefName;
+	typedef std::vector<std::string> SFFnDefArgs;
+
+	class SFFunctionDefinitionBase : public SFExtended {
+	public:
+		SFFnDefName getName() const { return name; }
+		SFFnDefArgs getArgs() const { return args; }
+	protected:
+		SFFunctionDefinitionBase(ExtendedType type, SFFnDefName _name, SFFnDefArgs _args)
+			: SFExtended(type), name(_name), args(_args) {
+		}
+		SFFnDefName name, readable_name;
+		SFFnDefArgs args;
 	};
+
+
 }

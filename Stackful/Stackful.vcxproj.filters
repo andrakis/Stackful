@@ -33,7 +33,10 @@
     <ClInclude Include="include\sfbuiltins.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\sfdebug.h">
+    <ClInclude Include="include\sfdebug.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sfinterp.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

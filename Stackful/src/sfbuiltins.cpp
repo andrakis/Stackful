@@ -87,33 +87,33 @@ void addBuiltin(std::string name, SFBuiltinParams_t parameters, SFBuiltin_f fn) 
 }
 
 void stackful::setupBuiltins() {
-	addBuiltin("print/*", params(), [](SFBasicList &parameters, SFClosure_p closure) {
+	addBuiltin("print/*", params(), [](SFBuiltinSignature_t params) {
 		std::stringstream s;
 		bool first = true;
-		for (size_t i = 0; i < parameters.size(); i++) {
+		for (size_t i = 0; i < params.arguments.size(); i++) {
 			if (first)
 				first = false;
 			else
 				s << " ";
-			SFLiteral_p p = parameters[i];
+			SFLiteral_p p = params.arguments[i];
 			s << p->str();
 		}
 		std::cout << s.str() << std::endl;
 		return SFLiteral_p(new SFBasicList(sfvar(atomNil)));
 	});
 
-	addBuiltin("var", params("Name", "Value"), [](SFBasicList &parameters, SFClosure_p closure) {
-		closure->setImmediate(parameters[0]->ListClass(), parameters[1]);
-		return parameters[1];
+	addBuiltin("var", params("Name", "Value"), [](SFBuiltinSignature_t params) {
+		params.closure->setImmediate(params.arguments[0]->ListClass(), params.arguments[1]);
+		return params.arguments[1];
 	});
 
-	addBuiltin("set", params("Name", "Value"), [](SFBasicList &parameters, SFClosure_p closure) {
-		closure->set(parameters[0]->ListClass(), parameters[1]);
-		return parameters[1];
+	addBuiltin("set", params("Name", "Value"), [](SFBuiltinSignature_t params) {
+		params.closure->set(params.arguments[0]->ListClass(), params.arguments[1]);
+		return params.arguments[1];
 	});
 
-	addBuiltin("get", params("Name"), [](SFBasicList &parameters, SFClosure_p closure) {
-		return closure->get(parameters[0]->ListClass());
+	addBuiltin("get", params("Name"), [](SFBuiltinSignature_t params) {
+		return params.closure->get(params.arguments[0]->ListClass());
 	});
 }
 

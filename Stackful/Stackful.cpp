@@ -11,7 +11,8 @@
 #include "include/sfbuiltins.hpp"
 #include "include/sftypes.hpp"
 #include "include/sfextypes.hpp"
-#include "include/sfdebug.h"
+#include "include/sfdebug.hpp"
+#include "include/sfinterp.hpp"
 
 using namespace stackful;
 
@@ -36,25 +37,6 @@ public:
 protected:
 	SFBasicList ops;
 	SFLiteral_p value = SFLiteral_p(new SFBasicInteger(getAtom("nil")));
-};
-
-typedef std::shared_ptr<SFState> SFState_p;
-
-class SFInterpreter {
-public:
-	SFInterpreter() {
-		push(new SFState());
-	}
-	~SFInterpreter() {
-		while (false == stateStack.empty())
-			stateStack.pop();
-	}
-	SFState_p top() const { return stateStack.top(); }
-	void push(SFState *s) {
-		stateStack.emplace(SFState_p(s));
-	}
-protected:
-	std::stack<SFState_p> stateStack;
 };
 
 std::string tostring(bool value) {
@@ -131,7 +113,9 @@ void test() {
 	printParams.push_back(SFLiteral_p(new SFInteger(3)));
 	printParams.push_back(SFLiteral_p(new SFFloat(12.34)));
 	debug << "(print " << printParams.extLiteral() << ")" << std::endl;
-	print(printParams, SFClosure_p(new SFClosure(c)));
+	SFInterpreter interp;
+	SFBuiltinSignature_t params = { printParams, SFClosure_p(new SFClosure(c)), interp};
+	print(params);
 
 	std::string fa1 = "foo";
 	std::string fa2 = "foo/*";
@@ -145,10 +129,9 @@ void test() {
 int main()
 {
 	debug.setEnabled(true);
-#ifdef TESTS
+#if _DEBUG
 	test();
 #endif
-	void interp_test();
 	interp_test();
     return 0;
 }

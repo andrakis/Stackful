@@ -8,9 +8,14 @@
 #include "sfextypes.hpp"
 
 namespace stackful {
-
+	class SFInterpreter;
 	// Standard builtin function signature
-	typedef SFLiteral_p(*SFBuiltin_f)(SFBasicList&, SFClosure_p);
+	typedef struct SFBuiltinSignature_s {
+		SFBasicList& arguments;
+		SFClosure_p closure;
+		SFInterpreter& interpreter;
+	} SFBuiltinSignature_t;
+	typedef SFLiteral_p(*SFBuiltin_f)(SFBuiltinSignature_t);
 	typedef std::map<std::string, SFBuiltin_f> SFBuiltinMapString_t;
 	typedef std::map<SFInteger_t, SFBuiltin_f> SFBuiltinMapAtom_t;
 
