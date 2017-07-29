@@ -216,6 +216,7 @@
     <ClInclude Include="include\sfextypes.hpp" />
     <ClInclude Include="include\sffndef.hpp" />
     <ClInclude Include="include\sfinterp.hpp" />
+    <ClInclude Include="include\sfsharedtypes.hpp" />
     <ClInclude Include="include\sftypes.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />

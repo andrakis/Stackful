@@ -2,17 +2,10 @@
 
 // Extended types
 
-#include "sftypes.hpp"
+#include "sfsharedtypes.hpp"
 #include "sfatoms.hpp"
 
 namespace stackful {
-
-	class SFOpChain;
-	class SFClosure;
-
-	typedef std::shared_ptr<SFOpChain> SFOpChain_p;
-	typedef std::shared_ptr<SFClosure> SFClosure_p;
-
 	enum ExtendedType {
 		Atom,
 		Integer,
@@ -55,6 +48,10 @@ namespace stackful {
 
 	class SFAtom : public SFExtended {
 	public:
+		SFAtom(SFInteger_t id) : SFExtended(Atom) {
+			push_back(Atom);
+			push_back(id);
+		}
 		SFAtom(const std::string &name) : SFExtended(Atom) {
 			push_back(Atom);
 			push_back(getAtom(name));
@@ -213,22 +210,19 @@ namespace stackful {
 			this->parent = parent;
 			this->topmost = parent->getTopmost();
 		}
-		SFLiteral_p get(const SFList_p &key) const throw(std::runtime_error) {
-			return get(key.get());
-		}
-		SFLiteral_p get(const SFBasicList &key) const throw(std::runtime_error) {
+		SFLiteral_p get(SFLiteral_p key) const throw(std::runtime_error) {
 			SFList_t::iterator find = getByKey(key);
 			if (find == end())
-				throw std::runtime_error("Key not found: " + key.str());
+				throw std::runtime_error("Key not found: " + key->str());
 			const SFBasicList &list = find->get()->ListClass();
 			return list[1];
 		}
-		void set(const SFBasicList &key, const SFLiteral_p &value) {
+		void set(SFLiteral_p key, SFLiteral_p &value) {
 			if (trySet(key, value))
 				return;
 			setImmediate(key, value);
 		}
-		void setImmediate(const SFBasicList &key, const SFLiteral_p &value) {
+		void setImmediate(SFLiteral_p key, SFLiteral_p value) {
 			SFList_t::iterator find = getByKey(key);
 			SFBasicList *newKeyValue = new SFBasicList();
 			newKeyValue->push_back(key);
@@ -246,25 +240,22 @@ namespace stackful {
 	protected:
 		SFClosure_p parent;
 		SFClosure_p topmost;
-		SFList_t::iterator getByKey(const SFList_p &key) const {
-			return getByKey(key.get());
-		}
-
-		SFList_t::iterator getByKey(const SFBasicList &key) const {
+		SFList_t::iterator getByKey(SFLiteral_p key) const {
 			SFList_t::iterator find = this->value->begin();
 			for (; find != end(); find++) {
 				// [key, value]
-				const SFBasicList &list = find->get()->ListClass();
+				const SFBasicList *list = find->get()->ListClass();
 				// check key
-				if (list[0]->ListClass()->isEqual(&key))
+				if (list->at(0)->equals(*key)) {
 					break;
+				}
 			}
 			return find;
 		}
-		bool hasKey(const SFBasicList &key) const {
+		bool hasKey(SFLiteral_p key) const {
 			return getByKey(key) != end();
 		}
-		bool trySet(const SFBasicList &key, const SFLiteral_p &value) {
+		bool trySet(SFLiteral_p key, SFLiteral_p value) {
 			if (hasKey(key)) {
 				setImmediate(key, value);
 				return true;
@@ -311,6 +302,8 @@ namespace stackful {
 		void rewind() {
 			pos = -1;
 		}
+
+		void importClosure(SFBuiltinDefinitions functions);
 	protected:
 		std::string _str() const;
 		SFOpChain_p parent;

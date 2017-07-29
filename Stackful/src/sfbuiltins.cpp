@@ -103,17 +103,17 @@ void stackful::setupBuiltins() {
 	});
 
 	addBuiltin("var", params("Name", "Value"), [](SFBuiltinSignature_t params) {
-		params.closure->setImmediate(params.arguments[0]->ListClass(), params.arguments[1]);
+		params.closure->setImmediate(params.arguments[0], params.arguments[1]);
 		return params.arguments[1];
 	});
 
 	addBuiltin("set", params("Name", "Value"), [](SFBuiltinSignature_t params) {
-		params.closure->set(params.arguments[0]->ListClass(), params.arguments[1]);
+		params.closure->set(params.arguments[0], params.arguments[1]);
 		return params.arguments[1];
 	});
 
 	addBuiltin("get", params("Name"), [](SFBuiltinSignature_t params) {
-		return params.closure->get(params.arguments[0]->ListClass());
+		return params.closure->get(params.arguments[0]);
 	});
 }
 

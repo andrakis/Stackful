@@ -88,10 +88,10 @@ void test() {
 	SFList_p pKey(vKey);
 	SFLiteral_p pValue(new SFBasicList(str2));
 	SFLiteral_p pValue2(new SFBasicList(str3));
-	c.set(vKey, pValue);
+	c.set(pKey, pValue);
 	debug << "Closure test: " << c.get(pKey)->str() << std::endl;
 	// Ensure this only results in 1 item
-	c.set(vKey, pValue2);
+	c.set(pKey, pValue2);
 	assert(c.size() == 1);
 	debug << "Closure test: " << c.get(pKey)->str() << std::endl;
 #if defined(_DEBUG) && defined(_DEBUG_EXCEPTIONS)
