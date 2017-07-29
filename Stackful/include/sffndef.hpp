@@ -12,12 +12,28 @@ namespace stackful {
 		SFFnDefArgs getArgs() const { return args; }
 		virtual SFLiteral_p invoke(SFFnCallSignature_t args) = 0;
 		std::string extLiteral() const { return _str(); }
+		bool isScoped() const { return scope != nullptr; }
+		SFLiteral_p getScope() const { return scope; }
+		void setScope(SFLiteral_p _scope) {
+			scope = _scope;
+		}
+		SFFunctionArity_t getAttributes() const { return attributes; }
+		SFFnDefArgsByAtom_t getArgsByAtom() const { return argsByAtom; }
 	protected:
 		SFFunctionDefinitionBase(ExtendedType type, SFFnDefName _name, SFFnDefArgs _args)
-		: SFExtended(type), name(_name), args(_args) {
+		: SFExtended(type), name(_name), args(_args), scope(nullptr) {
+			attributes = getFunctionArity(_name, _args.size());
+			SFFnDefArgs::iterator it = args.begin();
+			for (; it != args.end(); it++) {
+				SFInteger_t atomId = getAtom(*it);
+				argsByAtom.push_back(atomId);
+			}
 		}
 		SFFnDefName name, readable_name;
 		SFFnDefArgs args;
+		SFFunctionArity_t attributes;
+		SFLiteral_p scope;
+		SFFnDefArgsByAtom_t argsByAtom;
 		std::string _str() const {
 			return "FnDefNative";
 		}

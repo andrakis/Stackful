@@ -2,6 +2,7 @@
 // Stackful builtin functions
 //
 
+#include "../stdafx.h"
 #include <iostream>
 #include <map>
 #include <sstream>

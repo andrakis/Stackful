@@ -52,6 +52,7 @@ namespace stackful {
 		SFBuiltin_f body;
 	} SFNativeFunctionAttributes;
 	typedef std::vector<SFNativeFunctionAttributes> SFBuiltinDefinitions;
+	typedef std::vector<SFInteger_t> SFFnDefArgsByAtom_t;
 
 	typedef std::vector<std::string> DebugBuiltins_t;
 	extern DebugBuiltins_t DebugBuiltins;

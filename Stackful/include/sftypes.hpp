@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../stdafx.h"
 #include <exception>
 #include <inttypes.h>	// uint32_t
 #include <iostream>
@@ -115,6 +116,7 @@ namespace stackful {
 	// A list that may contain numbers or other lists
 	class SFBasicList : public SFLiteralT<SFList_t*> {
 	public:
+		typedef SFList_t::iterator iterator;
 		SFBasicList() : SFLiteralT(new SFList_t(), Basic_List) {
 		}
 		SFBasicList(const SFBasicList &l) : SFLiteralT(new SFList_t(), Basic_List) {
@@ -122,6 +124,10 @@ namespace stackful {
 		}
 		SFBasicList(const SFBasicList *l) : SFLiteralT(new SFList_t(), Basic_List) {
 			ShallowCopy(l);
+		}
+		SFBasicList &operator=(SFBasicList &list) {
+			std::swap(value, list.value);
+			return (*this);
 		}
 		void ShallowCopy(const SFBasicList *l) {
 			SFList_t::iterator it = l->begin();
