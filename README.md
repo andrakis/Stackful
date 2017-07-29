@@ -7,15 +7,15 @@ any other C++ 11 compliant platform, particularly the [OpenRISC 1000 platform](h
 
 It is designed to run a very simple Lisp-like language, [Lithp](http://github.com/andrakis/node-lithp).
 
-It supports only two main data types:
+Under the hood, it operates on only two data types:
 
 * Numbers (currently 32bit)
 
 * Lists (which may contain Numbers or Lists)
 
-Everything else the VM requires will be implemented with these two basic constructs.
+Everything else is implemented by extended the basic list type with additional class information.
 
-Some additional data types implemented with these constructs (PARTIALLY IMPLEMENTED):
+Some additional data types implemented with these constructs (MAY BE OUT OF DATE):
 
 * `(0, 42)` - A reference to the atom table, item 42
 
@@ -23,7 +23,7 @@ Some additional data types implemented with these constructs (PARTIALLY IMPLEMEN
 
 * `(2, (2061584302, 1076407828))` - a double precision float of `12.34`
 
-* `(3, (65, 66, 67))` - a string of `ABC`
+* `(3, (65, 66, 67))` - a string of `ABC`, also allowing for unicode
 
 
 Compilation
@@ -67,10 +67,22 @@ Continuous testing is performed for the following environments:
 Why Stackful?
 -------------
 
+The overarching goal is to provide a runtime environment as powerful as [Lithp](https://github.com/andrakis/node-lithp)
+whilst also being very small, so as to run it within an [OpenRISC 1000 emulator](http://s-macke.github.io/jor1k/demos/main.html).
+
+To that end, this project is targeted towards GCC 4.9.1, and builds and runs
+correctly on Ubuntu 16.04 cross compilation as well as the compilation environment available
+within the [jorconsole](https://github.com/andrakis/jorconsole) project. This allows it to be
+built on a fast host system or within the emulator, provided enough memory is available. The
+resulting binary can then be run in any OpenRISC 1000 emulator, particularly [jor1k](https://github.com/s-macke/jor1k).
+
+***Note***: This project cannot built under [the jor1k demo](http://s-macke.github.io/jor1k/demos/main.html) due to memory constraints. The demo page creates
+a virtual machine with only 32Mb RAM. The [jorconsole](https://github.com/andrakis/jorconsole) project allows
+running [jor1k](https://github.com/s-macke/jor1k) with additional memory (128M works for compilation.)
+
 Stackful is my attempt at a lightweight VM. It forms the basis of what will
 become Stackless, a Lithp implementation similar to Python''s Stackless
 implementation.
 
 Having a very simple VM to model will help with my implementation of
 Stackless, but I need to write that VM first.
-
