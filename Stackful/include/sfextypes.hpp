@@ -206,7 +206,7 @@ namespace stackful {
 		SFClosure_p getTopmost() const {
 			return topmost;
 		}
-		void setParent(const SFClosure_p &parent) {
+		void setParent(SFClosure_p parent) {
 			this->parent = parent;
 			this->topmost = parent->getTopmost();
 		}
@@ -217,7 +217,7 @@ namespace stackful {
 			const SFBasicList &list = find->get()->ListClass();
 			return list[1];
 		}
-		void set(SFLiteral_p key, SFLiteral_p &value) {
+		void set(SFLiteral_p key, SFLiteral_p value) {
 			if (trySet(key, value))
 				return;
 			setImmediate(key, value);

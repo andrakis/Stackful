@@ -20,6 +20,7 @@
           <itemPath>Stackful/include/sfextypes.hpp</itemPath>
           <itemPath>Stackful/include/sffndef.hpp</itemPath>
           <itemPath>Stackful/include/sfinterp.hpp</itemPath>
+          <itemPath>Stackful/include/sfsharedtypes.hpp</itemPath>
           <itemPath>Stackful/include/sftypes.hpp</itemPath>
         </logicalFolder>
         <logicalFolder name="src" displayName="src" projectFiles="true">
@@ -77,6 +78,12 @@
                             perm="755"
                             owner="root"
                             group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
         </packFileList>
       </packaging>
       <item path="Stackful/Stackful.cpp" ex="false" tool="1" flavor2="0">
@@ -92,6 +99,8 @@
       <item path="Stackful/include/sffndef.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Stackful/include/sfinterp.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/include/sfsharedtypes.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Stackful/include/sftypes.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -146,6 +155,12 @@
                             perm="755"
                             owner="root"
                             group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
         </packFileList>
       </packaging>
       <item path="Stackful/Stackful.cpp" ex="false" tool="1" flavor2="0">
@@ -161,6 +176,8 @@
       <item path="Stackful/include/sffndef.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Stackful/include/sfinterp.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/include/sfsharedtypes.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Stackful/include/sftypes.hpp" ex="false" tool="3" flavor2="0">
       </item>
