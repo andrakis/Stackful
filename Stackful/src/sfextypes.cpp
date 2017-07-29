@@ -143,4 +143,8 @@ namespace stackful {
 		ss << "]}";
 		return ss.str();
 	}
+
+	SFLiteral_p atomNil(new SFAtom(atomNilId)),
+		atomFalse(new SFAtom(atomFalseId)),
+		atomTrue(new SFAtom(atomTrueId));
 }

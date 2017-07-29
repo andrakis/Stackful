@@ -99,7 +99,7 @@ void stackful::setupBuiltins() {
 			s << p->str();
 		}
 		std::cout << s.str() << std::endl;
-		return SFLiteral_p(new SFBasicList(sfvar(atomNil)));
+		return atomNil;
 	});
 
 	addBuiltin("var", params("Name", "Value"), [](SFFnCallSignature_t params) {

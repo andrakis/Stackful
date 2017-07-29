@@ -45,7 +45,7 @@ namespace stackful {
 					if (value.get() != nullptr && value->isExtended()) {
 						SFExtended *valueExt = value->ExtClass();
 						if (valueExt->getExtendedType() == OpChain) {
-							SFOpChain *op = static_cast<SFOpChain*>(value.get());
+							SFOpChain *op = toOpChain(value);
 							SFOpChain *sub = new SFOpChain(chain_p, op);
 							SFLiteral_p sub_p(sub);
 							SFLiteral_p result = run(sub_p);

@@ -27,9 +27,8 @@ namespace stackful {
 		return atomsById[id];
 	}
 
-// Initialize default atoms
-SFInteger_t atomNil = getAtom("nil"),
-	atomFalse = getAtom("false"),
-	atomTrue = getAtom("true");
-
+	// Initialize default atoms
+	SFInteger_t atomNilId = getAtom("nil"),
+		atomFalseId = getAtom("false"),
+		atomTrueId = getAtom("true");
 }
