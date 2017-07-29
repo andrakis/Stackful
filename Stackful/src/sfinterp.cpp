@@ -46,10 +46,12 @@ namespace stackful {
 						SFExtended *valueExt = value->ExtClass();
 						if (valueExt->getExtendedType() == OpChain) {
 							SFOpChain *op = toOpChain(value);
-							SFOpChain *sub = new SFOpChain(chain_p, op);
-							SFLiteral_p sub_p(sub);
-							SFLiteral_p result = run(sub_p);
-							value.swap(result);
+							if (op->getImmediate()) {
+								SFOpChain *sub = new SFOpChain(chain_p, op);
+								SFLiteral_p sub_p(sub);
+								SFLiteral_p result = run(sub_p);
+								value.swap(result);
+							}
 						}
 					}
 					break;
@@ -62,7 +64,8 @@ namespace stackful {
 		return value;
 	}
 
-	SFLiteral_p SFInterpreter::do_functioncall(SFOpChain *chain, SFExtended *i) {
+	SFLiteral_p SFInterpreter::do_functioncall(SFOpChain *chain, SFFunctionCall *i) {
+		
 		return SFLiteral_p(new SFAtom("todo"));
 	}
 }

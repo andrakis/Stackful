@@ -144,7 +144,20 @@ namespace stackful {
 		return ss.str();
 	}
 
-	SFLiteral_p atomNil(new SFAtom(atomNilId)),
-		atomFalse(new SFAtom(atomFalseId)),
-		atomTrue(new SFAtom(atomTrueId));
+	SFInteger_t atomPtrsCounter = 0;
+	atomPtrsById_t atomPtrsById;
+	SFLiteral_p getAtomPtr(SFInteger_t id) {
+		atomPtrsById_t::iterator it = atomPtrsById.find(id);
+		if (it != atomPtrsById.end()) {
+			return it->second;
+		}
+
+		SFAtom *atom = new SFAtom(id);
+		SFLiteral_p atom_p;
+		atomPtrsById.emplace(id, atom_p);
+		return atom_p;
+	}
+	SFLiteral_p getAtomPtr(std::string name) {
+		return getAtomPtr(getAtom(name));
+	}
 }

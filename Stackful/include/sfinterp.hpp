@@ -13,7 +13,7 @@ namespace stackful {
 	protected:
 		SFInteger_t depth;
 		bool debugMode;
-		SFLiteral_p do_functioncall(SFOpChain *chain, SFExtended *i);
+		SFLiteral_p do_functioncall(SFOpChain *chain, SFFunctionCall *i);
 	};
 }
 

@@ -19,7 +19,24 @@ namespace stackful {
 	typedef std::map<std::string, SFBuiltin_f> SFBuiltinMapString_t;
 	typedef std::map<SFInteger_t, SFBuiltin_f> SFBuiltinMapAtom_t;
 
-	typedef std::tuple<std::string, char> SFFunctionArity_t;
+	typedef struct SFFunctionArity_s {
+		std::string nameRawStr;
+		std::string nameArityStr;
+		std::string nameStarStr;
+		SFLiteral_p nameArity;
+		SFLiteral_p nameArityStar;
+		char paramCount;
+		bool isArityStar() {
+			return paramCount == '*';
+		}
+		std::string str() {
+			if (isArityStar())
+				return nameStarStr;
+			else
+				return nameArityStr;
+		}
+	} SFFunctionArity_t;
+	SFFunctionArity_t getFunctionArity(std::string name, const int np);
 
 	// Builtin function param list
 	typedef std::vector<std::string> SFBuiltinParams_t;
@@ -38,4 +55,9 @@ namespace stackful {
 
 	typedef std::vector<std::string> DebugBuiltins_t;
 	extern DebugBuiltins_t DebugBuiltins;
+
+	typedef std::map<SFInteger_t, std::string> atomsById_t;
+	typedef std::map<std::string, SFInteger_t> atomsByName_t;
+
+	SFLiteral_p getAtomPtr(std::string name);
 }

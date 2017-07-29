@@ -121,9 +121,9 @@ void test() {
 	std::string fa2 = "foo/*";
 	std::string fa3 = "foo/2";
 
-	debug << "FA1: " << fa1 << " = " << fastr(getFunctionArity(fa1, 2)) << std::endl;
-	debug << "FA2: " << fa2 << " = " << fastr(getFunctionArity(fa2, 0)) << std::endl;
-	debug << "FA2: " << fa3 << " = " << fastr(getFunctionArity(fa3, 0)) << std::endl;
+	debug << "FA1: " << fa1 << " = " << getFunctionArity(fa1, 2).str() << std::endl;
+	debug << "FA2: " << fa2 << " = " << getFunctionArity(fa2, 0).str() << std::endl;
+	debug << "FA2: " << fa3 << " = " << getFunctionArity(fa3, 0).str() << std::endl;
 }
 
 int main()
@@ -133,6 +133,11 @@ int main()
 	test();
 #endif
 	interp_test();
+	debug << "Atom table: " << std::endl;
+	atomsByName_t::iterator it = atomsByName.begin();
+	for (; it != atomsByName.end(); it++) {
+		debug << "'" << it->first << "' = " << it->second << std::endl;
+	}
     return 0;
 }
 

@@ -1,17 +1,15 @@
 #include <map>
 #include <string>
 #include "../include/sftypes.hpp"
+#include "../include/sfsharedtypes.hpp"
 
 using namespace stackful;
 
-typedef std::map<SFInteger_t, std::string> atomsById_t;
-typedef std::map<std::string, SFInteger_t> atomsByName_t;
-
-SFInteger_t atomCounter = 0;
-atomsById_t atomsById;
-atomsByName_t atomsByName;
-
 namespace stackful {
+	SFInteger_t atomCounter = 0;
+	atomsById_t atomsById;
+	atomsByName_t atomsByName;
+
 	SFInteger_t getAtom(std::string name) {
 		atomsByName_t::iterator it = atomsByName.find(name);
 		if (it != atomsByName.end()) {
@@ -27,8 +25,12 @@ namespace stackful {
 		return atomsById[id];
 	}
 
+	atomsById_t getAtomsById() { return atomsById; }
+	atomsByName_t getAtomsByName() { return atomsByName; }
+
 	// Initialize default atoms
 	SFInteger_t atomNilId = getAtom("nil"),
 		atomFalseId = getAtom("false"),
-		atomTrueId = getAtom("true");
+		atomTrueId = getAtom("true"),
+		atomMissingId = getAtom("missing");
 }

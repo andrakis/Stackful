@@ -22,6 +22,8 @@ namespace stackful {
 	SFOpChain *toOpChain(SFLiteral_p opchain_p);
 	SFClosure *toClosure(SFLiteral_p closure_p);
 
+	extern SFLiteral_p atomNil, atomFalse, atomTrue, atomMissing;
+
 	class SFExtended : public SFBasicList {
 	public:
 		ExtendedType getExtendedType() const {
@@ -220,6 +222,13 @@ namespace stackful {
 			const SFBasicList &list = find->get()->ListClass();
 			return list[1];
 		}
+		SFLiteral_p getOrMissing(SFLiteral_p key) const {
+			SFList_t::iterator find = getByKey(key);
+			if (find == end())
+				return atomMissing;
+			const SFBasicList &list = find->get()->ListClass();
+			return list[1];
+		}
 		void set(SFLiteral_p key, SFLiteral_p value) {
 			if (trySet(key, value))
 				return;
@@ -277,16 +286,20 @@ namespace stackful {
 	class SFOpChain : public SFExtended {
 	public:
 		// An empty OpChain
-		SFOpChain() : SFExtended(Closure), parent(nullptr), closure(new SFClosure()) {
+		SFOpChain() : SFExtended(Closure), parent(nullptr), closure(new SFClosure()), immediate(false) {
 		}
 		// Copy constructor
-		SFOpChain(const SFOpChain &copy) : SFExtended(Closure, copy), parent(copy.getParentPtr()), closure(copy.getClosurePtr()) {
+		SFOpChain(const SFOpChain &copy)
+		: SFExtended(Closure, copy), parent(copy.getParentPtr()), closure(copy.getClosurePtr()),
+		immediate(false) {
 		}
 		// Initialize with given parent
-		SFOpChain(SFLiteral_p parent) : SFExtended(Closure), parent(parent), closure(new SFClosure()) {
+		SFOpChain(SFLiteral_p parent) : SFExtended(Closure), parent(parent), closure(new SFClosure()),
+		immediate(false) {
 		}
 		// Initialize with given parent and ops
-		SFOpChain(SFLiteral_p parent, const SFOpChain *ops) : SFExtended(OpChain, ops), parent(parent), closure(new SFClosure()) {
+		SFOpChain(SFLiteral_p parent, const SFOpChain *ops)
+		: SFExtended(OpChain, ops), parent(parent), closure(new SFClosure()), immediate(false) {
 		}
 		SFLiteral_p getParentPtr() const { return parent; }
 		SFLiteral_p getClosurePtr() const { return closure; }
@@ -309,12 +322,14 @@ namespace stackful {
 		}
 
 		void importClosure(SFBuiltinDefinitions functions);
-
+		bool getImmediate() const { return immediate; }
+		void setImmediate(bool imm) { immediate = imm; }
 	protected:
 		std::string _str() const;
 		SFLiteral_p parent;
 		SFLiteral_p closure;
 		size_t pos = -1;
+		bool immediate;
 	};
 
 	SFBasicList sfvar(const std::string &str);
@@ -345,4 +360,9 @@ namespace stackful {
 	protected:
 		std::string _str() const;
 	};
+
+	typedef std::map<SFInteger_t, SFLiteral_p> atomPtrsById_t;
+	extern atomPtrsById_t atomPtrsById;
+	SFLiteral_p getAtomPtr(SFInteger_t id);
+	SFLiteral_p getAtomPtr(std::string name);
 }
