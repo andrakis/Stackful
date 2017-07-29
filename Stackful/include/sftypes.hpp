@@ -143,8 +143,6 @@ namespace stackful {
 			clear();
 		}
 		void clear() {
-			if (size() == 0)
-				debug << "Basic_List::clear() called when empty!" << std::endl;
 			value->clear();
 		}
 		SFLiteral_p pop_back() throw(std::runtime_error) {
