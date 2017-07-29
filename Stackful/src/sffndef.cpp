@@ -33,12 +33,11 @@ namespace stackful {
 			tmpList.push_back(arguments);
 			arguments = tmpList;
 		}
-		for (; it != ourArgs.end(); it++) {
+		for (; it != ourArgs.end(); it++, ++position) {
 			// Get atom by id
 			SFInteger_t atomId = *it;
 			SFLiteral_p name = getAtomPtr(atomId);
 			chain->getClosureObject()->setImmediate(name, arguments[position]);
-			position++;
 		}
 		return args.interpreter.run(chain_p);
 	}
