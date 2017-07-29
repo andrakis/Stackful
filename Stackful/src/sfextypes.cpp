@@ -153,7 +153,7 @@ namespace stackful {
 		}
 
 		SFAtom *atom = new SFAtom(id);
-		SFLiteral_p atom_p;
+		SFLiteral_p atom_p(atom);
 		atomPtrsById.emplace(id, atom_p);
 		return atom_p;
 	}
