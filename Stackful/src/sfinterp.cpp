@@ -12,18 +12,17 @@ namespace stackful {
 	const SFInteger_t MaxDebugLen = 100;
 	const SFInteger_t MaxDebugArrayLen = 20;
 
-	typedef std::vector<std::string> DebugBuiltins_t;
 	DebugBuiltins_t DebugBuiltins({
 		"while", "call", "try", "eval", "apply", "next", "recurse"
 	});
 
-	SFLiteral_p SFInterpreter::run(SFOpChain_p &chain_p) throw(std::runtime_error) {
+	SFLiteral_p SFInterpreter::run(SFLiteral_p chain_p) throw(std::runtime_error) {
 		SFLiteral_p value(new SFAtom("nil"));
-		SFOpChain &chain = *chain_p;
-		while (chain.next() != nullptr) {
+		SFOpChain *chain = toOpChain(chain_p);
+		while (chain->next() != nullptr) {
 			// Not const, as the instruction might be updated if it
 			// references a function with incorrect arity.
-			SFLiteral_p p = chain.get();
+			SFLiteral_p p = chain->get();
 			if(false == p->isExtended())
 				throw std::runtime_error("Invalid operation");
 			SFExtended *i = static_cast<SFExtended*>(p.get());
@@ -33,7 +32,7 @@ namespace stackful {
 				{
 					SFOpChain *op = static_cast<SFOpChain*>(i);
 					SFOpChain *sub = new SFOpChain(chain_p, op);
-					SFOpChain_p sub_p(sub);
+					SFLiteral_p sub_p(sub);
 					SFLiteral_p result = run(sub_p);
 					value.swap(result);
 					break;
@@ -48,7 +47,7 @@ namespace stackful {
 						if (valueExt->getExtendedType() == OpChain) {
 							SFOpChain *op = static_cast<SFOpChain*>(value.get());
 							SFOpChain *sub = new SFOpChain(chain_p, op);
-							SFOpChain_p sub_p(sub);
+							SFLiteral_p sub_p(sub);
 							SFLiteral_p result = run(sub_p);
 							value.swap(result);
 						}
@@ -63,7 +62,7 @@ namespace stackful {
 		return value;
 	}
 
-	SFLiteral_p SFInterpreter::do_functioncall(SFOpChain &chain, SFExtended *i) const {
+	SFLiteral_p SFInterpreter::do_functioncall(SFOpChain *chain, SFExtended *i) {
 		return SFLiteral_p(new SFAtom("todo"));
 	}
 }
@@ -79,7 +78,7 @@ void interp_test () {
 	ocTest->push_back(SFLiteral_p(fcVar));
 	ocTest->push_back(SFLiteral_p(fcPrint));
 
-	SFOpChain_p ocTest_p(ocTest);
+	SFLiteral_p ocTest_p(ocTest);
 
 	debug << ocTest->str() << std::endl;
 	SFInterpreter si;

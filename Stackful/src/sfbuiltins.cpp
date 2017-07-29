@@ -87,7 +87,7 @@ void addBuiltin(std::string name, SFBuiltinParams_t parameters, SFBuiltin_f fn) 
 }
 
 void stackful::setupBuiltins() {
-	addBuiltin("print/*", params(), [](SFBuiltinSignature_t params) {
+	addBuiltin("print/*", params(), [](SFFnCallSignature_t params) {
 		std::stringstream s;
 		bool first = true;
 		for (size_t i = 0; i < params.arguments.size(); i++) {
@@ -102,18 +102,18 @@ void stackful::setupBuiltins() {
 		return SFLiteral_p(new SFBasicList(sfvar(atomNil)));
 	});
 
-	addBuiltin("var", params("Name", "Value"), [](SFBuiltinSignature_t params) {
-		params.closure->setImmediate(params.arguments[0], params.arguments[1]);
+	addBuiltin("var", params("Name", "Value"), [](SFFnCallSignature_t params) {
+		toClosure(params.closure)->setImmediate(params.arguments[0], params.arguments[1]);
 		return params.arguments[1];
 	});
 
-	addBuiltin("set", params("Name", "Value"), [](SFBuiltinSignature_t params) {
-		params.closure->set(params.arguments[0], params.arguments[1]);
+	addBuiltin("set", params("Name", "Value"), [](SFFnCallSignature_t params) {
+		toClosure(params.closure)->set(params.arguments[0], params.arguments[1]);
 		return params.arguments[1];
 	});
 
-	addBuiltin("get", params("Name"), [](SFBuiltinSignature_t params) {
-		return params.closure->get(params.arguments[0]);
+	addBuiltin("get", params("Name"), [](SFFnCallSignature_t params) {
+		return toClosure(params.closure)->get(params.arguments[0]);
 	});
 }
 

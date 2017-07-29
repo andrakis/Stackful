@@ -9,16 +9,13 @@ namespace stackful {
 
 	class SFOpChain;
 
-	typedef std::shared_ptr<SFOpChain> SFOpChain_p;
-	typedef std::shared_ptr<SFClosure> SFClosure_p;
-
-	// Standard builtin function signature
-	typedef struct SFBuiltinSignature_s {
+	// Standard callable function signature
+	typedef struct SFFnCallSignature_s {
 		SFBasicList arguments;
-		SFClosure_p closure;
+		SFLiteral_p closure;
 		SFInterpreter& interpreter;
-	} SFBuiltinSignature_t;
-	typedef SFLiteral_p(*SFBuiltin_f)(SFBuiltinSignature_t);
+	} SFFnCallSignature_t;
+	typedef SFLiteral_p(*SFBuiltin_f)(SFFnCallSignature_t);
 	typedef std::map<std::string, SFBuiltin_f> SFBuiltinMapString_t;
 	typedef std::map<SFInteger_t, SFBuiltin_f> SFBuiltinMapAtom_t;
 
@@ -39,4 +36,6 @@ namespace stackful {
 	} SFNativeFunctionAttributes;
 	typedef std::vector<SFNativeFunctionAttributes> SFBuiltinDefinitions;
 
+	typedef std::vector<std::string> DebugBuiltins_t;
+	extern DebugBuiltins_t DebugBuiltins;
 }

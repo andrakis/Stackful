@@ -2,6 +2,7 @@
 
 #include "sfbuiltins.hpp"
 #include "sfsharedtypes.hpp"
+#include "sfinterp.hpp"
 
 namespace stackful {
 	// Generic class (protected constructor) for function definitions
@@ -9,7 +10,7 @@ namespace stackful {
 	public:
 		SFFnDefName getName() const { return name; }
 		SFFnDefArgs getArgs() const { return args; }
-		virtual SFLiteral_p invoke(SFBuiltinSignature_t args) = 0;
+		virtual SFLiteral_p invoke(SFFnCallSignature_t args) = 0;
 		std::string extLiteral() const { return _str(); }
 	protected:
 		SFFunctionDefinitionBase(ExtendedType type, SFFnDefName _name, SFFnDefArgs _args)
@@ -27,9 +28,7 @@ namespace stackful {
 	class SFFunctionDefinitionNative : public SFFunctionDefinitionBase {
 	public:
 		SFFunctionDefinitionNative(SFFnDefName _name, SFFnDefArgs _args, SFBuiltin_f _body);
-		SFLiteral_p invoke(SFBuiltinSignature_t args) {
-			return nullptr;
-		}
+		inline SFLiteral_p invoke(SFFnCallSignature_t args);
 	protected:
 		SFBuiltin_f body;
 	};
@@ -37,9 +36,10 @@ namespace stackful {
 	// A function definition which uses Stackful code.
 	class SFFunctionDefinition : public SFFunctionDefinitionBase {
 	public:
-		SFFunctionDefinition(SFOpChain_p parent, SFFnDefName _name, SFFnDefArgs _args, SFOpChain_p body);
-		SFLiteral_p invoke(SFBuiltinSignature_t args) {
-			return nullptr;
+		SFFunctionDefinition(SFLiteral_p parent, SFFnDefName _name, SFFnDefArgs _args, SFLiteral_p body);
+		inline SFLiteral_p invoke(SFFnCallSignature_t args);
+		SFLiteral_p getBody() {
+			return at(0);
 		}
 	protected:
 	};

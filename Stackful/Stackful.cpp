@@ -114,7 +114,7 @@ void test() {
 	printParams.push_back(SFLiteral_p(new SFFloat(12.34)));
 	debug << "(print " << printParams.extLiteral() << ")" << std::endl;
 	SFInterpreter interp;
-	SFBuiltinSignature_t params = { printParams, SFClosure_p(new SFClosure(c)), interp};
+	SFFnCallSignature_t params = { printParams, SFLiteral_p(new SFClosure(c)), interp};
 	print(params);
 
 	std::string fa1 = "foo";
