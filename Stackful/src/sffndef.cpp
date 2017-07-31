@@ -33,7 +33,7 @@ namespace stackful {
 			tmpList.push_back(arguments);
 			arguments = tmpList;
 		}
-		for (; it != ourArgs.end(); it++, ++position) {
+		for (; it != ourArgs.end(); ++it, ++position) {
 			// Get atom by id
 			SFInteger_t atomId = *it;
 			SFLiteral_p name = getAtomPtr(atomId);
@@ -44,7 +44,7 @@ namespace stackful {
 
 	void SFOpChain::importClosure(SFBuiltinDefinitions functions) {
 		SFBuiltinDefinitions::iterator it = functions.begin();
-		for (; it != functions.end(); it++) {
+		for (; it != functions.end(); ++it) {
 			SFNativeFunctionAttributes native = *it;
 			SFFunctionDefinitionNative *fndef = new SFFunctionDefinitionNative(native.name, native.args, native.body);
 			SFLiteral_p fndef_p(fndef);

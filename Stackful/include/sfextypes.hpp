@@ -97,7 +97,7 @@ namespace stackful {
 			doublebits b;
 			b.valueDouble = value;
 			SFBasicList *l = new SFBasicList();
-			for (auto i = 0; i < sizeof(double) / sizeof(SFInteger_t); i++) {
+			for (unsigned int i = 0; i < sizeof(double) / sizeof(SFInteger_t); i++) {
 				l->push_back(b.valueInteger[i]);
 			}
 			push_back(l);
@@ -121,7 +121,7 @@ namespace stackful {
 		SFString(const std::string &str) : SFExtended(String) {
 			SFBasicList *l = new SFBasicList();
 			std::string::const_iterator it = str.begin();
-			for (; it != str.end(); it++) {
+			for (; it != str.end(); ++it) {
 				// Generally a char
 				auto curr = *it;
 				l->push_back(curr);
@@ -254,7 +254,7 @@ namespace stackful {
 		SFLiteral_p topmost;
 		SFList_t::iterator getByKey(SFLiteral_p key) const {
 			SFList_t::iterator find = this->value->begin();
-			for (; find != end(); find++) {
+			for (; find != end(); ++find) {
 				// [key, value]
 				const SFBasicList *list = find->get()->ListClass();
 				// check key

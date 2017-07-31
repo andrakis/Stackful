@@ -52,7 +52,6 @@ stackful::SFBuiltinParams_t params(std::string p1, std::string p2, std::string p
 }
 
 void addBuiltin(std::string name, SFBuiltinParams_t parameters, SFBuiltin_f fn) {
-	SFInteger_t builtinId = builtinCounter++;
 	SFInteger_t atomId = getAtom(name);
 	builtinsByAtom.emplace(atomId, fn);
 	builtinsByString.emplace(name, fn);

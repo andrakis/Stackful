@@ -72,7 +72,7 @@ namespace stackful {
 	public:
 		T getValue() const { return value; }
 	protected:
-		SFLiteralT(const T v, SFType type) : value(v), SFLiteral(type) {
+		SFLiteralT(const T v, SFType type) : SFLiteral(type), value(v) {
 		}
 		bool _isequal(const SFLiteral &other) const {
 			return literalEquals(other);
@@ -131,7 +131,7 @@ namespace stackful {
 		}
 		void ShallowCopy(const SFBasicList *l) {
 			SFList_t::iterator it = l->begin();
-			for (; it != l->end(); it++) {
+			for (; it != l->end(); ++it) {
 				value->push_back(*it);
 			}
 		}
@@ -158,10 +158,10 @@ namespace stackful {
 		void push_back(SFLiteral *v) {
 			value->push_back(SFLiteral_p(v));
 		}
-		void push_back(const SFBasicInteger i) {
+		void push_back(const SFBasicInteger &i) {
 			push_back(new SFBasicInteger(i));
 		}
-		void push_back(const SFBasicList l) {
+		void push_back(const SFBasicList &l) {
 			SFBasicList *n = new SFBasicList(l);
 			push_back(n);
 			// n will be freed by the shared pointer
@@ -171,7 +171,7 @@ namespace stackful {
 			SFList_t::iterator it = begin();
 			bool first = true;
 			ss << "[";
-			for (; it != end(); it++) {
+			for (; it != end(); ++it) {
 				if (first)
 					first = false;
 				else
@@ -200,7 +200,7 @@ namespace stackful {
 				return false;
 			SFList_t::iterator our_it = begin();
 			SFList_t::iterator other_it = other_list->begin();
-			for (; our_it != end(), other_it != other_list->end(); our_it++, other_it++) {
+			for (; our_it != end(), other_it != other_list->end(); ++our_it, ++other_it) {
 				const SFLiteral *our_item = our_it->get();
 				const SFLiteral *other_item = other_it->get();
 				if (our_item->equals(*other_item) == false)

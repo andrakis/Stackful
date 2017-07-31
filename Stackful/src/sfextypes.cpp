@@ -29,7 +29,7 @@ namespace stackful {
 	SFLiteral_p tolist(const std::string &str) {
 		SFBasicList *l = new SFBasicList();
 		std::string::const_iterator it = str.begin();
-		for (; it != str.end(); it++) {
+		for (; it != str.end(); ++it) {
 			// Generally a char
 			auto curr = *it;
 			l->push_back(curr);
@@ -129,7 +129,7 @@ namespace stackful {
 		bool first = true;
 		ss << "{OpChain: [";
 		SFOpChain::iterator it = this->begin();
-		for (; it != this->end(); it++) {
+		for (; it != this->end(); ++it) {
 			SFLiteral_p item = *it;
 			if (first)
 				first = false;

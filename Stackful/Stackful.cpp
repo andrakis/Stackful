@@ -19,7 +19,7 @@ using namespace stackful;
 SFBasicList xtolist(const std::string &str) {
 	SFBasicList l;
 	std::string::const_iterator it = str.begin();
-	for (; it != str.end(); it++) {
+	for (; it != str.end(); ++it) {
 		// Generally a char
 		auto curr = *it;
 		l.push_back(curr);
@@ -98,7 +98,7 @@ void test() {
 	try {
 		SFLiteral_p not_exist(c.get(str3));
 		debug << "Closure test failure: " << not_exist << std::endl;
-	} catch (std::runtime_error e) {
+	} catch (std::runtime_error &e) {
 		debug << "Closure test OK" << std::endl;
 	}
 #endif
@@ -135,7 +135,7 @@ int main()
 	interp_test();
 	debug << "Atom table: " << std::endl;
 	atomsByName_t::iterator it = atomsByName.begin();
-	for (; it != atomsByName.end(); it++) {
+	for (; it != atomsByName.end(); ++it) {
 		debug << "'" << it->first << "' = " << it->second << std::endl;
 	}
     return 0;

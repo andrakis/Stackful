@@ -21,18 +21,18 @@ namespace stackful {
 		SFFnDefArgsByAtom_t getArgsByAtom() const { return argsByAtom; }
 	protected:
 		SFFunctionDefinitionBase(ExtendedType type, SFFnDefName _name, SFFnDefArgs _args)
-		: SFExtended(type), name(_name), args(_args), scope(nullptr) {
-			attributes = getFunctionArity(_name, _args.size());
+		: SFExtended(type), name(_name), args(_args), scope(nullptr),
+		  attributes(getFunctionArity(_name, _args.size())) {
 			SFFnDefArgs::iterator it = args.begin();
-			for (; it != args.end(); it++) {
+			for (; it != args.end(); ++it) {
 				SFInteger_t atomId = getAtom(*it);
 				argsByAtom.push_back(atomId);
 			}
 		}
 		SFFnDefName name, readable_name;
 		SFFnDefArgs args;
-		SFFunctionArity_t attributes;
 		SFLiteral_p scope;
+		SFFunctionArity_t attributes;
 		SFFnDefArgsByAtom_t argsByAtom;
 		std::string _str() const {
 			return "FnDefNative";
