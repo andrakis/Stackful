@@ -85,6 +85,12 @@
                             perm="755"
                             owner="root"
                             group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
         </packFileList>
       </packaging>
       <item path="Stackful/Stackful.cpp" ex="false" tool="1" flavor2="0">
@@ -137,6 +143,7 @@
         <ccTool>
           <developmentMode>5</developmentMode>
           <standard>8</standard>
+          <commandLine>-Wall -Wno-unused-parameter -Wextra</commandLine>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -152,6 +159,12 @@
         <packType>Tar</packType>
         <output>${CND_DISTDIR}/${CND_CONF}/package/stackful.tar</output>
         <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
                             from="${OUTPUT_PATH}.exe"

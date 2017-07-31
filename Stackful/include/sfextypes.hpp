@@ -211,9 +211,9 @@ namespace stackful {
 		SFLiteral_p getTopmost() const {
 			return topmost;
 		}
-		void setParent(SFLiteral_p parent) {
-			this->parent = parent;
-			this->topmost = toClosure(parent)->getTopmost();
+		void setParent(SFLiteral_p _parent) {
+			this->parent = _parent;
+			this->topmost = toClosure(_parent)->getTopmost();
 		}
 		SFLiteral_p get(SFLiteral_p key) const throw(std::runtime_error) {
 			SFList_t::iterator find = getByKey(key);
@@ -229,16 +229,16 @@ namespace stackful {
 			const SFBasicList &list = find->get()->ListClass();
 			return list[1];
 		}
-		void set(SFLiteral_p key, SFLiteral_p value) {
-			if (trySet(key, value))
+		void set(SFLiteral_p _key, SFLiteral_p _value) {
+			if (trySet(_key, _value))
 				return;
-			setImmediate(key, value);
+			setImmediate(_key, _value);
 		}
-		void setImmediate(SFLiteral_p key, SFLiteral_p value) {
+		void setImmediate(SFLiteral_p key, SFLiteral_p _value) {
 			SFList_t::iterator find = getByKey(key);
 			SFBasicList *newKeyValue = new SFBasicList();
 			newKeyValue->push_back(key);
-			newKeyValue->push_back(value);
+			newKeyValue->push_back(_value);
 			SFLiteral_p newKeyValue_p(newKeyValue);
 			if (find == end()) {
 				this->push_back(newKeyValue_p);
@@ -267,12 +267,12 @@ namespace stackful {
 		bool hasKey(SFLiteral_p key) const {
 			return getByKey(key) != end();
 		}
-		bool trySet(SFLiteral_p key, SFLiteral_p value) {
+		bool trySet(SFLiteral_p key, SFLiteral_p _value) {
 			if (hasKey(key)) {
-				setImmediate(key, value);
+				setImmediate(key, _value);
 				return true;
 			}
-			if (parent.get() != nullptr && toClosure(parent)->trySet(key, value))
+			if (parent.get() != nullptr && toClosure(parent)->trySet(key, _value))
 				return true;
 			return false;
 		}
@@ -309,7 +309,7 @@ namespace stackful {
 			return str();
 		}
 		SFLiteral_p get() const {
-			if (pos >= size())
+			if (pos >= (int)size())
 				return nullptr;
 			return at(pos);
 		}
@@ -328,7 +328,7 @@ namespace stackful {
 		std::string _str() const;
 		SFLiteral_p parent;
 		SFLiteral_p closure;
-		size_t pos = -1;
+		int pos = -1;
 		bool immediate;
 	};
 

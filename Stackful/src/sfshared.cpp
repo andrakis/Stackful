@@ -26,7 +26,7 @@ namespace stackful {
 		std::string fnArityStr = fnNameRaw + "/*";
 		if (fnArity == "*")
 			return SFFunctionArity_t({ fnNameRaw, name, name, getAtomPtr(name), getAtomPtr(name), '*' });
-		char nparams = (int)np;
+		char nparams = (char)np;
 		if (fnArity.matched) {
 			fnNameStr = fnNameRaw + "/" + fnArity.str();
 			nparams = (char)std::stoi(fnArity.str());

@@ -5,8 +5,8 @@ namespace stackful {
 	: SFFunctionDefinitionBase(FunctionDefinitionNative, _name, _args), body(_body) {
 	}
 
-	SFLiteral_p SFFunctionDefinitionNative::invoke(SFFnCallSignature_t args) {
-		return body(args);
+	SFLiteral_p SFFunctionDefinitionNative::invoke(SFFnCallSignature_t _args) {
+		return body(_args);
 	}
 
 	SFFunctionDefinition::SFFunctionDefinition(SFLiteral_p parent, SFFnDefName _name, SFFnDefArgs _args, SFLiteral_p body)
@@ -14,9 +14,9 @@ namespace stackful {
 		this->push_back(body);
 	}
 
-	SFLiteral_p SFFunctionDefinition::invoke(SFFnCallSignature_t args) {
+	SFLiteral_p SFFunctionDefinition::invoke(SFFnCallSignature_t _args) {
 		SFLiteral_p body_p = this->getBody();
-		SFLiteral_p parent_p = args.closure;
+		SFLiteral_p parent_p = _args.closure;
 		if (this->isScoped())
 			parent_p = this->getScope();
 		SFOpChain *body = toOpChain(body_p);
@@ -27,7 +27,7 @@ namespace stackful {
 		SFFnDefArgsByAtom_t::iterator it = ourArgs.begin();
 		int position = 0;
 		SFFunctionArity_t fnattributes = this->getAttributes();
-		SFBasicList arguments = args.arguments;
+		SFBasicList arguments = _args.arguments;
 		if (fnattributes.isArityStar()) {
 			SFBasicList tmpList;
 			tmpList.push_back(arguments);
@@ -36,10 +36,10 @@ namespace stackful {
 		for (; it != ourArgs.end(); ++it, ++position) {
 			// Get atom by id
 			SFInteger_t atomId = *it;
-			SFLiteral_p name = getAtomPtr(atomId);
-			chain->getClosureObject()->setImmediate(name, arguments[position]);
+			SFLiteral_p _name = getAtomPtr(atomId);
+			chain->getClosureObject()->setImmediate(_name, arguments[position]);
 		}
-		return args.interpreter.run(chain_p);
+		return _args.interpreter.run(chain_p);
 	}
 
 	void SFOpChain::importClosure(SFBuiltinDefinitions functions) {

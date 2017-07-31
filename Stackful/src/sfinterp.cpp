@@ -49,7 +49,7 @@ namespace stackful {
 							if (op->getImmediate()) {
 								SFOpChain *sub = new SFOpChain(chain_p, op);
 								SFLiteral_p sub_p(sub);
-								SFLiteral_p result = run(sub_p);
+								result = run(sub_p);
 								value.swap(result);
 							}
 						}
