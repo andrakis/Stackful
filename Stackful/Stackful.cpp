@@ -113,7 +113,7 @@ void test() {
 	printParams.push_back(SFLiteral_p(new SFInteger(3)));
 	printParams.push_back(SFLiteral_p(new SFFloat(12.34)));
 	debug << "(print " << printParams.extLiteral() << ")" << std::endl;
-	SFInterpreter interp;
+	SFInterpreter *interp = new SFInterpreter();
 	SFFnCallSignature_t params = { printParams, SFLiteral_p(new SFClosure(c)), interp};
 	print(params);
 
@@ -124,20 +124,24 @@ void test() {
 	debug << "FA1: " << fa1 << " = " << getFunctionArity(fa1, 2).str() << std::endl;
 	debug << "FA2: " << fa2 << " = " << getFunctionArity(fa2, 0).str() << std::endl;
 	debug << "FA2: " << fa3 << " = " << getFunctionArity(fa3, 0).str() << std::endl;
+
+	delete interp;
 }
 
 int main()
 {
+#ifdef _DEBUG
 	debug.setEnabled(true);
-#if _DEBUG
 	test();
 #endif
 	interp_test();
+#ifdef _DEBUG
 	debug << "Atom table: " << std::endl;
 	atomsByName_t::iterator it = atomsByName.begin();
 	for (; it != atomsByName.end(); ++it) {
 		debug << "'" << it->first << "' = " << it->second << std::endl;
 	}
+#endif
     return 0;
 }
 

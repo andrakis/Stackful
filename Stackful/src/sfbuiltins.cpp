@@ -62,6 +62,13 @@ void addBuiltin(std::string name, SFBuiltinParams_t parameters, SFBuiltin_f fn) 
 }
 
 volatile bool definitionsDone = false;
+SFClosure *getClosure(SFLiteral_p chain) {
+	return toOpChain(chain)->getClosureObject();
+}
+SFClosure *getClosure(SFOpChain *chain) {
+	return chain->getClosureObject();
+}
+
 void stackful::setupBuiltins() {
 	if (definitionsDone)
 		return;
@@ -82,17 +89,17 @@ void stackful::setupBuiltins() {
 	});
 
 	addBuiltin("var", params("Name", "Value"), [](SFFnCallSignature_t params) {
-		toClosure(params.closure)->setImmediate(params.arguments[0], params.arguments[1]);
+		getClosure(params.chain)->setImmediate(params.arguments[0], params.arguments[1]);
 		return params.arguments[1];
 	});
 
 	addBuiltin("set", params("Name", "Value"), [](SFFnCallSignature_t params) {
-		toClosure(params.closure)->set(params.arguments[0], params.arguments[1]);
+		getClosure(params.chain)->set(params.arguments[0], params.arguments[1]);
 		return params.arguments[1];
 	});
 
 	addBuiltin("get", params("Name"), [](SFFnCallSignature_t params) {
-		return toClosure(params.closure)->get(params.arguments[0]);
+		return getClosure(params.chain)->get(params.arguments[0]);
 	});
 }
 

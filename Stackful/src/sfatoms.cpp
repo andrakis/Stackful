@@ -1,3 +1,4 @@
+#include "../stdafx.h"
 #include <map>
 #include <string>
 #include "../include/sftypes.hpp"

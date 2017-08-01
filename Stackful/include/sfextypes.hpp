@@ -286,20 +286,23 @@ namespace stackful {
 	class SFOpChain : public SFExtended {
 	public:
 		// An empty OpChain
-		SFOpChain() : SFExtended(Closure), parent(nullptr), closure(new SFClosure()), immediate(false) {
+		SFOpChain()
+		: SFExtended(Closure), parent(nullptr), closure(new SFClosure()), immediate(false),
+		functionEntry("") {
 		}
 		// Copy constructor
 		SFOpChain(const SFOpChain &copy)
 		: SFExtended(Closure, copy), parent(copy.getParentPtr()), closure(copy.getClosurePtr()),
-		immediate(false) {
+		immediate(false), functionEntry("") {
 		}
 		// Initialize with given parent
 		SFOpChain(SFLiteral_p parent) : SFExtended(Closure), parent(parent), closure(new SFClosure()),
-		immediate(false) {
+		immediate(false), functionEntry("") {
 		}
 		// Initialize with given parent and ops
 		SFOpChain(SFLiteral_p parent, const SFOpChain *ops)
-		: SFExtended(OpChain, ops), parent(parent), closure(new SFClosure()), immediate(false) {
+		: SFExtended(OpChain, ops), parent(parent), closure(new SFClosure()), immediate(false),
+		functionEntry("") {
 		}
 		SFLiteral_p getParentPtr() const { return parent; }
 		SFLiteral_p getClosurePtr() const { return closure; }
@@ -324,12 +327,15 @@ namespace stackful {
 		void importClosure(const SFBuiltinDefinitions_t &functions);
 		bool getImmediate() const { return immediate; }
 		void setImmediate(bool imm) { immediate = imm; }
+		std::string getFunctionEntry() const { return functionEntry; }
+		void setFunctionEntry(std::string entry) { functionEntry = entry; }
 	protected:
 		std::string _str() const;
 		SFLiteral_p parent;
 		SFLiteral_p closure;
 		int pos = -1;
 		bool immediate;
+		std::string functionEntry;
 	};
 
 	SFBasicList sfvar(const std::string &str);
@@ -341,7 +347,7 @@ namespace stackful {
 
 	class SFFunctionCall : public SFList {
 	public:
-		SFFunctionCall(const SFFunctionCall &copy) : SFList(FunctionCall, copy) {
+		SFFunctionCall(const SFFunctionCall &copy) : SFList(FunctionCall, copy), details(copy.getDetails()) {
 		}
 		SFFunctionCall(const std::string &fn);
 		SFFunctionCall(const std::string &fn, SFLiteral_p p1);
@@ -354,11 +360,14 @@ namespace stackful {
 		SFLiteral_p getFunction() const {
 			return at(0);
 		}
-		SFLiteral_p getArguments() const {
-			return at(1);
+		SFList *getArguments() const {
+			SFLiteral_p args = at(1);
+			return static_cast<SFList*>(args.get());
 		}
+		SFFunctionArity_t getDetails() const { return details; }
 	protected:
 		std::string _str() const;
+		SFFunctionArity_t details;
 	};
 
 	typedef std::map<SFInteger_t, SFLiteral_p> atomPtrsById_t;

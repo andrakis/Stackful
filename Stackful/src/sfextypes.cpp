@@ -71,13 +71,15 @@ namespace stackful {
 		return l.str();
 	}
 
-	stackful::SFFunctionCall::SFFunctionCall(const std::string &fn) : SFList(FunctionCall)
+	stackful::SFFunctionCall::SFFunctionCall(const std::string &fn)
+	: SFList(FunctionCall), details(getFunctionArity(fn, 0))
 	{
 		this->push_back(getAtomPtr(fn));
 		this->push_back(new SFList());
 	}
 
-	SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1) : SFList(FunctionCall)
+	SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1)
+	: SFList(FunctionCall), details(getFunctionArity(fn, 1))
 	{
 		this->push_back(getAtomPtr(fn));
 		SFList *params = new SFList();
@@ -85,7 +87,8 @@ namespace stackful {
 		this->push_back(SFLiteral_p(params));
 	}
 
-	SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2) : SFList(FunctionCall)
+	SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2)
+	: SFList(FunctionCall), details(getFunctionArity(fn, 2))
 	{
 		this->push_back(getAtomPtr(fn));
 		SFList *params = new SFList();
@@ -94,7 +97,8 @@ namespace stackful {
 		this->push_back(SFLiteral_p(params));
 	}
 
-	SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2, SFLiteral_p p3) : SFList(FunctionCall)
+	SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2, SFLiteral_p p3)
+	: SFList(FunctionCall), details(getFunctionArity(fn, 3))
 	{
 		this->push_back(getAtomPtr(fn));
 		SFList *params = new SFList();
@@ -104,7 +108,8 @@ namespace stackful {
 		this->push_back(SFLiteral_p(params));
 	}
 
-	SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2, SFLiteral_p p3, SFLiteral_p p4) : SFList(FunctionCall)
+	SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2, SFLiteral_p p3, SFLiteral_p p4)
+	: SFList(FunctionCall), details(getFunctionArity(fn, 0))
 	{
 		this->push_back(getAtomPtr(fn));
 		SFList *params = new SFList();

@@ -1,10 +1,14 @@
+#include "../stdafx.h"
+
 #include "../include/sfinterp.hpp"
 #include "../include/sfextypes.hpp"
 #include "../include/sfdebug.hpp"
 #include "../include/sfbuiltins.hpp"
+#include "../include/sffndef.hpp"
 
 #include <exception>
 #include <string>
+#include <sstream>
 #include <vector>
 
 using namespace stackful;
@@ -16,6 +20,14 @@ namespace stackful {
 	DebugBuiltins_t DebugBuiltins({
 		"while", "call", "try", "eval", "apply", "next", "recurse"
 	});
+	bool isDebugBuiltin(std::string name) {
+		DebugBuiltins_t::iterator it = DebugBuiltins.begin();
+		for (; it != DebugBuiltins.end(); ++it) {
+			if (*it == name)
+				return true;
+		}
+		return false;
+	}
 
 	SFLiteral_p SFInterpreter::run(SFLiteral_p chain_p) throw(std::runtime_error) {
 		SFLiteral_p value(new SFAtom("nil"));
@@ -41,7 +53,7 @@ namespace stackful {
 				case FunctionCall:
 				{
 					SFFunctionCall *fncall = static_cast<SFFunctionCall*>(i);
-					SFLiteral_p result = do_functioncall(chain, fncall);
+					SFLiteral_p result = doFunctionCall(chain_p, fncall);
 					value.swap(result);
 					if (value.get() != nullptr && value->isExtended()) {
 						SFExtended *valueExt = value->ExtClass();
@@ -78,9 +90,103 @@ namespace stackful {
 	* the appropriate real value so that the function call
 	* can occur.
 	*/
-	SFLiteral_p SFInterpreter::do_functioncall(SFOpChain *chain, SFFunctionCall *i) {
-		chain->getClosureObject()->getOrMissing(i->getFunction());
-		return SFLiteral_p(new SFAtom("todo"));
+	SFLiteral_p SFInterpreter::doFunctionCall(SFLiteral_p chain_p, SFFunctionCall *i) {
+		SFFunctionArity_t details = i->getDetails();
+		SFOpChain *chain = toOpChain(chain_p);
+		SFLiteral_p fndef = chain->getClosureObject()->getOrMissing(i->getFunction());
+		if (fndef == atomMissing) {
+			fndef = chain->getClosureObject()->getOrMissing(details.nameArityStar);
+			if (fndef == atomMissing) {
+				throw std::runtime_error("Function not found: " + details.str());
+			}
+		}
+		debug << "Found fndef: " << details.str() << std::endl;
+		SFList *args = i->getArguments();
+		SFList::iterator it = args->begin();
+		SFBasicList params;
+		for (; it != args->end(); ++it) {
+			params.push_back(this->getParamValue(chain_p, *it));
+		}
+
+		SFFnCallSignature_t call = { params, chain_p, this };
+		return this->invokeFunctionCall(fndef, call);
+	}
+	SFLiteral_p SFInterpreter::getParamValue(SFLiteral_p chain_p, SFLiteral_p p) {
+		SFLiteral *basic = p.get();
+		if (basic->isExtended()) {
+			SFExtended *ext = basic->ExtClass();
+			if(ext->getExtendedType() == FunctionCall) {
+				SFFunctionCall *fncall = static_cast<SFFunctionCall*>(ext);
+				return this->doFunctionCall(chain_p, fncall);
+			}
+		}
+		return p;
+	}
+
+	std::string SFInterpreter::inspectObject(const SFBasicList &obj) const {
+		std::stringstream s;
+		SFBasicList::iterator it = obj.begin();
+		bool first = true;
+		s << "[";
+		for (; it != obj.end(); ++it) {
+			if (first)
+				first = false;
+			else
+				s << " ";
+			SFLiteral *item = it->get();
+			if (item->isExtended()) {
+				SFExtended *ext = item->ExtClass();
+				s << ext->extLiteral();
+			} else {
+				s << item->str();
+			}
+		}
+		s << "]";
+		return s.str();
+	}
+
+	std::string indentSymbol = "|";
+	SFLiteral_p SFInterpreter::invokeFunctionCall(SFLiteral_p fndef, SFFnCallSignature_t call) {
+		SFFunctionDefinitionBase *def = static_cast<SFFunctionDefinitionBase*>(fndef.get());
+		SFFunctionArity_t details = def->getAttributes();
+		std::stringstream s;
+		SFLiteral_p result;
+
+		++this->depth;
+
+		if (debug.getEnabled()) {
+			std::string indent;
+			SFFunctionArity_t arity = def->getAttributes();
+			if (this->depth < 20) {
+				indent = std::string(indentSymbol, this->depth);
+			} else {
+				indent = "|             " + std::to_string(this->depth) + " | | ";
+			}
+			s << "+" << indent;
+			s << " (" << arity.str();
+			if(call.arguments.size() != 0)
+				s << " " << this->inspectObject(call.arguments);
+			s << ")";
+		}
+		if (def->isNative()) {
+			if (debug.getEnabled() && isDebugBuiltin(details.nameRawStr)) {
+				debug << s.str();
+			}
+		} else {
+			// Mark opchain as function entry
+			SFOpChain *chain = toOpChain(call.chain);
+			chain->setFunctionEntry(details.nameArityStr);
+		}
+		result = def->invoke(call);
+		depth--;
+		if (debug.getEnabled()) {
+			s << " :: ";
+			SFBasicList inspector;
+			inspector.push_back(result);
+			s << this->inspectObject(inspector);
+			debug << s.str() << std::endl;
+		}
+		return result;
 	}
 }
 

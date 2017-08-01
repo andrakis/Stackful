@@ -26,6 +26,31 @@ Some additional data types implemented with these constructs (MAY BE OUT OF DATE
 * `(3, (65, 66, 67))` - a string of `ABC`, also allowing for unicode
 
 
+Status
+------
+
+* *Version 0.20*:
+
+   The interpreter has been implemented, as well as the following builtins:
+
+   * `print/*` - Print given arguments `(print Any::any)::nil`
+
+   * `var/2` - Set a variable in the current scope `(var Name::atom Value::any)::Value`
+
+   * `get/1` - Get a variable from the current scope `(get Name::atom)::Value::any)`
+
+   There is a basic test which constructs an OpChain and runs it, resulting an output message.
+
+* *Priority List*:
+
+   1. Basic control flow and arithmatic builtins
+
+   2. AST compiler
+
+   3. Native parser
+
+   4. Extended builtins
+
 Compilation
 -----------
 

@@ -16,7 +16,7 @@ namespace stackful {
 
 	SFLiteral_p SFFunctionDefinition::invoke(SFFnCallSignature_t _args) {
 		SFLiteral_p body_p = this->getBody();
-		SFLiteral_p parent_p = _args.closure;
+		SFLiteral_p parent_p = _args.chain;
 		if (this->isScoped())
 			parent_p = this->getScope();
 		SFOpChain *body = toOpChain(body_p);
@@ -41,7 +41,7 @@ namespace stackful {
 			SFLiteral_p _name = getAtomPtr(atomId);
 			chain->getClosureObject()->setImmediate(_name, arguments[position]);
 		}
-		return _args.interpreter.run(chain_p);
+		return _args.interpreter->run(chain_p);
 	}
 
 	void SFOpChain::importClosure(const SFBuiltinDefinitions_t &functions) {

@@ -12,8 +12,8 @@ namespace stackful {
 	// Standard callable function signature
 	typedef struct SFFnCallSignature_s {
 		SFBasicList arguments;
-		SFLiteral_p closure;
-		SFInterpreter& interpreter;
+		SFLiteral_p chain;
+		SFInterpreter* interpreter;
 	} SFFnCallSignature_t;
 	typedef SFLiteral_p(*SFBuiltin_f)(SFFnCallSignature_t);
 	typedef std::map<std::string, SFBuiltin_f> SFBuiltinMapString_t;
