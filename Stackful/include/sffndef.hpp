@@ -19,6 +19,7 @@ namespace stackful {
 		}
 		SFFunctionArity_t getAttributes() const { return attributes; }
 		SFFnDefArgsByAtom_t getArgsByAtom() const { return argsByAtom; }
+		virtual bool isNative() const = 0;
 	protected:
 		SFFunctionDefinitionBase(ExtendedType type, SFFnDefName _name, SFFnDefArgs _args)
 		: SFExtended(type), name(_name), args(_args), scope(nullptr),
@@ -45,6 +46,7 @@ namespace stackful {
 	public:
 		SFFunctionDefinitionNative(SFFnDefName _name, SFFnDefArgs _args, SFBuiltin_f _body);
 		inline SFLiteral_p invoke(SFFnCallSignature_t args);
+		bool isNative() const { return true; }
 	protected:
 		SFBuiltin_f body;
 	};
@@ -57,6 +59,7 @@ namespace stackful {
 		SFLiteral_p getBody() {
 			return at(0);
 		}
+		bool isNative() const { return false; }
 	protected:
 	};
 }

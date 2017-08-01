@@ -321,7 +321,7 @@ namespace stackful {
 			pos = -1;
 		}
 
-		void importClosure(SFBuiltinDefinitions functions);
+		void importClosure(const SFBuiltinDefinitions_t &functions);
 		bool getImmediate() const { return immediate; }
 		void setImmediate(bool imm) { immediate = imm; }
 	protected:
@@ -351,11 +351,11 @@ namespace stackful {
 		std::string extLiteral() const {
 			return _literal(true);
 		}
-		SFExtended *getFunction() const {
-			return at(0)->ExtClass();
+		SFLiteral_p getFunction() const {
+			return at(0);
 		}
-		SFExtended *getArguments() const {
-			return at(1)->ExtClass();
+		SFLiteral_p getArguments() const {
+			return at(1);
 		}
 	protected:
 		std::string _str() const;

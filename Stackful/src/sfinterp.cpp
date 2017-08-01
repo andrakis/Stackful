@@ -1,6 +1,7 @@
 #include "../include/sfinterp.hpp"
 #include "../include/sfextypes.hpp"
 #include "../include/sfdebug.hpp"
+#include "../include/sfbuiltins.hpp"
 
 #include <exception>
 #include <string>
@@ -64,8 +65,21 @@ namespace stackful {
 		return value;
 	}
 
+	/**
+	* Perform a function call with the given chain closure.
+	*
+	* This is the main interpreting function, it takes care
+	* of creating new closures for a function call, making
+	* the call itself, and finding the correct function to
+	* call based on arity.
+	*
+	* For each argument, if it is a function call, this
+	* procedure is called recursively, eventually returning
+	* the appropriate real value so that the function call
+	* can occur.
+	*/
 	SFLiteral_p SFInterpreter::do_functioncall(SFOpChain *chain, SFFunctionCall *i) {
-		
+		chain->getClosureObject()->getOrMissing(i->getFunction());
 		return SFLiteral_p(new SFAtom("todo"));
 	}
 }
@@ -75,13 +89,15 @@ void interp_test () {
 	// ((var A "foobar")
 	//  (print "A:" (get 'A')))
 	SFOpChain *ocTest = new SFOpChain();
-	SFFunctionCall *fcVar = new SFFunctionCall("var", SFLiteral_p(new SFAtom("A")), SFLiteral_p(new SFString("foobar")));
-	SFFunctionCall *fcGet = new SFFunctionCall("get", SFLiteral_p(new SFAtom("A")));
+	SFLiteral_p ocTest_p(ocTest);
+	setupBuiltins();
+	ocTest->importClosure(getBuiltinDefinitions());
+
+	SFFunctionCall *fcVar = new SFFunctionCall("var", getAtomPtr("A"), SFLiteral_p(new SFString("foobar")));
+	SFFunctionCall *fcGet = new SFFunctionCall("get", SFLiteral_p(getAtomPtr("A")));
 	SFFunctionCall *fcPrint = new SFFunctionCall("print", SFLiteral_p(new SFString("A:")), SFLiteral_p(fcGet));
 	ocTest->push_back(SFLiteral_p(fcVar));
 	ocTest->push_back(SFLiteral_p(fcPrint));
-
-	SFLiteral_p ocTest_p(ocTest);
 
 	debug << ocTest->str() << std::endl;
 	SFInterpreter si;

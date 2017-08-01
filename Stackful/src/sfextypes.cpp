@@ -118,8 +118,8 @@ namespace stackful {
 	std::string SFFunctionCall::_str() const {
 		std::stringstream ss;
 		ss << "{FunctionCall: ";
-		ss << this->getFunction()->extLiteral();
-		ss << this->getArguments()->extLiteral();
+		ss << this->getFunction()->ExtClass()->extLiteral();
+		ss << this->getArguments()->ExtClass()->extLiteral();
 		ss << "}";
 		return ss.str();
 	}

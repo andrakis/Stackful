@@ -50,8 +50,8 @@ namespace stackful {
 		SFFnDefName name;
 		SFFnDefArgs args;
 		SFBuiltin_f body;
-	} SFNativeFunctionAttributes;
-	typedef std::vector<SFNativeFunctionAttributes> SFBuiltinDefinitions;
+	} SFNativeFunctionAttributes_t;
+	typedef std::vector<SFNativeFunctionAttributes_t> SFBuiltinDefinitions_t;
 	typedef std::vector<SFInteger_t> SFFnDefArgsByAtom_t;
 
 	typedef std::vector<std::string> DebugBuiltins_t;

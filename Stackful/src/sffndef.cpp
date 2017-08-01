@@ -29,10 +29,12 @@ namespace stackful {
 		SFFunctionArity_t fnattributes = this->getAttributes();
 		SFBasicList arguments = _args.arguments;
 		if (fnattributes.isArityStar()) {
+			// Converts args to [args]
 			SFBasicList tmpList;
 			tmpList.push_back(arguments);
 			arguments = tmpList;
 		}
+		// Set variables in new scope
 		for (; it != ourArgs.end(); ++it, ++position) {
 			// Get atom by id
 			SFInteger_t atomId = *it;
@@ -42,10 +44,10 @@ namespace stackful {
 		return _args.interpreter.run(chain_p);
 	}
 
-	void SFOpChain::importClosure(SFBuiltinDefinitions functions) {
-		SFBuiltinDefinitions::iterator it = functions.begin();
+	void SFOpChain::importClosure(const SFBuiltinDefinitions_t &functions) {
+		SFBuiltinDefinitions_t::const_iterator it = functions.begin();
 		for (; it != functions.end(); ++it) {
-			SFNativeFunctionAttributes native = *it;
+			SFNativeFunctionAttributes_t native = *it;
 			SFFunctionDefinitionNative *fndef = new SFFunctionDefinitionNative(native.name, native.args, native.body);
 			SFLiteral_p fndef_p(fndef);
 			SFLiteral_p atom_p = getAtomPtr(native.name);

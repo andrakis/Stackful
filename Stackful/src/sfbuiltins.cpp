@@ -20,6 +20,7 @@ SFInteger_t builtinCounter = 0;
 
 SFBuiltinMapAtom_t builtinsByAtom;
 SFBuiltinMapString_t builtinsByString;
+SFBuiltinDefinitions_t builtinDefinitions;
 
 SFBuiltinParams_t stackful::params() {
 	return SFBuiltinParams_t();
@@ -52,12 +53,19 @@ stackful::SFBuiltinParams_t params(std::string p1, std::string p2, std::string p
 }
 
 void addBuiltin(std::string name, SFBuiltinParams_t parameters, SFBuiltin_f fn) {
+	SFNativeFunctionAttributes_t attrs = { name, parameters, fn };
+	builtinDefinitions.push_back(attrs);
+
 	SFInteger_t atomId = getAtom(name);
 	builtinsByAtom.emplace(atomId, fn);
 	builtinsByString.emplace(name, fn);
 }
 
+volatile bool definitionsDone = false;
 void stackful::setupBuiltins() {
+	if (definitionsDone)
+		return;
+	definitionsDone = true;
 	addBuiltin("print/*", params(), [](SFFnCallSignature_t params) {
 		std::stringstream s;
 		bool first = true;
@@ -94,4 +102,8 @@ SFBuiltin_f stackful::getBuiltin(const SFInteger_t atomId) {
 
 SFBuiltin_f stackful::getBuiltin(const std::string &name) {
 	return builtinsByString[name];
+}
+
+SFBuiltinDefinitions_t stackful::getBuiltinDefinitions() {
+	return builtinDefinitions;
 }

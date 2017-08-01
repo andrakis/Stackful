@@ -17,4 +17,5 @@ namespace stackful {
 	void setupBuiltins();
 	SFBuiltin_f getBuiltin(const SFInteger_t atomId);
 	SFBuiltin_f getBuiltin(const std::string &name);
+	SFBuiltinDefinitions_t getBuiltinDefinitions();
 }
