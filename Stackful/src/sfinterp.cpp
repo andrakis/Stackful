@@ -40,7 +40,6 @@ namespace stackful {
 			if(false == p->isExtended())
 				throw std::runtime_error("Invalid operation");
 			SFExtended *i = static_cast<SFExtended*>(p.get());
-			debug << "Instruction: " << i->str() << std::endl;
 			switch (i->getExtendedType()) {
 				case OpChain:
 				{
@@ -100,7 +99,6 @@ namespace stackful {
 			if (fndef == atomMissing) {
 				throw std::runtime_error("Function not found: " + details.str());
 			}
-			debug << "Updated " + details.str() + " to arity * version" << std::endl;
 			i->setFunction(details.nameArityStar);
 		}
 		SFList *args = i->getArguments();
