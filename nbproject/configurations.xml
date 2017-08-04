@@ -31,6 +31,7 @@
           <itemPath>Stackful/src/sffndef.cpp</itemPath>
           <itemPath>Stackful/src/sfinterp.cpp</itemPath>
           <itemPath>Stackful/src/sfshared.cpp</itemPath>
+          <itemPath>Stackful/src/sftests.cpp</itemPath>
           <itemPath>Stackful/src/sftypes.cpp</itemPath>
         </logicalFolder>
         <itemPath>Stackful/Stackful.cpp</itemPath>
@@ -63,6 +64,9 @@
       <compileType>
         <ccTool>
           <standard>8</standard>
+          <preprocessorList>
+            <Elem>_DEBUG</Elem>
+          </preprocessorList>
         </ccTool>
         <linkerTool>
           <output>${CND_DISTDIR}/${CND_CONF}/stackful</output>
@@ -73,6 +77,18 @@
         <packType>Tar</packType>
         <output>${CND_DISTDIR}/${CND_CONF}/package/stackful.tar</output>
         <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
                             from="${OUTPUT_PATH}.exe"
@@ -124,6 +140,8 @@
       <item path="Stackful/src/sfinterp.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Stackful/src/sfshared.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sftests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Stackful/src/sftypes.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -177,6 +195,18 @@
                             perm="755"
                             owner="root"
                             group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
         </packFileList>
       </packaging>
       <item path="Stackful/Stackful.cpp" ex="false" tool="1" flavor2="0">
@@ -210,6 +240,8 @@
       <item path="Stackful/src/sfinterp.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Stackful/src/sfshared.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sftests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Stackful/src/sftypes.cpp" ex="false" tool="1" flavor2="0">
       </item>

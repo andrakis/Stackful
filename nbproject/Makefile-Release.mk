@@ -43,6 +43,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Stackful/src/sffndef.o \
 	${OBJECTDIR}/Stackful/src/sfinterp.o \
 	${OBJECTDIR}/Stackful/src/sfshared.o \
+	${OBJECTDIR}/Stackful/src/sftests.o \
 	${OBJECTDIR}/Stackful/src/sftypes.o
 
 
@@ -109,6 +110,11 @@ ${OBJECTDIR}/Stackful/src/sfshared.o: Stackful/src/sfshared.cpp
 	${MKDIR} -p ${OBJECTDIR}/Stackful/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfshared.o Stackful/src/sfshared.cpp
+
+${OBJECTDIR}/Stackful/src/sftests.o: Stackful/src/sftests.cpp
+	${MKDIR} -p ${OBJECTDIR}/Stackful/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sftests.o Stackful/src/sftests.cpp
 
 ${OBJECTDIR}/Stackful/src/sftypes.o: Stackful/src/sftypes.cpp
 	${MKDIR} -p ${OBJECTDIR}/Stackful/src

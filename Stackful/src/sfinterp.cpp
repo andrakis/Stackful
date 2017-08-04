@@ -1,3 +1,7 @@
+/*
+ * Stackful Interpreter
+ * Runs OpChains by satisfying function calls.
+ **/
 #include "../stdafx.h"
 
 #include "../include/sfinterp.hpp"
@@ -9,9 +13,6 @@
 #include <exception>
 #include <string>
 #include <sstream>
-#include <vector>
-
-using namespace stackful;
 
 namespace stackful {
 	const SFInteger_t MaxDebugLen = 100;
@@ -125,10 +126,13 @@ namespace stackful {
 	}
 
 	std::string SFInterpreter::inspectObject(const SFBasicList &obj) const {
+		return this->inspectObject(obj, "[", "]");
+	}
+	std::string SFInterpreter::inspectObject(const SFBasicList &obj, const std::string &pre, const std::string &post) const {
 		std::stringstream s;
 		SFBasicList::iterator it = obj.begin();
 		bool first = true;
-		s << "[";
+		s << pre;
 		for (; it != obj.end(); ++it) {
 			if (first)
 				first = false;
@@ -142,7 +146,7 @@ namespace stackful {
 				s << item->str();
 			}
 		}
-		s << "]";
+		s << post;
 		return s.str();
 	}
 
@@ -184,58 +188,9 @@ namespace stackful {
 			s << " :: ";
 			SFBasicList inspector;
 			inspector.push_back(result);
-			s << this->inspectObject(inspector);
+			s << this->inspectObject(inspector, "", "");
 			debug << s.str() << std::endl;
 		}
 		return result;
 	}
-}
-
-void interp_test () {
-	// Test var, get
-	// ((var A "foobar")
-	//  (print "A:" (get 'A')))
-	SFOpChain *ocTest = new SFOpChain();
-	SFLiteral_p ocTest_p(ocTest);
-	setupBuiltins();
-	ocTest->importClosure(getBuiltinDefinitions());
-
-	SFFunctionCall *fcVar = new SFFunctionCall("var", getAtomPtr("A"), SFLiteral_p(new SFString("foobar")));
-	SFFunctionCall *fcGet = new SFFunctionCall("get", getAtomPtr("A"));
-	SFFunctionCall *fcPrint = new SFFunctionCall("print", SFLiteral_p(new SFString("A:")), SFLiteral_p(fcGet));
-	SFFunctionCall *fcPrint2 = new SFFunctionCall("print", SFLiteral_p(new SFString("woohoo!")));
-	ocTest->push_back(SFLiteral_p(fcVar));
-	ocTest->push_back(SFLiteral_p(fcPrint));
-	ocTest->push_back(SFLiteral_p(fcPrint2));
-
-	debug << ocTest->str() << std::endl;
-	SFInterpreter si;
-	SFLiteral_p result = si.run(ocTest_p);
-	debug << "Result: " << result->str() << std::endl;
-	ocTest->rewind();
-	si.run(ocTest_p);
-
-	void test_factorial();
-	test_factorial();
-}
-
-void test_factorial() {
-	// Test a factorial function
-	// ((def fac #N :: (
-	//    (if (<= N 0) (
-	//       (1)
-	//    ) (else (
-	//       (* N (- N 1))
-	//    )))
-	//  ))
-	//  (var N 10)
-	//  (print "Fac of" (get N) (fac (get N)))
-	// )
-	SFOpChain *chain = new SFOpChain();
-	SFLiteral_p chain_p(chain);
-
-	chain->importClosure(getBuiltinDefinitions());
-	
-	// (var N 10)
-	//SFFunctionCall fcVarN = new SFFunctionCall("var", )
 }

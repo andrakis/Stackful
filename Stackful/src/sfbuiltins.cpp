@@ -101,6 +101,25 @@ void stackful::setupBuiltins() {
 	addBuiltin("get", params("Name"), [](SFFnCallSignature_t params) {
 		return getClosure(params.chain)->get(params.arguments[0]);
 	});
+
+	addBuiltin("==", params("A", "B"), [](SFFnCallSignature_t params) {
+		return params.arguments[0].get() == params.arguments[1].get() ? atomTrue : atomFalse;
+	});
+	addBuiltin("!=", params("A", "B"), [](SFFnCallSignature_t params) {
+		return params.arguments[0].get() != params.arguments[1].get() ? atomTrue : atomFalse;
+	});
+	addBuiltin("<", params("A", "B"), [](SFFnCallSignature_t params) {
+		return params.arguments[0].get() < params.arguments[1].get() ? atomTrue : atomFalse;
+	});
+	addBuiltin(">", params("A", "B"), [](SFFnCallSignature_t params) {
+		return params.arguments[0].get() > params.arguments[1].get() ? atomTrue : atomFalse;
+	});
+	addBuiltin("<=", params("A", "B"), [](SFFnCallSignature_t params) {
+		return params.arguments[0].get() <= params.arguments[1].get() ? atomTrue : atomFalse;
+	});
+	addBuiltin(">=", params("A", "B"), [](SFFnCallSignature_t params) {
+		return params.arguments[0].get() >= params.arguments[1].get() ? atomTrue : atomFalse;
+	});
 }
 
 SFBuiltin_f stackful::getBuiltin(const SFInteger_t atomId) {

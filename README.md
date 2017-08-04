@@ -88,6 +88,12 @@ Continuous testing is performed for the following environments:
 
    ***Note***: The output file will be `dist/($CONF)/stackful`.
 
+There should be no warnings present. All warnings, including extended warnings and PVS-Studio optimization
+warnings have been dealt with. This project aims to build cleanly on all platforms.
+
+Memory is managed by use of C++11 `shared_ptr` template. However, there are probably memory leaks at this
+early stage.
+
 
 Why Stackful?
 -------------

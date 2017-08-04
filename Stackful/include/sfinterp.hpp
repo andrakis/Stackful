@@ -1,6 +1,8 @@
 #pragma once
 
 #include "sfextypes.hpp"
+#include "sfbuiltins.hpp"
+#include "sffndef.hpp"
 
 namespace stackful {
 	class SFInterpreter {
@@ -13,6 +15,7 @@ namespace stackful {
 		bool getDebug() { return debugMode; }
 		SFLiteral_p invokeFunctionCall(SFLiteral_p fndef, const SFFnCallSignature_t &call);
 		std::string inspectObject(const SFBasicList &obj) const;
+		std::string inspectObject(const SFBasicList &obj, const std::string &pre, const std::string &post) const;
 	protected:
 		SFInteger_t depth;
 		SFInteger_t functionCalls;

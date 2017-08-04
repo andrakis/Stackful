@@ -11,7 +11,7 @@ namespace stackful {
 		atomTrue(new SFAtom(atomTrueId)),
 		atomMissing(new SFAtom(atomMissingId));
 
-	std::regex functionArityRegex(R"~(([a-z][a-z0-9_]+)\/?(\*|\d+)?$)~");
+	std::regex functionArityRegex(R"~((^[^\/]+)\/?(\*|\d+)?$)~");
 	SFFunctionArity_t getFunctionArity(std::string name, const int np) {
 		std::sregex_iterator iter(name.begin(), name.end(), functionArityRegex);
 		std::sregex_iterator end;
