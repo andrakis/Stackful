@@ -227,233 +227,6 @@ namespace stackful {
 		return tmp;
 	}
 
-	SFExtended* operator+(const SFExtended &a, const SFExtended &b);
-	SFExtended* operator-(const SFExtended &a, const SFExtended &b);
-	SFExtended* operator*(const SFExtended &a, const SFExtended &b);
-	SFExtended* operator/(const SFExtended &a, const SFExtended &b);
-	SFExtended* operator|(const SFExtended &a, const SFExtended &b);
-	SFExtended* operator^(const SFExtended &a, const SFExtended &b);
-	SFExtended* operator%(const SFExtended &a, const SFExtended &b);
-	SFExtended* operator<<(const SFExtended &a, const SFExtended &b);
-	SFExtended* operator>>(const SFExtended &a, const SFExtended &b);
-
-	SFLiteral* operator+(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error) {
-		if (a.isExtended() && b.isExtended()) {
-			const SFExtended *ea = a.ExtClass();
-			const SFExtended *eb = b.ExtClass();
-			return *ea + *eb;
-		}
-		switch (a.getType()) {
-			case Basic_Integer:
-			{
-				if (b.getType() != Basic_Integer) {
-					throw std::runtime_error("Cannot add a list to an integer");
-				}
-				const SFBasicInteger *ia = a.IntegerClass();
-				const SFBasicInteger *ib = b.IntegerClass();
-				return new SFBasicInteger(*ia + *ib);
-			}
-			case Basic_List:
-			{
-				const SFBasicList *la = a.ListClass();
-				const SFBasicList *lb;
-				SFLiteral_p p;
-				if (b.getType() == Basic_Integer) {
-					const SFBasicInteger *ib = b.IntegerClass();
-					SFBasicList *tmp = new SFBasicList();
-					tmp->push_back(new SFBasicInteger(ib->getValue()));
-					p = SFLiteral_p(tmp);
-					lb = tmp;
-				} else {
-					lb = b.ListClass();
-				}
-				return new SFBasicList(*la + *lb);
-			}
-			default:
-				throw std::runtime_error("Invalid operation");
-		}
-	}
-	SFLiteral* operator-(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error) {
-		if (a.isExtended() && b.isExtended()) {
-			const SFExtended *ea = a.ExtClass();
-			const SFExtended *eb = b.ExtClass();
-			return *ea - *eb;
-		}
-		switch (a.getType()) {
-			case Basic_Integer:
-			{
-				if (b.getType() != Basic_Integer) {
-					throw std::runtime_error("Cannot subtract a list to an integer");
-				}
-				const SFBasicInteger *ia = a.IntegerClass();
-				const SFBasicInteger *ib = b.IntegerClass();
-				return new SFBasicInteger(*ia - *ib);
-			}
-			default:
-				throw std::runtime_error("Invalid operation");
-		}
-	}
-	SFLiteral* operator*(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error) {
-		if (a.isExtended() && b.isExtended()) {
-			const SFExtended *ea = a.ExtClass();
-			const SFExtended *eb = b.ExtClass();
-			return *ea * *eb;
-		}
-		switch (a.getType()) {
-			case Basic_Integer:
-			{
-				if (b.getType() != Basic_Integer) {
-					throw std::runtime_error("Cannot multiply a list to an integer");
-				}
-				const SFBasicInteger *ia = a.IntegerClass();
-				const SFBasicInteger *ib = b.IntegerClass();
-				return new SFBasicInteger(*ia * *ib);
-			}
-			default:
-				throw std::runtime_error("Invalid operation");
-		}
-	}
-	SFLiteral* operator/(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error) {
-		if (a.isExtended() && b.isExtended()) {
-			const SFExtended *ea = a.ExtClass();
-			const SFExtended *eb = b.ExtClass();
-			return *ea / *eb;
-		}
-		switch (a.getType()) {
-			case Basic_Integer:
-			{
-				if (b.getType() != Basic_Integer) {
-					throw std::runtime_error("Cannot divide a list to an integer");
-				}
-				const SFBasicInteger *ia = a.IntegerClass();
-				const SFBasicInteger *ib = b.IntegerClass();
-				return new SFBasicInteger(*ia / *ib);
-			}
-			default:
-				throw std::runtime_error("Invalid operation");
-		}
-	}
-	SFLiteral* operator|(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error) {
-		if (a.isExtended() && b.isExtended()) {
-			const SFExtended *ea = a.ExtClass();
-			const SFExtended *eb = b.ExtClass();
-			return *ea | *eb;
-		}
-		switch (a.getType()) {
-			case Basic_Integer:
-			{
-				if (b.getType() != Basic_Integer) {
-					throw std::runtime_error("Cannot binary OR a list to an integer");
-				}
-				const SFBasicInteger *ia = a.IntegerClass();
-				const SFBasicInteger *ib = b.IntegerClass();
-				return new SFBasicInteger(*ia | *ib);
-			}
-			default:
-				throw std::runtime_error("Invalid operation");
-		}
-	}
-	SFLiteral* operator^(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error) {
-		if (a.isExtended() && b.isExtended()) {
-			const SFExtended *ea = a.ExtClass();
-			const SFExtended *eb = b.ExtClass();
-			return *ea ^ *eb;
-		}
-		switch (a.getType()) {
-			case Basic_Integer:
-			{
-				if (b.getType() != Basic_Integer) {
-					throw std::runtime_error("Cannot binary XOR a list to an integer");
-				}
-				const SFBasicInteger *ia = a.IntegerClass();
-				const SFBasicInteger *ib = b.IntegerClass();
-				return new SFBasicInteger(*ia ^ *ib);
-			}
-			default:
-				throw std::runtime_error("Invalid operation");
-		}
-	}
-	SFLiteral* operator&(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error) {
-		if (a.isExtended() && b.isExtended()) {
-			const SFExtended *ea = a.ExtClass();
-			const SFExtended *eb = b.ExtClass();
-			return *ea & *eb;
-		}
-		switch (a.getType()) {
-			case Basic_Integer:
-			{
-				if (b.getType() != Basic_Integer) {
-					throw std::runtime_error("Cannot binary AND a list to an integer");
-				}
-				const SFBasicInteger *ia = a.IntegerClass();
-				const SFBasicInteger *ib = b.IntegerClass();
-				return new SFBasicInteger(*ia & *ib);
-			}
-			default:
-				throw std::runtime_error("Invalid operation");
-		}
-	}
-	SFLiteral* operator%(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error) {
-		if (a.isExtended() && b.isExtended()) {
-			const SFExtended *ea = a.ExtClass();
-			const SFExtended *eb = b.ExtClass();
-			return *ea % *eb;
-		}
-		switch (a.getType()) {
-			case Basic_Integer:
-			{
-				if (b.getType() != Basic_Integer) {
-					throw std::runtime_error("Cannot modulo a list to an integer");
-				}
-				const SFBasicInteger *ia = a.IntegerClass();
-				const SFBasicInteger *ib = b.IntegerClass();
-				return new SFBasicInteger(*ia % *ib);
-			}
-			default:
-				throw std::runtime_error("Invalid operation");
-		}
-	}
-	SFLiteral* operator<<(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error) {
-		if (a.isExtended() && b.isExtended()) {
-			const SFExtended *ea = a.ExtClass();
-			const SFExtended *eb = b.ExtClass();
-			return *ea << *eb;
-		}
-		switch (a.getType()) {
-			case Basic_Integer:
-			{
-				if (b.getType() != Basic_Integer) {
-					throw std::runtime_error("Cannot shift left a list to an integer");
-				}
-				const SFBasicInteger *ia = a.IntegerClass();
-				const SFBasicInteger *ib = b.IntegerClass();
-				return new SFBasicInteger(*ia << *ib);
-			}
-			default:
-				throw std::runtime_error("Invalid operation");
-		}
-	}
-	SFLiteral* operator>>(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error) {
-		if (a.isExtended() && b.isExtended()) {
-			const SFExtended *ea = a.ExtClass();
-			const SFExtended *eb = b.ExtClass();
-			return *ea >> *eb;
-		}
-		switch (a.getType()) {
-			case Basic_Integer:
-			{
-				if (b.getType() != Basic_Integer) {
-					throw std::runtime_error("Cannot shift left a list to an integer");
-				}
-				const SFBasicInteger *ia = a.IntegerClass();
-				const SFBasicInteger *ib = b.IntegerClass();
-				return new SFBasicInteger(*ia >> *ib);
-			}
-			default:
-				throw std::runtime_error("Invalid operation");
-		}
-	}
-
 	SFExtended* operator+(const SFExtended &a, const SFExtended &b) throw(std::runtime_error) {
 		SFLiteral_p p;
 		switch (a.getExtendedType()) {
@@ -758,6 +531,155 @@ namespace stackful {
 				} else
 					throw std::runtime_error("Cannot shift right given type to integer");
 				return *ia >> *ib;
+			}
+			default:
+				throw std::runtime_error("Invalid operation");
+		}
+	}
+
+	bool operator<(const SFExtended &a, const SFExtended &b) throw(std::runtime_error) {
+		SFLiteral_p p;
+		switch (a.getExtendedType()) {
+			case Integer:
+			{
+				const SFInteger *ia = static_cast<const SFInteger*>(&a);
+				const SFInteger *ib;
+				if (b.getExtendedType() == Integer)
+					ib = static_cast<const SFInteger*>(&b);
+				else if (b.getExtendedType() == Float) {
+					const SFFloat *fb = static_cast<const SFFloat*>(&b);
+					SFInteger *tmp = fb->operator stackful::SFInteger *();
+					p = SFLiteral_p(tmp);
+					ib = tmp;
+				} else
+					throw std::runtime_error("Cannot compare given type to integer");
+				return ia->getRawValue() < ib->getRawValue();
+			}
+			case Float:
+			{
+				const SFFloat *fa = static_cast<const SFFloat*>(&a);
+				const SFFloat *fb;
+				if (b.getExtendedType() == Float)
+					fb = static_cast<const SFFloat*>(&b);
+				else if (b.getExtendedType() == Integer) {
+					const SFInteger *ib = static_cast<const SFInteger*>(&b);
+					SFFloat *tmp = ib->operator stackful::SFFloat *();
+					p = SFLiteral_p(tmp);
+					fb = tmp;
+				} else
+					throw std::runtime_error("Cannot compare given type to float");
+				return fa->getRawValue() < fb->getRawValue();
+			}
+			default:
+				throw std::runtime_error("Invalid operation");
+		}
+	}
+	bool operator>(const SFExtended &a, const SFExtended &b) throw(std::runtime_error) {
+		SFLiteral_p p;
+		switch (a.getExtendedType()) {
+			case Integer:
+			{
+				const SFInteger *ia = static_cast<const SFInteger*>(&a);
+				const SFInteger *ib;
+				if (b.getExtendedType() == Integer)
+					ib = static_cast<const SFInteger*>(&b);
+				else if (b.getExtendedType() == Float) {
+					const SFFloat *fb = static_cast<const SFFloat*>(&b);
+					SFInteger *tmp = fb->operator stackful::SFInteger *();
+					p = SFLiteral_p(tmp);
+					ib = tmp;
+				} else
+					throw std::runtime_error("Cannot compare given type to integer");
+				return ia->getRawValue() > ib->getRawValue();
+			}
+			case Float:
+			{
+				const SFFloat *fa = static_cast<const SFFloat*>(&a);
+				const SFFloat *fb;
+				if (b.getExtendedType() == Float)
+					fb = static_cast<const SFFloat*>(&b);
+				else if (b.getExtendedType() == Integer) {
+					const SFInteger *ib = static_cast<const SFInteger*>(&b);
+					SFFloat *tmp = ib->operator stackful::SFFloat *();
+					p = SFLiteral_p(tmp);
+					fb = tmp;
+				} else
+					throw std::runtime_error("Cannot compare given type to float");
+				return fa->getRawValue() > fb->getRawValue();
+			}
+			default:
+				throw std::runtime_error("Invalid operation");
+		}
+	}
+	bool operator<=(const SFExtended &a, const SFExtended &b) throw(std::runtime_error) {
+		SFLiteral_p p;
+		switch (a.getExtendedType()) {
+			case Integer:
+			{
+				const SFInteger *ia = static_cast<const SFInteger*>(&a);
+				const SFInteger *ib;
+				if (b.getExtendedType() == Integer)
+					ib = static_cast<const SFInteger*>(&b);
+				else if (b.getExtendedType() == Float) {
+					const SFFloat *fb = static_cast<const SFFloat*>(&b);
+					SFInteger *tmp = fb->operator stackful::SFInteger *();
+					p = SFLiteral_p(tmp);
+					ib = tmp;
+				} else
+					throw std::runtime_error("Cannot compare given type to integer");
+				return ia->getRawValue() <= ib->getRawValue();
+			}
+			case Float:
+			{
+				const SFFloat *fa = static_cast<const SFFloat*>(&a);
+				const SFFloat *fb;
+				if (b.getExtendedType() == Float)
+					fb = static_cast<const SFFloat*>(&b);
+				else if (b.getExtendedType() == Integer) {
+					const SFInteger *ib = static_cast<const SFInteger*>(&b);
+					SFFloat *tmp = ib->operator stackful::SFFloat *();
+					p = SFLiteral_p(tmp);
+					fb = tmp;
+				} else
+					throw std::runtime_error("Cannot compare given type to float");
+				return fa->getRawValue() <= fb->getRawValue();
+			}
+			default:
+				throw std::runtime_error("Invalid operation");
+		}
+	}
+	bool operator>=(const SFExtended &a, const SFExtended &b) throw(std::runtime_error)  {
+		SFLiteral_p p;
+		switch (a.getExtendedType()) {
+			case Integer:
+			{
+				const SFInteger *ia = static_cast<const SFInteger*>(&a);
+				const SFInteger *ib;
+				if (b.getExtendedType() == Integer)
+					ib = static_cast<const SFInteger*>(&b);
+				else if (b.getExtendedType() == Float) {
+					const SFFloat *fb = static_cast<const SFFloat*>(&b);
+					SFInteger *tmp = fb->operator stackful::SFInteger *();
+					p = SFLiteral_p(tmp);
+					ib = tmp;
+				} else
+					throw std::runtime_error("Cannot compare given type to integer");
+				return ia->getRawValue() >= ib->getRawValue();
+			}
+			case Float:
+			{
+				const SFFloat *fa = static_cast<const SFFloat*>(&a);
+				const SFFloat *fb;
+				if (b.getExtendedType() == Float)
+					fb = static_cast<const SFFloat*>(&b);
+				else if (b.getExtendedType() == Integer) {
+					const SFInteger *ib = static_cast<const SFInteger*>(&b);
+					SFFloat *tmp = ib->operator stackful::SFFloat *();
+					p = SFLiteral_p(tmp);
+					fb = tmp;
+				} else
+					throw std::runtime_error("Cannot compare given type to float");
+				return fa->getRawValue() >= fb->getRawValue();
 			}
 			default:
 				throw std::runtime_error("Invalid operation");

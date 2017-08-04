@@ -243,3 +243,6 @@ ModelManifest.xml
 /Stackful/Profiling/Stackful.tlog
 /Stackful/Profiling
 /Profiling
+*.PVS-Studio.*
+*.i
+*.i*

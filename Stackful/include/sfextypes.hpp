@@ -406,4 +406,18 @@ namespace stackful {
 	extern atomPtrsById_t atomPtrsById;
 	SFLiteral_p getAtomPtr(SFInteger_t id);
 	SFLiteral_p getAtomPtr(const std::string &name);
+
+	SFExtended* operator+(const SFExtended &a, const SFExtended &b) throw(std::runtime_error);
+	SFExtended* operator-(const SFExtended &a, const SFExtended &b) throw(std::runtime_error);
+	SFExtended* operator*(const SFExtended &a, const SFExtended &b) throw(std::runtime_error);
+	SFExtended* operator/(const SFExtended &a, const SFExtended &b) throw(std::runtime_error);
+	SFExtended* operator|(const SFExtended &a, const SFExtended &b) throw(std::runtime_error);
+	SFExtended* operator^(const SFExtended &a, const SFExtended &b) throw(std::runtime_error);
+	SFExtended* operator%(const SFExtended &a, const SFExtended &b) throw(std::runtime_error);
+	SFExtended* operator<<(const SFExtended &a, const SFExtended &b) throw(std::runtime_error);
+	SFExtended* operator>>(const SFExtended &a, const SFExtended &b) throw(std::runtime_error);
+	bool operator<(const SFExtended &a, const SFExtended &b) throw(std::runtime_error);
+	bool operator>(const SFExtended &a, const SFExtended &b) throw(std::runtime_error);
+	bool operator<=(const SFExtended &a, const SFExtended &b) throw(std::runtime_error);
+	bool operator>=(const SFExtended &a, const SFExtended &b) throw(std::runtime_error);
 }

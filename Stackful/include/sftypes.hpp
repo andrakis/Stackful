@@ -46,6 +46,9 @@ namespace stackful {
 		bool operator == (const SFLiteral &other) const {
 			return equals(other);
 		}
+		bool operator != (const SFLiteral &other) const {
+			return !equals(other);
+		}
 
 		bool equals(const SFLiteral &other) const {
 			if (this->getType() != other.getType())
@@ -221,13 +224,18 @@ namespace stackful {
 
 	SFBasicList operator + (const SFBasicList &a, const SFBasicList &b);
 
-	SFLiteral* operator+(const SFLiteral &a, const SFLiteral &b);
-	SFLiteral* operator-(const SFLiteral &a, const SFLiteral &b);
-	SFLiteral* operator*(const SFLiteral &a, const SFLiteral &b);
-	SFLiteral* operator/(const SFLiteral &a, const SFLiteral &b);
-	SFLiteral* operator|(const SFLiteral &a, const SFLiteral &b);
-	SFLiteral* operator^(const SFLiteral &a, const SFLiteral &b);
-	SFLiteral* operator%(const SFLiteral &a, const SFLiteral &b);
-	SFLiteral* operator<<(const SFLiteral &a, const SFLiteral &b);
-	SFLiteral* operator>>(const SFLiteral &a, const SFLiteral &b);
+	SFLiteral* operator+(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error);
+	SFLiteral* operator-(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error);
+	SFLiteral* operator*(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error);
+	SFLiteral* operator/(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error);
+	SFLiteral* operator|(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error);
+	SFLiteral* operator^(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error);
+	SFLiteral* operator%(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error);
+	SFLiteral* operator<<(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error);
+	SFLiteral* operator>>(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error);
+
+	bool operator<(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error);
+	bool operator>(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error);
+	bool operator<=(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error);
+	bool operator>=(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error);
 }
