@@ -5,11 +5,12 @@
 namespace stackful {
 
 	SFLiteral::~SFLiteral() {
-		return;
+#ifdef PETTY_DEBUG
 		debug << "A ";
 		if (this->type == Basic_Integer) debug << "number " << this->IntegerClass()->getValue();
 		else if (this->type == Basic_List) debug << "list";
 		debug << " has died" << std::endl;
+#endif
 	}
 
 	SFBasicInteger* SFLiteral::IntegerClass() {
@@ -54,6 +55,9 @@ namespace stackful {
 	SFBasicInteger operator ^ (const SFBasicInteger &a, const SFBasicInteger &b) {
 		return SFBasicInteger(a.getValue() ^ b.getValue());
 	}
+	SFBasicInteger operator % (const SFBasicInteger &a, const SFBasicInteger &b) {
+		return SFBasicInteger(a.getValue() % b.getValue());
+	}
 	SFBasicInteger operator ! (const SFBasicInteger &a) {
 		return SFBasicInteger(!a.getValue());
 	}
@@ -69,4 +73,31 @@ namespace stackful {
 		result.ShallowCopy(&b);
 		return result;
 	}
+
+#if 0
+	SFLiteral* operator + (const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error) {
+		if (a.getType() != b.getType())
+			throw std::runtime_error("Basic type mismatch");
+		switch (a.getType()) {
+			case Basic_Integer:
+			{
+				const SFBasicInteger *ba = a.IntegerClass();
+				const SFBasicInteger *bb = b.IntegerClass();
+				return new SFBasicInteger(ba->getValue() + bb->getValue());
+			}
+			case Basic_List:
+			{
+				if (a.isExtended()) {
+					const SFExtended *ba = a.ExtClass();
+					const SFExtended *bb = b.ExtClass();
+					return ba->add(bb);
+				} else {
+					const SFBasicList &ba = a.ListClass();
+					const SFBasicList &bb = b.ListClass();
+					return new SFBasicList(ba + bb);
+				}
+			}
+		}
+	}
+#endif
 }

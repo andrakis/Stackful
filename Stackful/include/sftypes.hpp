@@ -106,6 +106,7 @@ namespace stackful {
 	SFBasicInteger operator | (const SFBasicInteger &a, const SFBasicInteger &b);
 	SFBasicInteger operator & (const SFBasicInteger &a, const SFBasicInteger &b);
 	SFBasicInteger operator ^ (const SFBasicInteger &a, const SFBasicInteger &b);
+	SFBasicInteger operator % (const SFBasicInteger &a, const SFBasicInteger &b);
 	SFBasicInteger operator ! (const SFBasicInteger &a);
 	SFBasicInteger operator << (const SFBasicInteger &a, const SFBasicInteger &b);
 	SFBasicInteger operator >> (const SFBasicInteger &a, const SFBasicInteger &b);
@@ -200,7 +201,7 @@ namespace stackful {
 				return false;
 			SFList_t::iterator our_it = begin();
 			SFList_t::iterator other_it = other_list->begin();
-			for (; our_it != end(), other_it != other_list->end(); ++our_it, ++other_it) {
+			for (; our_it != end(), other_it != other_list->end(); ++our_it, ++other_it) { //-V521
 				const SFLiteral *our_item = our_it->get();
 				const SFLiteral *other_item = other_it->get();
 				if (our_item->equals(*other_item) == false)
@@ -220,4 +221,13 @@ namespace stackful {
 
 	SFBasicList operator + (const SFBasicList &a, const SFBasicList &b);
 
+	SFLiteral* operator+(const SFLiteral &a, const SFLiteral &b);
+	SFLiteral* operator-(const SFLiteral &a, const SFLiteral &b);
+	SFLiteral* operator*(const SFLiteral &a, const SFLiteral &b);
+	SFLiteral* operator/(const SFLiteral &a, const SFLiteral &b);
+	SFLiteral* operator|(const SFLiteral &a, const SFLiteral &b);
+	SFLiteral* operator^(const SFLiteral &a, const SFLiteral &b);
+	SFLiteral* operator%(const SFLiteral &a, const SFLiteral &b);
+	SFLiteral* operator<<(const SFLiteral &a, const SFLiteral &b);
+	SFLiteral* operator>>(const SFLiteral &a, const SFLiteral &b);
 }

@@ -5,7 +5,7 @@ namespace stackful {
 	: SFFunctionDefinitionBase(FunctionDefinitionNative, _name, _args), body(_body) {
 	}
 
-	SFLiteral_p SFFunctionDefinitionNative::invoke(SFFnCallSignature_t _args) {
+	SFLiteral_p SFFunctionDefinitionNative::invoke(const SFFnCallSignature_t &_args) {
 		return body(_args);
 	}
 
@@ -14,7 +14,7 @@ namespace stackful {
 		this->push_back(body);
 	}
 
-	SFLiteral_p SFFunctionDefinition::invoke(SFFnCallSignature_t _args) {
+	SFLiteral_p SFFunctionDefinition::invoke(const SFFnCallSignature_t &_args) {
 		SFLiteral_p body_p = this->getBody();
 		SFLiteral_p parent_p = _args.chain;
 		if (this->isScoped())

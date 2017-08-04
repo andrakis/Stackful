@@ -60,5 +60,5 @@ namespace stackful {
 	typedef std::map<SFInteger_t, std::string> atomsById_t;
 	typedef std::map<std::string, SFInteger_t> atomsByName_t;
 
-	SFLiteral_p getAtomPtr(std::string name);
+	SFLiteral_p getAtomPtr(const std::string &name);
 }

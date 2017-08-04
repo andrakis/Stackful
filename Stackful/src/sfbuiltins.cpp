@@ -25,25 +25,25 @@ SFBuiltinDefinitions_t builtinDefinitions;
 SFBuiltinParams_t stackful::params() {
 	return SFBuiltinParams_t();
 }
-SFBuiltinParams_t stackful::params(std::string p1) {
+SFBuiltinParams_t stackful::params(const std::string &p1) {
 	SFBuiltinParams_t p;
 	p.push_back(p1);
 	return p;
 }
-SFBuiltinParams_t stackful::params(std::string p1, std::string p2) {
+SFBuiltinParams_t stackful::params(const std::string &p1, const std::string &p2) {
 	SFBuiltinParams_t p;
 	p.push_back(p1);
 	p.push_back(p2);
 	return p;
 }
-SFBuiltinParams_t stackful::params(std::string p1, std::string p2, std::string p3) {
+SFBuiltinParams_t stackful::params(const std::string &p1, const std::string &p2, const std::string &p3) {
 	SFBuiltinParams_t p;
 	p.push_back(p1);
 	p.push_back(p2);
 	p.push_back(p3);
 	return p;
 }
-stackful::SFBuiltinParams_t params(std::string p1, std::string p2, std::string p3, std::string p4) {
+stackful::SFBuiltinParams_t params(const std::string &p1, const std::string &p2, const std::string &p3, const std::string &p4) {
 	SFBuiltinParams_t p;
 	p.push_back(p1);
 	p.push_back(p2);

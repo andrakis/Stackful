@@ -9,10 +9,10 @@
 
 namespace stackful {
 	SFBuiltinParams_t params();
-	SFBuiltinParams_t params(std::string);
-	SFBuiltinParams_t params(std::string, std::string);
-	SFBuiltinParams_t params(std::string, std::string, std::string);
-	SFBuiltinParams_t params(std::string, std::string, std::string, std::string);
+	SFBuiltinParams_t params(const std::string &);
+	SFBuiltinParams_t params(const std::string &, const std::string &);
+	SFBuiltinParams_t params(const std::string &, const std::string &, const std::string &);
+	SFBuiltinParams_t params(const std::string &, const std::string &, const std::string &, const std::string &);
 
 	void setupBuiltins();
 	SFBuiltin_f getBuiltin(const SFInteger_t atomId);

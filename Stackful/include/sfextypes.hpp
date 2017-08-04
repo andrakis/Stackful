@@ -24,6 +24,9 @@ namespace stackful {
 
 	extern SFLiteral_p atomNil, atomFalse, atomTrue, atomMissing;
 
+	class SFAtom; class SFInteger; class SFFloat;
+	class SFString; class SFList;
+
 	class SFExtended : public SFBasicList {
 	public:
 		ExtendedType getExtendedType() const {
@@ -42,6 +45,11 @@ namespace stackful {
 		bool isExtended() const {
 			return true;
 		}
+
+		virtual SFExtended *coerce(ExtendedType type) const throw(std::runtime_error) {
+			throw std::runtime_error("coerce not implemented for this type");
+		}
+
 	protected:
 		SFExtended(ExtendedType extType) : SFBasicList(), extendedType(extType) {
 		}
@@ -49,6 +57,11 @@ namespace stackful {
 		}
 		const ExtendedType extendedType;
 		virtual std::string _str() const = 0;
+
+		ExtendedType getPreferredType(ExtendedType a, ExtendedType b) {
+			// Always convert to type a
+			return a;
+		}
 	};
 
 	class SFAtom : public SFExtended {
@@ -80,6 +93,11 @@ namespace stackful {
 		std::string extLiteral() const {
 			return str();
 		}
+		SFInteger_t getRawValue() const {
+			return operator[](1)->IntegerClass()->getValue();
+		}
+		operator SFFloat*() const;
+		operator SFString*() const;
 	protected:
 		std::string _str() const {
 			return operator[](1)->str();
@@ -105,14 +123,22 @@ namespace stackful {
 		std::string extLiteral() const {
 			return str();
 		}
+		double getRawValue() const {
+			return bitsToDouble();
+		}
+		operator SFInteger*() const;
+		operator SFString*() const;
 	protected:
-		std::string _str() const {
+		double bitsToDouble() const {
 			doublebits b = { 0 };
 			const SFBasicList &v = operator[](1)->ListClass();
 			for (size_t i = 0; i < v.size(); i++) {
 				b.valueInteger[i] = v[i]->IntegerClass()->getValue();
 			}
-			return std::to_string(b.valueDouble);
+			return b.valueDouble;
+		}
+		std::string _str() const {
+			return std::to_string(bitsToDouble());
 		}
 	};
 
@@ -131,6 +157,9 @@ namespace stackful {
 		}
 		std::string extLiteral() const {
 			return "\"" + str() + "\"";
+		}
+		std::string getRawValue() const {
+			return _str();
 		}
 	protected:
 		std::string _str() const {
@@ -167,7 +196,7 @@ namespace stackful {
 			s << "[";
 			bool first = true;
 			auto it = begin();
-			for (; it != end(); it++) {
+			for (; it != end(); ++it) {
 				SFLiteral_p item = *it;
 				if (first)
 					first = false;
@@ -328,7 +357,7 @@ namespace stackful {
 		bool getImmediate() const { return immediate; }
 		void setImmediate(bool imm) { immediate = imm; }
 		std::string getFunctionEntry() const { return functionEntry; }
-		void setFunctionEntry(std::string entry) { functionEntry = entry; }
+		void setFunctionEntry(const std::string &entry) { functionEntry = entry; }
 	protected:
 		std::string _str() const;
 		SFLiteral_p parent;
@@ -360,6 +389,9 @@ namespace stackful {
 		SFLiteral_p getFunction() const {
 			return at(0);
 		}
+		void setFunction(SFLiteral_p fn) {
+			at(0).swap(fn);
+		}
 		SFList *getArguments() const {
 			SFLiteral_p args = at(1);
 			return static_cast<SFList*>(args.get());
@@ -373,5 +405,5 @@ namespace stackful {
 	typedef std::map<SFInteger_t, SFLiteral_p> atomPtrsById_t;
 	extern atomPtrsById_t atomPtrsById;
 	SFLiteral_p getAtomPtr(SFInteger_t id);
-	SFLiteral_p getAtomPtr(std::string name);
+	SFLiteral_p getAtomPtr(const std::string &name);
 }

@@ -10,7 +10,7 @@ namespace stackful {
 	public:
 		SFFnDefName getName() const { return name; }
 		SFFnDefArgs getArgs() const { return args; }
-		virtual SFLiteral_p invoke(SFFnCallSignature_t args) = 0;
+		virtual SFLiteral_p invoke(const SFFnCallSignature_t &args) = 0;
 		std::string extLiteral() const { return _str(); }
 		bool isScoped() const { return scope != nullptr; }
 		SFLiteral_p getScope() const { return scope; }
@@ -45,7 +45,7 @@ namespace stackful {
 	class SFFunctionDefinitionNative : public SFFunctionDefinitionBase {
 	public:
 		SFFunctionDefinitionNative(SFFnDefName _name, SFFnDefArgs _args, SFBuiltin_f _body);
-		inline SFLiteral_p invoke(SFFnCallSignature_t args);
+		SFLiteral_p invoke(const SFFnCallSignature_t &args);
 		bool isNative() const { return true; }
 	protected:
 		SFBuiltin_f body;
@@ -55,7 +55,7 @@ namespace stackful {
 	class SFFunctionDefinition : public SFFunctionDefinitionBase {
 	public:
 		SFFunctionDefinition(SFLiteral_p parent, SFFnDefName _name, SFFnDefArgs _args, SFLiteral_p body);
-		inline SFLiteral_p invoke(SFFnCallSignature_t args);
+		SFLiteral_p invoke(const SFFnCallSignature_t &args);
 		SFLiteral_p getBody() {
 			return at(0);
 		}

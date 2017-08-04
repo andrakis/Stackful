@@ -117,6 +117,18 @@ void test() {
 	SFFnCallSignature_t params = { printParams, SFLiteral_p(new SFClosure(c)), interp};
 	print(params);
 
+	SFLiteral *integer1 = printParams[1].get();
+	SFLiteral *integer2 = printParams[2].get();
+	SFLiteral *integerAdded = *integer1 + *integer2;
+	std::cout << "Integer added: " << integerAdded->str() << std::endl;
+	delete integerAdded;
+
+	SFLiteral *floatPi = new SFFloat(3.1415);
+	SFLiteral *floatAdded = *floatPi + *integer1;
+	std::cout << "Float added: " << floatAdded->str() << std::endl;
+	delete floatPi;
+	delete floatAdded;
+
 	std::string fa1 = "foo";
 	std::string fa2 = "foo/*";
 	std::string fa3 = "foo/2";

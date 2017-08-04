@@ -20,7 +20,7 @@ namespace stackful {
 	DebugBuiltins_t DebugBuiltins({
 		"while", "call", "try", "eval", "apply", "next", "recurse"
 	});
-	bool isDebugBuiltin(std::string name) {
+	bool isDebugBuiltin(const std::string &name) {
 		DebugBuiltins_t::iterator it = DebugBuiltins.begin();
 		for (; it != DebugBuiltins.end(); ++it) {
 			if (*it == name)
@@ -99,8 +99,9 @@ namespace stackful {
 			if (fndef == atomMissing) {
 				throw std::runtime_error("Function not found: " + details.str());
 			}
+			debug << "Updated " + details.str() + " to arity * version" << std::endl;
+			i->setFunction(details.nameArityStar);
 		}
-		debug << "Found fndef: " << details.str() << std::endl;
 		SFList *args = i->getArguments();
 		SFList::iterator it = args->begin();
 		SFBasicList params;
@@ -146,7 +147,7 @@ namespace stackful {
 	}
 
 	std::string indentSymbol = "|";
-	SFLiteral_p SFInterpreter::invokeFunctionCall(SFLiteral_p fndef, SFFnCallSignature_t call) {
+	SFLiteral_p SFInterpreter::invokeFunctionCall(SFLiteral_p fndef, const SFFnCallSignature_t &call) {
 		SFFunctionDefinitionBase *def = static_cast<SFFunctionDefinitionBase*>(fndef.get());
 		SFFunctionArity_t details = def->getAttributes();
 		std::stringstream s;
@@ -200,13 +201,41 @@ void interp_test () {
 	ocTest->importClosure(getBuiltinDefinitions());
 
 	SFFunctionCall *fcVar = new SFFunctionCall("var", getAtomPtr("A"), SFLiteral_p(new SFString("foobar")));
-	SFFunctionCall *fcGet = new SFFunctionCall("get", SFLiteral_p(getAtomPtr("A")));
+	SFFunctionCall *fcGet = new SFFunctionCall("get", getAtomPtr("A"));
 	SFFunctionCall *fcPrint = new SFFunctionCall("print", SFLiteral_p(new SFString("A:")), SFLiteral_p(fcGet));
+	SFFunctionCall *fcPrint2 = new SFFunctionCall("print", SFLiteral_p(new SFString("woohoo!")));
 	ocTest->push_back(SFLiteral_p(fcVar));
 	ocTest->push_back(SFLiteral_p(fcPrint));
+	ocTest->push_back(SFLiteral_p(fcPrint2));
 
 	debug << ocTest->str() << std::endl;
 	SFInterpreter si;
 	SFLiteral_p result = si.run(ocTest_p);
 	debug << "Result: " << result->str() << std::endl;
+	ocTest->rewind();
+	si.run(ocTest_p);
+
+	void test_factorial();
+	test_factorial();
+}
+
+void test_factorial() {
+	// Test a factorial function
+	// ((def fac #N :: (
+	//    (if (<= N 0) (
+	//       (1)
+	//    ) (else (
+	//       (* N (- N 1))
+	//    )))
+	//  ))
+	//  (var N 10)
+	//  (print "Fac of" (get N) (fac (get N)))
+	// )
+	SFOpChain *chain = new SFOpChain();
+	SFLiteral_p chain_p(chain);
+
+	chain->importClosure(getBuiltinDefinitions());
+	
+	// (var N 10)
+	//SFFunctionCall fcVarN = new SFFunctionCall("var", )
 }
