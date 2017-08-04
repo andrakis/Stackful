@@ -6,11 +6,7 @@
 #include "../include/sfextypes.hpp"
 
 namespace stackful {
-	SFLiteral_p atomNil(new SFAtom(atomNilId)),
-		atomFalse(new SFAtom(atomFalseId)),
-		atomTrue(new SFAtom(atomTrueId)),
-		atomMissing(new SFAtom(atomMissingId));
-
+	SFLiteral_p atomNil, atomFalse, atomTrue, atomMissing;
 	std::regex functionArityRegex(R"~((^[^\/]+)\/?(\*|\d+)?$)~");
 	SFFunctionArity_t getFunctionArity(std::string name, const int np) {
 		std::sregex_iterator iter(name.begin(), name.end(), functionArityRegex);

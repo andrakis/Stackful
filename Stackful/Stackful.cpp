@@ -14,17 +14,16 @@ using namespace stackful;
 
 int main()
 {
+	// Initialize default atoms
+	atomNil = getAtomPtr("nil");
+	atomFalse = getAtomPtr("false");
+	atomTrue = getAtomPtr("true");
+	atomMissing = getAtomPtr("missing");
+
 #ifdef _DEBUG
 	debug.setEnabled(true);
 #endif
 	interp_test();
-#ifdef _DEBUG
-	debug << "Atom table: " << std::endl;
-	atomsByName_t::iterator it = atomsByName.begin();
-	for (; it != atomsByName.end(); ++it) {
-		debug << "'" << it->first << "' = " << it->second << std::endl;
-	}
-#endif
     return 0;
 }
 
