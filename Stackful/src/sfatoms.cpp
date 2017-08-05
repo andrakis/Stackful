@@ -28,10 +28,4 @@ namespace stackful {
 
 	atomsById_t getAtomsById() { return atomsById; }
 	atomsByName_t getAtomsByName() { return atomsByName; }
-
-	// Initialize default atoms
-	SFInteger_t atomNilId = getAtom("nil"),
-		atomFalseId = getAtom("false"),
-		atomTrueId = getAtom("true"),
-		atomMissingId = getAtom("missing");
 }

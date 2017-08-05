@@ -29,6 +29,14 @@ Some additional data types implemented with these constructs (MAY BE OUT OF DATE
 Status
 ------
 
+* *Version 0.24*:
+
+   Type system implemented. Arithmatic and comparison operators implemented. New builtins.
+
+   * `==`, `!=`, `>`, `<`, `>=`, `<=` builtins implemented
+
+   * Logic for arithmatic operations on core types implemented.
+
 * *Version 0.20*:
 
    The interpreter has been implemented, as well as the following builtins:
