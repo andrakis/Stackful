@@ -46,10 +46,6 @@ namespace stackful {
 			return true;
 		}
 
-		virtual SFExtended *coerce(ExtendedType type) const throw(std::runtime_error) {
-			throw std::runtime_error("coerce not implemented for this type");
-		}
-
 	protected:
 		SFExtended(ExtendedType extType) : SFBasicList(), extendedType(extType) {
 		}
@@ -226,17 +222,23 @@ namespace stackful {
 		SFClosure(const SFClosure &copy) : SFExtended(Closure, copy), parent(copy.getParent()), topmost(copy.getTopmost()) {
 		}
 		// Construct with ops and no parent
-		SFClosure(const SFBasicList &ops) : SFExtended(Closure, ops), parent(nullptr), topmost(nullptr) {
+		SFClosure(const SFBasicList &ops) : SFExtended(Closure, ops), parent(nullptr) {
 		}
 		// Construct with no ops and given parent (use shared ptr)
-		SFClosure(SFLiteral_p parent) : SFExtended(Closure), parent(parent), topmost(toClosure(parent)->getTopmost()) {
+		SFClosure(SFLiteral_p _parent) : SFExtended(Closure), parent(_parent) {
 		}
 		// Construct with ops and given parent (use shared ptr)
-		SFClosure(SFLiteral_p parent, const SFBasicList &ops) : SFExtended(Closure, ops), parent(parent), topmost(toClosure(parent)->getTopmost()) {
+		SFClosure(SFLiteral_p _parent, const SFBasicList &ops) : SFExtended(Closure, ops), parent(_parent) {
 		}
 		~SFClosure() {
 		}
 		SFLiteral_p getParent() const { return parent; }
+		SFClosure *getParentObject() const {
+			if (!hasParent())
+				return nullptr;
+			return static_cast<SFClosure*>(parent.get());
+		}
+		bool hasParent() const { return parent.get() != nullptr; }
 		SFLiteral_p getTopmost() const {
 			return topmost;
 		}
@@ -246,17 +248,23 @@ namespace stackful {
 		}
 		SFLiteral_p get(SFLiteral_p key) const throw(std::runtime_error) {
 			SFList_t::iterator find = getByKey(key);
-			if (find == end())
-				throw std::runtime_error("Key not found: " + key->str());
-			const SFBasicList &list = find->get()->ListClass();
-			return list[1];
+			if (find != end()) {
+				const SFBasicList &list = find->get()->ListClass();
+				return list[1];
+			}
+			if (hasParent())
+				return getParentObject()->get(key);
+			throw std::runtime_error("Key not found: " + key->str());
 		}
 		SFLiteral_p getOrMissing(SFLiteral_p key) const {
 			SFList_t::iterator find = getByKey(key);
-			if (find == end())
-				return atomMissing;
-			const SFBasicList &list = find->get()->ListClass();
-			return list[1];
+			if (find != end()) {
+				const SFBasicList &list = find->get()->ListClass();
+				return list[1];
+			}
+			if (hasParent())
+				return getParentObject()->getOrMissing(key);
+			return atomMissing;
 		}
 		void set(SFLiteral_p _key, SFLiteral_p _value) {
 			if (trySet(_key, _value))
@@ -301,13 +309,22 @@ namespace stackful {
 				setImmediate(key, _value);
 				return true;
 			}
-			if (parent.get() != nullptr && toClosure(parent)->trySet(key, _value))
+			if (hasParent() && toClosure(parent)->trySet(key, _value))
 				return true;
 			return false;
 		}
-	protected:
 		std::string _str() const {
-			return "CLOSURE";
+			SFClosure::iterator it = begin();
+			std::stringstream ss;
+			ss << "{Closure:";
+			for (; it != end(); ++it) {
+				SFLiteral_p p(*it);
+				ss << p->str();
+			}
+			if (hasParent())
+				ss << "{Parent:" + getParentObject()->str() + "}";
+			ss << "}";
+			return ss.str();
 		}
 	};
 
@@ -316,22 +333,30 @@ namespace stackful {
 	public:
 		// An empty OpChain
 		SFOpChain()
-		: SFExtended(Closure), parent(nullptr), closure(new SFClosure()), immediate(false),
+		: SFExtended(OpChain), parent(nullptr), closure(new SFClosure()), immediate(false),
 		functionEntry("") {
 		}
 		// Copy constructor
 		SFOpChain(const SFOpChain &copy)
-		: SFExtended(Closure, copy), parent(copy.getParentPtr()), closure(copy.getClosurePtr()),
+		: SFExtended(OpChain, copy), parent(copy.getParentPtr()), closure(copy.getClosurePtr()),
 		immediate(false), functionEntry("") {
 		}
 		// Initialize with given parent
-		SFOpChain(SFLiteral_p parent) : SFExtended(Closure), parent(parent), closure(new SFClosure()),
+		SFOpChain(SFLiteral_p _parent) : SFExtended(OpChain), parent(_parent),
 		immediate(false), functionEntry("") {
+			SFOpChain *parent_o = toOpChain(parent);
+			SFLiteral_p parentP = parent_o->getClosurePtr();
+			SFClosure *_closure = new SFClosure(parentP);
+			this->closure = SFLiteral_p(_closure);
 		}
 		// Initialize with given parent and ops
-		SFOpChain(SFLiteral_p parent, const SFOpChain *ops)
-		: SFExtended(OpChain, ops), parent(parent), closure(new SFClosure()), immediate(false),
-		functionEntry("") {
+		SFOpChain(SFLiteral_p _parent, const SFOpChain *ops)
+		: SFExtended(OpChain, ops), parent(_parent),
+		immediate(false), functionEntry("") {
+			SFOpChain *parent_o = toOpChain(parent);
+			SFLiteral_p parentP = parent_o->getClosurePtr();
+			SFClosure *_closure = new SFClosure(parentP);
+			this->closure = SFLiteral_p(_closure);
 		}
 		SFLiteral_p getParentPtr() const { return parent; }
 		SFLiteral_p getClosurePtr() const { return closure; }

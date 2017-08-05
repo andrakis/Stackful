@@ -7,7 +7,7 @@
 
 namespace stackful {
 	SFLiteral_p atomNil, atomFalse, atomTrue, atomMissing;
-	std::regex functionArityRegex(R"~((^[^\/]+)\/?(\*|\d+)?$)~");
+	std::regex functionArityRegex(R"~((^.[^\/]*?)\/?(\*|\d+)?$)~");
 	SFFunctionArity_t getFunctionArity(std::string name, const int np) {
 		std::sregex_iterator iter(name.begin(), name.end(), functionArityRegex);
 		std::sregex_iterator end;

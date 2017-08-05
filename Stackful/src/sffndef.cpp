@@ -16,10 +16,10 @@ namespace stackful {
 
 	SFLiteral_p SFFunctionDefinition::invoke(const SFFnCallSignature_t &_args) {
 		SFLiteral_p body_p = this->getBody();
+		SFOpChain *body = toOpChain(body_p);
 		SFLiteral_p parent_p = _args.chain;
 		if (this->isScoped())
 			parent_p = this->getScope();
-		SFOpChain *body = toOpChain(body_p);
 		SFOpChain *chain = new SFOpChain(parent_p, body);
 		SFLiteral_p chain_p(chain);
 		// Set arguments in new chain
@@ -49,8 +49,9 @@ namespace stackful {
 		for (; it != functions.end(); ++it) {
 			SFNativeFunctionAttributes_t native = *it;
 			SFFunctionDefinitionNative *fndef = new SFFunctionDefinitionNative(native.name, native.args, native.body);
+			const SFFunctionArity_t &attrs = fndef->getAttributes();
 			SFLiteral_p fndef_p(fndef);
-			SFLiteral_p atom_p = getAtomPtr(native.name);
+			SFLiteral_p atom_p = attrs.nameArity;
 			this->getClosureObject()->setImmediate(atom_p, fndef_p);
 		}
 	}

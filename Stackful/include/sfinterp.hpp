@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../stdafx.h"
+
 #include "sfextypes.hpp"
 #include "sfbuiltins.hpp"
 #include "sffndef.hpp"

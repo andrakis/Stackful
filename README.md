@@ -29,6 +29,14 @@ Some additional data types implemented with these constructs (MAY BE OUT OF DATE
 Status
 ------
 
+* *Version 0.30*:
+
+   First fully working interpreter!
+
+   * Factorial implemented and working. Large changes to interpreter and types.
+
+   * The current test will calculate the factorial of 10. Run with Debug configuration to see call stack.
+
 * *Version 0.24*:
 
    Type system implemented. Arithmatic and comparison operators implemented. New builtins.

@@ -173,12 +173,13 @@ namespace stackful {
 		}
 		if (def->isNative()) {
 			if (debug.getEnabled() && isDebugBuiltin(details.nameRawStr)) {
-				debug << s.str();
+				debug << s.str() << std::endl;
 			}
 		} else {
 			// Mark opchain as function entry
 			SFOpChain *chain = toOpChain(call.chain);
 			chain->setFunctionEntry(details.nameArityStr);
+			debug << s.str() << std::endl;
 		}
 		result = def->invoke(call);
 		depth--;

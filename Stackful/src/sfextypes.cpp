@@ -74,14 +74,14 @@ namespace stackful {
 	stackful::SFFunctionCall::SFFunctionCall(const std::string &fn)
 	: SFList(FunctionCall), details(getFunctionArity(fn, 0))
 	{
-		this->push_back(getAtomPtr(fn));
+		this->push_back(getAtomPtr(details.nameArityStr));
 		this->push_back(new SFList());
 	}
 
 	SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1)
 	: SFList(FunctionCall), details(getFunctionArity(fn, 1))
 	{
-		this->push_back(getAtomPtr(fn));
+		this->push_back(getAtomPtr(details.nameArityStr));
 		SFList *params = new SFList();
 		params->push_back(p1);
 		this->push_back(SFLiteral_p(params));
@@ -90,7 +90,7 @@ namespace stackful {
 	SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2)
 	: SFList(FunctionCall), details(getFunctionArity(fn, 2))
 	{
-		this->push_back(getAtomPtr(fn));
+		this->push_back(getAtomPtr(details.nameArityStr));
 		SFList *params = new SFList();
 		params->push_back(p1);
 		params->push_back(p2);
@@ -100,7 +100,7 @@ namespace stackful {
 	SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2, SFLiteral_p p3)
 	: SFList(FunctionCall), details(getFunctionArity(fn, 3))
 	{
-		this->push_back(getAtomPtr(fn));
+		this->push_back(getAtomPtr(details.nameArityStr));
 		SFList *params = new SFList();
 		params->push_back(p1);
 		params->push_back(p2);
@@ -111,7 +111,7 @@ namespace stackful {
 	SFFunctionCall::SFFunctionCall(const std::string &fn, SFLiteral_p p1, SFLiteral_p p2, SFLiteral_p p3, SFLiteral_p p4)
 	: SFList(FunctionCall), details(getFunctionArity(fn, 0))
 	{
-		this->push_back(getAtomPtr(fn));
+		this->push_back(getAtomPtr(details.nameArityStr));
 		SFList *params = new SFList();
 		params->push_back(p1);
 		params->push_back(p2);
@@ -132,7 +132,9 @@ namespace stackful {
 	std::string SFOpChain::_str() const {
 		std::stringstream ss;
 		bool first = true;
-		ss << "{OpChain: [";
+		ss << "{OpChain: ";
+		//ss << this->getClosureObject()->str();
+		ss << " [";
 		SFOpChain::iterator it = this->begin();
 		for (; it != this->end(); ++it) {
 			SFLiteral_p item = *it;

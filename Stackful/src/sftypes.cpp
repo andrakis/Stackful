@@ -324,4 +324,64 @@ namespace stackful {
 				throw std::runtime_error("Invalid operation");
 		}
 	}
+	bool operator>(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error) {
+		if (a.isExtended() && b.isExtended()) {
+			const SFExtended *ea = a.ExtClass();
+			const SFExtended *eb = b.ExtClass();
+			return *ea > *eb;
+		}
+		switch (a.getType()) {
+			case Basic_Integer:
+			{
+				if (b.getType() != Basic_Integer) {
+					throw std::runtime_error("Cannot compare a list to an integer");
+				}
+				const SFBasicInteger *ia = a.IntegerClass();
+				const SFBasicInteger *ib = b.IntegerClass();
+				return *ia > *ib;
+			}
+			default:
+				throw std::runtime_error("Invalid operation");
+		}
+	}
+	bool operator<=(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error) {
+		if (a.isExtended() && b.isExtended()) {
+			const SFExtended *ea = a.ExtClass();
+			const SFExtended *eb = b.ExtClass();
+			return *ea <= *eb;
+		}
+		switch (a.getType()) {
+			case Basic_Integer:
+			{
+				if (b.getType() != Basic_Integer) {
+					throw std::runtime_error("Cannot compare a list to an integer");
+				}
+				const SFBasicInteger *ia = a.IntegerClass();
+				const SFBasicInteger *ib = b.IntegerClass();
+				return *ia <= *ib;
+			}
+			default:
+				throw std::runtime_error("Invalid operation");
+		}
+	}
+	bool operator>=(const SFLiteral &a, const SFLiteral &b) throw(std::runtime_error) {
+		if (a.isExtended() && b.isExtended()) {
+			const SFExtended *ea = a.ExtClass();
+			const SFExtended *eb = b.ExtClass();
+			return *ea >= *eb;
+		}
+		switch (a.getType()) {
+			case Basic_Integer:
+			{
+				if (b.getType() != Basic_Integer) {
+					throw std::runtime_error("Cannot compare a list to an integer");
+				}
+				const SFBasicInteger *ia = a.IntegerClass();
+				const SFBasicInteger *ib = b.IntegerClass();
+				return *ia >= *ib;
+			}
+			default:
+				throw std::runtime_error("Invalid operation");
+		}
+	}
 }

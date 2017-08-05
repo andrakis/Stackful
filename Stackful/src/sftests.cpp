@@ -10,19 +10,55 @@ using namespace stackful;
 void test_factorial() {
 	// Test a factorial function
 	// ((def fac #N :: (
-	//    (if (<= N 0) (
+	//    (if (<= (get N) 1) (
 	//       (1)
 	//    ) (else (
-	//       (* N (- N 1))
+	//       (* (get N) (- (get N) 1))
 	//    )))
 	//  ))
-	//  (var N 10)
-	//  (print "Fac of" (get N) (fac (get N)))
+	//  (var X 10)
+	//  (print "Fac of" (get X) (fac (get X)))
 	// )
 	SFOpChain *chain = new SFOpChain();
+
+	setupBuiltins();
+	chain->importClosure(getBuiltinDefinitions());
 	SFLiteral_p chain_p(chain);
 
-	chain->importClosure(getBuiltinDefinitions());
+	SFOpChain *facBody = new SFOpChain(chain_p);
+	SFLiteral_p facBody_p(facBody);
+	SFFunctionCall *fcGetN = new SFFunctionCall("get", getAtomPtr("N"));
+	SFLiteral_p fcGetN_p(fcGetN);
+	SFFunctionCall *fcCompare = new SFFunctionCall("<=", fcGetN_p, SFLiteral_p(new SFInteger(1)));
+	SFOpChain *facBodyIf1True = new SFOpChain(facBody_p);
+	facBodyIf1True->push_back(SFLiteral_p(new SFInteger(1)));
+	SFOpChain *facBodyIf1False = new SFOpChain(facBody_p);
+	SFFunctionCall *fcFacBodyIf1False = new SFFunctionCall(
+		"*", fcGetN_p, SFLiteral_p(new SFFunctionCall(
+			"fac", SFLiteral_p(new SFFunctionCall(
+			"-", fcGetN_p, SFLiteral_p(new SFInteger(1))
+		)))
+	));
+	facBodyIf1False->push_back(SFLiteral_p(fcFacBodyIf1False));
+	SFFunctionCall *fcIf = new SFFunctionCall(
+		"if", SFLiteral_p(fcCompare), SFLiteral_p(facBodyIf1True), SFLiteral_p(facBodyIf1False)
+	);
+	facBody->push_back(SFLiteral_p(fcIf));
+	SFFunctionDefinition *fnDef = new SFFunctionDefinition(chain_p, "fac", { "N" }, facBody_p);
+	SFLiteral_p fnDef_p(fnDef);
+	SFFunctionCall *fcDef = new SFFunctionCall("def", getAtomPtr("fac"), fnDef_p);
+	chain->push_back(SFLiteral_p(fcDef));
+
+	SFFunctionCall *fcVarN = new SFFunctionCall("var", getAtomPtr("X"), SFLiteral_p(new SFInteger(10)));
+	chain->push_back(SFLiteral_p(fcVarN));
+
+	SFFunctionCall *fcGetX = new SFFunctionCall("get", getAtomPtr("X"));
+	SFLiteral_p fcGetX_p(fcGetX);
+	SFFunctionCall *fcPrint = new SFFunctionCall("print/*",
+		SFLiteral_p(new SFString("Fac of")), fcGetX_p,
+		SFLiteral_p(new SFFunctionCall("fac", fcGetX_p))
+	);
+	chain->push_back(SFLiteral_p(fcPrint));
 
 	debug << chain->str() << std::endl;
 	SFInterpreter si;
@@ -89,7 +125,15 @@ void test_comparison() {
 	debug << "Result: " << result->str() << std::endl;
 }
 
-void interp_test () {
+void basic_test();
+
+void interp_test() {
+	//basic_test();
+	//test_comparison();
+	test_factorial();
+}
+
+void basic_test() {
 	// Test var, get
 	// ((var A "foobar")
 	//  (print "A:" (get 'A')))
@@ -112,9 +156,6 @@ void interp_test () {
 	debug << "Result: " << result->str() << std::endl;
 	ocTest->rewind();
 	si.run(ocTest_p);
-
-	test_comparison();
-	test_factorial();
 }
 
 SFBasicList xtolist(const std::string &str) {
