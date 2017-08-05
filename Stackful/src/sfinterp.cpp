@@ -148,7 +148,7 @@ namespace stackful {
 		return s.str();
 	}
 
-	std::string indentSymbol = "|";
+	char indentSymbol = '|';
 	SFLiteral_p SFInterpreter::invokeFunctionCall(SFLiteral_p fndef, const SFFnCallSignature_t &call) {
 		SFFunctionDefinitionBase *def = static_cast<SFFunctionDefinitionBase*>(fndef.get());
 		SFFunctionArity_t details = def->getAttributes();
@@ -161,11 +161,11 @@ namespace stackful {
 			std::string indent;
 			SFFunctionArity_t arity = def->getAttributes();
 			if (this->depth < 20) {
-				indent = std::string(indentSymbol, this->depth);
+				indent = std::string(this->depth, indentSymbol);
 			} else {
 				indent = "|             " + std::to_string(this->depth) + " | | ";
 			}
-			s << "+" << indent;
+			s << "+ " << indent;
 			s << " (" << arity.str();
 			if(call.arguments.size() != 0)
 				s << " " << this->inspectObject(call.arguments);

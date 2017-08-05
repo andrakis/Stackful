@@ -166,11 +166,6 @@ namespace stackful {
 		return getAtomPtr(getAtom(name));
 	}
 
-	SFLiteral_p atomNil = getAtomPtr("nil"),
-		atomFalse = getAtomPtr("false"),
-		atomTrue = getAtomPtr("true"),
-		atomMissing = getAtomPtr("missing");
-
 	SFInteger* operator+(const SFInteger &a, const SFInteger &b) {
 		return new SFInteger(a.getRawValue() + b.getRawValue());
 	}
