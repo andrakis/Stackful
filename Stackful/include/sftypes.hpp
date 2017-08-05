@@ -13,7 +13,7 @@
 namespace stackful {
 
 	// The size of our basic number type
-	typedef uint32_t SFInteger_t;
+	typedef long long SFInteger_t;
 
 	// Forward declarations
 	class SFLiteral;

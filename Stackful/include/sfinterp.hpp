@@ -19,7 +19,7 @@ namespace stackful {
 		std::string inspectObject(const SFBasicList &obj) const;
 		std::string inspectObject(const SFBasicList &obj, const std::string &pre, const std::string &post) const;
 	protected:
-		SFInteger_t depth;
+		int depth;
 		SFInteger_t functionCalls;
 		bool debugMode;
 		SFLiteral_p doFunctionCall(SFLiteral_p chain, SFFunctionCall *i);

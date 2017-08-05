@@ -1,6 +1,7 @@
 #include "../include/sfinterp.hpp"
 
 #include <assert.h>
+#include <chrono>
 #include <map>
 #include <stack>
 #include <string>
@@ -21,9 +22,16 @@ void test_factorial() {
 	// )
 	SFOpChain *chain = new SFOpChain();
 
+	auto start = std::chrono::steady_clock::now();
+
 	setupBuiltins();
 	chain->importClosure(getBuiltinDefinitions());
 	SFLiteral_p chain_p(chain);
+
+	auto step1 = std::chrono::steady_clock::now();
+	std::cerr << "Builtins imported in " <<
+		std::chrono::duration_cast<std::chrono::milliseconds>(step1 - start).count()
+		<< "ms" << std::endl;
 
 	SFOpChain *facBody = new SFOpChain(chain_p);
 	SFLiteral_p facBody_p(facBody);
@@ -59,10 +67,19 @@ void test_factorial() {
 		SFLiteral_p(new SFFunctionCall("fac", fcGetX_p))
 	);
 	chain->push_back(SFLiteral_p(fcPrint));
-
 	debug << chain->str() << std::endl;
+
 	SFInterpreter si;
+
+	auto step2 = std::chrono::steady_clock::now();
+	std::cerr << "Chain created in " <<
+		std::chrono::duration_cast<std::chrono::milliseconds>(step2 - step1).count()
+		<< "ms" << std::endl;
 	SFLiteral_p result = si.run(chain_p);
+	auto step3 = std::chrono::steady_clock::now();
+	std::cerr << "Code run in " <<
+		std::chrono::duration_cast<std::chrono::milliseconds>(step3 - step2).count()
+		<< "ms" << std::endl;
 	debug << "Result: " << result->str() << std::endl;
 	
 	// (var N 10)
