@@ -15,7 +15,7 @@ namespace stackful {
 		SFLiteral_p chain;
 		SFInterpreter* interpreter;
 	} SFFnCallSignature_t;
-	typedef SFLiteral_p(*SFBuiltin_f)(SFFnCallSignature_t);
+	typedef SFLiteral_p(*SFBuiltin_f)(const SFFnCallSignature_t&);
 	typedef std::map<std::string, SFBuiltin_f> SFBuiltinMapString_t;
 	typedef std::map<SFInteger_t, SFBuiltin_f> SFBuiltinMapAtom_t;
 

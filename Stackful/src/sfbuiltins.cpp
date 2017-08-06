@@ -100,7 +100,7 @@ void stackful::setupBuiltins() {
 
 	emptyChain = SFLiteral_p(new SFOpChain());
 
-	addBuiltin("print/*", params(), [](SFFnCallSignature_t params) {
+	addBuiltin("print/*", params(), [](const SFFnCallSignature_t &params) {
 		std::stringstream s;
 		bool first = true;
 		for (size_t i = 0; i < params.arguments.size(); i++) {
@@ -115,91 +115,91 @@ void stackful::setupBuiltins() {
 		return atomNil;
 	});
 
-	addBuiltin("var", params("Name", "Value"), [](SFFnCallSignature_t params) {
+	addBuiltin("var", params("Name", "Value"), [](const SFFnCallSignature_t &params) {
 		getClosure(params.chain)->setImmediate(params.arguments[0], params.arguments[1]);
 		return params.arguments[1];
 	});
 
-	addBuiltin("set", params("Name", "Value"), [](SFFnCallSignature_t params) {
+	addBuiltin("set", params("Name", "Value"), [](const SFFnCallSignature_t &params) {
 		getClosure(params.chain)->set(params.arguments[0], params.arguments[1]);
 		return params.arguments[1];
 	});
 
-	addBuiltin("get", params("Name"), [](SFFnCallSignature_t params) {
+	addBuiltin("get", params("Name"), [](const SFFnCallSignature_t &params) {
 		return getClosure(params.chain)->get(params.arguments[0]);
 	});
 
-	addBuiltin("==", params("A", "B"), [](SFFnCallSignature_t params) {
+	addBuiltin("==", params("A", "B"), [](const SFFnCallSignature_t &params) {
 		return *params.arguments[0] == *params.arguments[1] ? atomTrue : atomFalse;
 	});
-	addBuiltin("!=", params("A", "B"), [](SFFnCallSignature_t params) {
+	addBuiltin("!=", params("A", "B"), [](const SFFnCallSignature_t &params) {
 		return *params.arguments[0] != *params.arguments[1] ? atomTrue : atomFalse;
 	});
-	addBuiltin("<", params("A", "B"), [](SFFnCallSignature_t params) {
+	addBuiltin("<", params("A", "B"), [](const SFFnCallSignature_t &params) {
 		return *params.arguments[0] < *params.arguments[1] ? atomTrue : atomFalse;
 	});
-	addBuiltin(">", params("A", "B"), [](SFFnCallSignature_t params) {
+	addBuiltin(">", params("A", "B"), [](const SFFnCallSignature_t &params) {
 		return *params.arguments[0] > *params.arguments[1] ? atomTrue : atomFalse;
 	});
-	addBuiltin("<=", params("A", "B"), [](SFFnCallSignature_t params) {
+	addBuiltin("<=", params("A", "B"), [](const SFFnCallSignature_t &params) {
 		return *params.arguments[0] <= *params.arguments[1] ? atomTrue : atomFalse;
 	});
-	addBuiltin(">=", params("A", "B"), [](SFFnCallSignature_t params) {
+	addBuiltin(">=", params("A", "B"), [](const SFFnCallSignature_t &params) {
 		return *params.arguments[0] >= *params.arguments[1] ? atomTrue : atomFalse;
 	});
 
-	addBuiltin("def", params("Name", "Function"), [](SFFnCallSignature_t params) {
+	addBuiltin("def", params("Name", "Function"), [](const SFFnCallSignature_t &params) {
 		const SFFunctionDefinitionNative *native = static_cast<SFFunctionDefinitionNative*>(params.arguments[1].get());
 		SFFunctionArity_t attrs = getFunctionArity(params.arguments[0]->str(), native->getArgs().size());
 		toOpChain(params.chain)->getClosureObject()->setImmediate(attrs.nameArity, params.arguments[1]);
 		return params.arguments[1];
 	});
 
-	addBuiltin("+", params("A", "B"), [](SFFnCallSignature_t params) {
+	addBuiltin("+", params("A", "B"), [](const SFFnCallSignature_t &params) {
 		SFLiteral_p result = params.arguments.foldLeft([](SFLiteral_p acc, SFLiteral_p curr) {
 			return SFLiteral_p(*acc + *curr);
 		});
 		return result;
 	});
-	addBuiltin("-", params("A", "B"), [](SFFnCallSignature_t params) {
+	addBuiltin("-", params("A", "B"), [](const SFFnCallSignature_t &params) {
 		SFLiteral_p result = params.arguments.foldLeft([](SFLiteral_p acc, SFLiteral_p curr) {
 			return SFLiteral_p(*acc - *curr);
 		});
 		return result;
 	});
-	addBuiltin("*", params("A", "B"), [](SFFnCallSignature_t params) {
+	addBuiltin("*", params("A", "B"), [](const SFFnCallSignature_t &params) {
 		SFLiteral_p result = params.arguments.foldLeft([](SFLiteral_p acc, SFLiteral_p curr) {
 			return SFLiteral_p(*acc * *curr);
 		});
 		return result;
 	});
-	addBuiltin("/2", params("A", "B"), [](SFFnCallSignature_t params) {
+	addBuiltin("/2", params("A", "B"), [](const SFFnCallSignature_t &params) {
 		SFLiteral_p result = params.arguments.foldLeft([](SFLiteral_p acc, SFLiteral_p curr) {
 			return SFLiteral_p(*acc / *curr);
 		});
 		return result;
 	});
-	addBuiltin("<<", params("A", "B"), [](SFFnCallSignature_t params) {
+	addBuiltin("<<", params("A", "B"), [](const SFFnCallSignature_t &params) {
 		SFLiteral_p result = params.arguments.foldLeft([](SFLiteral_p acc, SFLiteral_p curr) {
 			return SFLiteral_p(*acc << *curr);
 		});
 		return result;
 	});
-	addBuiltin(">>", params("A", "B"), [](SFFnCallSignature_t params) {
+	addBuiltin(">>", params("A", "B"), [](const SFFnCallSignature_t &params) {
 		SFLiteral_p result = params.arguments.foldLeft([](SFLiteral_p acc, SFLiteral_p curr) {
 			return SFLiteral_p(*acc >> *curr);
 		});
 		return result;
 	});
 
-	addBuiltin("if/2", params("Test", "Action"), [](SFFnCallSignature_t params) {
+	addBuiltin("if/2", params("Test", "Action"), [](const SFFnCallSignature_t &params) {
 		return TestIf(params.arguments[0], params.arguments[1], emptyChain, params.chain);
 	});
-	addBuiltin("if/3", params("Test", "Action", "Else"), [](SFFnCallSignature_t params) {
+	addBuiltin("if/3", params("Test", "Action", "Else"), [](const SFFnCallSignature_t &params) {
 		return TestIf(params.arguments[0], params.arguments[1], params.arguments[2], params.chain);
 	});
 
-	addBuiltin("list/*", params(), [](SFFnCallSignature_t params) {
+	addBuiltin("list/*", params(), [](const SFFnCallSignature_t &params) {
 		SFList *list = new SFList();
 		list->ShallowCopy(params.arguments);
 		return SFLiteral_p(list);

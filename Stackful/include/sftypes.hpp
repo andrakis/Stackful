@@ -217,7 +217,7 @@ namespace stackful {
 			return SFLiteral_p(new SFBasicList());
 		}
 		template<class CB>
-		SFLiteral_p foldLeft(CB callback) {
+		SFLiteral_p foldLeft(CB callback) const {
 			SFList_t::iterator curr = begin();
 			SFLiteral_p init = *curr++;
 			return std::accumulate(curr, end(), init, callback);
