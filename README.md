@@ -9,7 +9,7 @@ It is designed to run a very simple Lisp-like language, [Lithp](http://github.co
 
 Under the hood, it operates on only two data types:
 
-* Numbers (currently 32bit)
+* Numbers (currently 64bit)
 
 * Lists (which may contain Numbers or Lists)
 
@@ -100,7 +100,7 @@ Continuous testing is performed for the following environments:
 
    * `CXX=or1k-linux-musl-g++` - cross compilation for `OpenRISC 1000` compiler suite
 
-   * `CXXFLAGS=-s` - strip all possible symbols from output file
+   * `CXXFLAGS=-D_EXTREME` - make the test samples more extreme (eg, factorial of 50 instead of 10)
 
    ***Note***: The output file will be `dist/($CONF)/stackful`.
 

@@ -14,7 +14,7 @@ void test_factorial() {
 	//    (if (<= (get N) 1) (
 	//       (1)
 	//    ) (else (
-	//       (* (get N) (- (get N) 1))
+	//       (* (get N) (fac (- (get N) 1)))
 	//    )))
 	//  ))
 	//  (var X 10)
@@ -58,11 +58,11 @@ void test_factorial() {
 	chain->push_back(SFLiteral_p(fcDef));
 
 #ifdef _EXTREME
-	const auto X = 50;
+	SFLiteral_p X(new SFFloat(50.0));
 #else
-	const auto X = 10;
+	SFLiteral_p X(new SFInteger(10));
 #endif
-	SFFunctionCall *fcVarN = new SFFunctionCall("var", getAtomPtr("X"), SFLiteral_p(new SFInteger(X)));
+	SFFunctionCall *fcVarN = new SFFunctionCall("var", getAtomPtr("X"), X);
 	chain->push_back(SFLiteral_p(fcVarN));
 
 	SFFunctionCall *fcGetX = new SFFunctionCall("get", getAtomPtr("X"));
