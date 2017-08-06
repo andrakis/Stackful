@@ -156,16 +156,40 @@ void stackful::setupBuiltins() {
 	});
 
 	addBuiltin("+", params("A", "B"), [](SFFnCallSignature_t params) {
-		return SFLiteral_p(*params.arguments[0] + *params.arguments[1]);
+		SFLiteral_p result = params.arguments.foldLeft([](SFLiteral_p acc, SFLiteral_p curr) {
+			return SFLiteral_p(*acc + *curr);
+		});
+		return result;
 	});
 	addBuiltin("-", params("A", "B"), [](SFFnCallSignature_t params) {
-		return SFLiteral_p(*params.arguments[0] - *params.arguments[1]);
+		SFLiteral_p result = params.arguments.foldLeft([](SFLiteral_p acc, SFLiteral_p curr) {
+			return SFLiteral_p(*acc - *curr);
+		});
+		return result;
 	});
 	addBuiltin("*", params("A", "B"), [](SFFnCallSignature_t params) {
-		return SFLiteral_p(*params.arguments[0] * *params.arguments[1]);
+		SFLiteral_p result = params.arguments.foldLeft([](SFLiteral_p acc, SFLiteral_p curr) {
+			return SFLiteral_p(*acc * *curr);
+		});
+		return result;
 	});
 	addBuiltin("/2", params("A", "B"), [](SFFnCallSignature_t params) {
-		return SFLiteral_p(*params.arguments[0] / *params.arguments[1]);
+		SFLiteral_p result = params.arguments.foldLeft([](SFLiteral_p acc, SFLiteral_p curr) {
+			return SFLiteral_p(*acc / *curr);
+		});
+		return result;
+	});
+	addBuiltin("<<", params("A", "B"), [](SFFnCallSignature_t params) {
+		SFLiteral_p result = params.arguments.foldLeft([](SFLiteral_p acc, SFLiteral_p curr) {
+			return SFLiteral_p(*acc << *curr);
+		});
+		return result;
+	});
+	addBuiltin(">>", params("A", "B"), [](SFFnCallSignature_t params) {
+		SFLiteral_p result = params.arguments.foldLeft([](SFLiteral_p acc, SFLiteral_p curr) {
+			return SFLiteral_p(*acc >> *curr);
+		});
+		return result;
 	});
 
 	addBuiltin("if/2", params("Test", "Action"), [](SFFnCallSignature_t params) {
@@ -175,6 +199,11 @@ void stackful::setupBuiltins() {
 		return TestIf(params.arguments[0], params.arguments[1], params.arguments[2], params.chain);
 	});
 
+	addBuiltin("list/*", params(), [](SFFnCallSignature_t params) {
+		SFList *list = new SFList();
+		list->ShallowCopy(params.arguments);
+		return SFLiteral_p(list);
+	});
 }
 
 SFBuiltin_f stackful::getBuiltin(const SFInteger_t atomId) {

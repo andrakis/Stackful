@@ -5,6 +5,7 @@
 #include <inttypes.h>	// uint32_t
 #include <iostream>
 #include <memory>		// shared_ptr
+#include <numeric>
 #include <sstream>		// stringstream
 #include <vector>
 
@@ -211,6 +212,30 @@ namespace stackful {
 					return false;
 			}
 			return true;
+		}
+		static SFLiteral_p emptyBasicList() {
+			return SFLiteral_p(new SFBasicList());
+		}
+		template<class CB>
+		SFLiteral_p foldLeft(CB callback) {
+			SFList_t::iterator curr = begin();
+			SFLiteral_p init = *curr++;
+			return std::accumulate(curr, end(), init, callback);
+		}
+		SFLiteral_p head() const {
+			SFList_t::iterator i = begin();
+			if (i == end())
+				return emptyBasicList();
+			return *i;
+		}
+		SFLiteral_p tail() const {
+			SFBasicList *newList = new SFBasicList();
+			SFList_t::iterator i = begin();
+			++i;
+			for (; i != end(); ++i) {
+				newList->push_back(*i);
+			}
+			return SFLiteral_p(newList);
 		}
 	protected:
 		// Compare every item in the list. May result in recursive calls.

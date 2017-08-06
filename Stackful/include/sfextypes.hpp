@@ -12,6 +12,7 @@ namespace stackful {
 		Float,
 		String,
 		List,
+		Dictionary,
 		FunctionCall,
 		OpChain,
 		Closure,
@@ -208,68 +209,37 @@ namespace stackful {
 		}
 	};
 
-	// A closure, which is a list of sublists, which make up a key/value store.
+	// A dictionary, which is a list of sublists, which make up a key/value store.
 	// Each item in the list is composed of:
 	//		[key, value]
-	//	Where key is a list of integers representing a string.
-	//	And value is an SFLiteral_p
-	class SFClosure : public SFExtended {
+	//	Where key is an SFLiteral_p, generally one of the SFExtended types.
+	//	And value is an SFLiteral_p, which can be of any SFLiteral type.
+	class SFDictionary : public SFExtended {
 	public:
-		// Empty constructor with no parent
-		SFClosure() : SFExtended(Closure), parent(nullptr), topmost(nullptr) {
+		// Empty constructor with no values
+		SFDictionary() : SFExtended(Closure) {
 		}
 		// Copy constructor
-		SFClosure(const SFClosure &copy) : SFExtended(Closure, copy), parent(copy.getParent()), topmost(copy.getTopmost()) {
+		SFDictionary(const SFDictionary &copy) : SFExtended(Closure, copy) {
 		}
-		// Construct with ops and no parent
-		SFClosure(const SFBasicList &ops) : SFExtended(Closure, ops), parent(nullptr) {
+		// Construct with values
+		SFDictionary(const SFBasicList &values) : SFExtended(Closure) {
+			ShallowCopy(values);
 		}
-		// Construct with no ops and given parent (use shared ptr)
-		SFClosure(SFLiteral_p _parent) : SFExtended(Closure), parent(_parent) {
-		}
-		// Construct with ops and given parent (use shared ptr)
-		SFClosure(SFLiteral_p _parent, const SFBasicList &ops) : SFExtended(Closure, ops), parent(_parent) {
-		}
-		~SFClosure() {
-		}
-		SFLiteral_p getParent() const { return parent; }
-		SFClosure *getParentObject() const {
-			if (!hasParent())
-				return nullptr;
-			return static_cast<SFClosure*>(parent.get());
-		}
-		bool hasParent() const { return parent.get() != nullptr; }
-		SFLiteral_p getTopmost() const {
-			return topmost;
-		}
-		void setTopmost(SFLiteral_p _topmost) {
-			this->topmost = _topmost;
-		}
-		SFClosure *getTopmostObject() const {
-			return toClosure(this->topmost);
-		}
-		void setParent(SFLiteral_p _parent) {
-			this->parent = _parent;
-			this->topmost = toClosure(_parent)->getTopmost();
-		}
-		SFLiteral_p get(SFLiteral_p key) const throw(std::runtime_error) {
+		virtual SFLiteral_p get(SFLiteral_p key) const throw(std::runtime_error) {
 			SFList_t::iterator find = getByKey(key);
 			if (find != end()) {
 				const SFBasicList &list = find->get()->ListClass();
 				return list[1];
 			}
-			if (hasParent())
-				return getParentObject()->get(key);
 			throw std::runtime_error("Key not found: " + key->str());
 		}
-		SFLiteral_p getOrMissing(SFLiteral_p key) const {
+		virtual SFLiteral_p getOrMissing(SFLiteral_p key) const {
 			SFList_t::iterator find = getByKey(key);
 			if (find != end()) {
 				const SFBasicList &list = find->get()->ListClass();
 				return list[1];
 			}
-			if (hasParent())
-				return getParentObject()->getOrMissing(key);
 			return atomMissing;
 		}
 		void set(SFLiteral_p _key, SFLiteral_p _value) {
@@ -293,8 +263,8 @@ namespace stackful {
 			return str();
 		}
 	protected:
-		SFLiteral_p parent;
-		SFLiteral_p topmost;
+		SFDictionary(ExtendedType _type) : SFExtended(_type) {
+		}
 		SFList_t::iterator getByKey(SFLiteral_p key) const {
 			SFList_t::iterator find = this->value->begin();
 			for (; find != end(); ++find) {
@@ -310,9 +280,91 @@ namespace stackful {
 		bool hasKey(SFLiteral_p key) const {
 			return getByKey(key) != end();
 		}
-		bool trySet(SFLiteral_p key, SFLiteral_p _value) {
+		virtual bool trySet(SFLiteral_p key, SFLiteral_p _value) {
 			if (hasKey(key)) {
 				setImmediate(key, _value);
+				return true;
+			}
+			return false;
+		}
+		std::string _str() const {
+			SFDictionary::iterator it = begin();
+			std::stringstream ss;
+			ss << "{Dict:";
+			for (; it != end(); ++it) {
+				SFLiteral_p p(*it);
+				ss << p->str();
+			}
+			ss << "}";
+			return ss.str();
+		}
+	};
+
+	class SFClosure : public SFDictionary {
+	public:
+		// Empty constructor with no parent
+		SFClosure() : SFDictionary(Closure), parent(nullptr), topmost(nullptr) {
+		}
+		// Copy constructor
+		SFClosure(const SFClosure &copy) : SFDictionary(Closure), parent(copy.getParent()), topmost(copy.getTopmost()) {
+			ShallowCopy(copy);
+		}
+		// Construct with ops and no parent
+		SFClosure(const SFBasicList &ops) : SFDictionary(Closure), parent(nullptr) {
+			ShallowCopy(ops);
+		}
+		// Construct with no ops and given parent (use shared ptr)
+		SFClosure(SFLiteral_p _parent) : SFDictionary(Closure), parent(_parent) {
+		}
+		// Construct with ops and given parent (use shared ptr)
+		SFClosure(SFLiteral_p _parent, const SFBasicList &ops) : SFDictionary(Closure), parent(_parent) {
+			ShallowCopy(ops);
+		}
+		~SFClosure() {
+		}
+		SFLiteral_p get(SFLiteral_p key) const throw(std::runtime_error) {
+			SFList_t::iterator find = getByKey(key);
+			if (find != end()) {
+				const SFBasicList &list = find->get()->ListClass();
+				return list[1];
+			}
+			if (hasParent())
+				return getParentObject()->get(key);
+			throw std::runtime_error("Key not found: " + key->str());
+		}
+		SFLiteral_p getOrMissing(SFLiteral_p key) const {
+			SFLiteral_p value_p = SFDictionary::getOrMissing(key);
+			if (value_p != atomMissing)
+				return value_p;
+			if (hasParent())
+				return getParentObject()->getOrMissing(key);
+			return atomMissing;
+		}
+		SFLiteral_p getParent() const { return parent; }
+		SFClosure *getParentObject() const {
+			if (!hasParent())
+				return nullptr;
+			return static_cast<SFClosure*>(parent.get());
+		}
+		bool hasParent() const { return parent.get() != nullptr; }
+		SFLiteral_p getTopmost() const {
+			return topmost;
+		}
+		void setTopmost(SFLiteral_p _topmost) {
+			this->topmost = _topmost;
+		}
+		SFClosure *getTopmostObject() const {
+			return toClosure(this->topmost);
+		}
+		void setParent(SFLiteral_p _parent) {
+			this->parent = _parent;
+			this->topmost = toClosure(_parent)->getTopmost();
+		}
+	protected:
+		SFLiteral_p parent;
+		SFLiteral_p topmost;
+		virtual bool trySet(SFLiteral_p key, SFLiteral_p _value) {
+			if (SFDictionary::trySet(key, _value)) {
 				return true;
 			}
 			if (hasParent() && toClosure(parent)->trySet(key, _value))
