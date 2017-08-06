@@ -57,7 +57,12 @@ void test_factorial() {
 	SFFunctionCall *fcDef = new SFFunctionCall("def", getAtomPtr("fac"), fnDef_p);
 	chain->push_back(SFLiteral_p(fcDef));
 
-	SFFunctionCall *fcVarN = new SFFunctionCall("var", getAtomPtr("X"), SFLiteral_p(new SFInteger(10)));
+#ifdef _EXTREME
+	const auto X = 50;
+#else
+	const auto X = 10;
+#endif
+	SFFunctionCall *fcVarN = new SFFunctionCall("var", getAtomPtr("X"), SFLiteral_p(new SFInteger(X)));
 	chain->push_back(SFLiteral_p(fcVarN));
 
 	SFFunctionCall *fcGetX = new SFFunctionCall("get", getAtomPtr("X"));

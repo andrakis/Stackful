@@ -242,6 +242,12 @@ namespace stackful {
 		SFLiteral_p getTopmost() const {
 			return topmost;
 		}
+		void setTopmost(SFLiteral_p _topmost) {
+			this->topmost = _topmost;
+		}
+		SFClosure *getTopmostObject() const {
+			return toClosure(this->topmost);
+		}
 		void setParent(SFLiteral_p _parent) {
 			this->parent = _parent;
 			this->topmost = toClosure(_parent)->getTopmost();
@@ -335,28 +341,29 @@ namespace stackful {
 		SFOpChain()
 		: SFExtended(OpChain), parent(nullptr), closure(new SFClosure()), immediate(false),
 		functionEntry("") {
+			this->getClosureObject()->setTopmost(this->getClosurePtr());
 		}
 		// Copy constructor
 		SFOpChain(const SFOpChain &copy)
 		: SFExtended(OpChain, copy), parent(copy.getParentPtr()), closure(copy.getClosurePtr()),
 		immediate(false), functionEntry("") {
+			if(this->getClosureObject()->getTopmost().get() == nullptr)
+				this->getClosureObject()->setTopmost(this->getClosurePtr());
 		}
 		// Initialize with given parent
 		SFOpChain(SFLiteral_p _parent) : SFExtended(OpChain), parent(_parent),
+		closure(new SFClosure(toOpChain(_parent)->getClosurePtr())),
 		immediate(false), functionEntry("") {
-			SFOpChain *parent_o = toOpChain(parent);
-			SFLiteral_p parentP = parent_o->getClosurePtr();
-			SFClosure *_closure = new SFClosure(parentP);
-			this->closure = SFLiteral_p(_closure);
+			if(this->getClosureObject()->getTopmost().get() == nullptr)
+				this->getClosureObject()->setTopmost(this->getClosurePtr());
 		}
 		// Initialize with given parent and ops
 		SFOpChain(SFLiteral_p _parent, const SFOpChain *ops)
 		: SFExtended(OpChain, ops), parent(_parent),
+		closure(new SFClosure(toOpChain(_parent)->getClosurePtr())),
 		immediate(false), functionEntry("") {
-			SFOpChain *parent_o = toOpChain(parent);
-			SFLiteral_p parentP = parent_o->getClosurePtr();
-			SFClosure *_closure = new SFClosure(parentP);
-			this->closure = SFLiteral_p(_closure);
+			if(this->getClosureObject()->getTopmost().get() == nullptr)
+				this->getClosureObject()->setTopmost(this->getClosurePtr());
 		}
 		SFLiteral_p getParentPtr() const { return parent; }
 		SFLiteral_p getClosurePtr() const { return closure; }

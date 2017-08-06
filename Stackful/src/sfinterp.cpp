@@ -77,6 +77,32 @@ namespace stackful {
 		return value;
 	}
 
+	SFLiteral_p getFnDefFromClosure(SFClosure *closure, SFFunctionCall *i, const SFFunctionArity_t &details)
+	{
+		SFLiteral_p fndef = closure->getOrMissing(i->getFunction());
+		if (fndef == atomMissing) {
+			fndef = closure->getOrMissing(details.nameArityStar);
+			if (fndef == atomMissing)
+				return atomMissing;
+			i->setFunction(details.nameArityStar);
+		}
+		return fndef;
+
+	}
+
+	SFLiteral_p getFnDef(const SFOpChain *chain, SFFunctionCall *i, const SFFunctionArity_t &details) throw(std::runtime_error) {
+		SFClosure *topmost = chain->getClosureObject()->getTopmostObject();
+		SFClosure *current = chain->getClosureObject();
+		SFLiteral_p fndef = getFnDefFromClosure(topmost, i, details);
+		if (fndef == atomMissing) {
+			fndef = getFnDefFromClosure(current, i, details);
+			if (fndef == atomMissing) {
+				throw std::runtime_error("Function not found: " + details.str());
+			}
+		}
+		return fndef;
+	}
+
 	/**
 	* Perform a function call with the given chain closure.
 	*
@@ -93,14 +119,7 @@ namespace stackful {
 	SFLiteral_p SFInterpreter::doFunctionCall(SFLiteral_p chain_p, SFFunctionCall *i) {
 		SFFunctionArity_t details = i->getDetails();
 		SFOpChain *chain = toOpChain(chain_p);
-		SFLiteral_p fndef = chain->getClosureObject()->getOrMissing(i->getFunction());
-		if (fndef == atomMissing) {
-			fndef = chain->getClosureObject()->getOrMissing(details.nameArityStar);
-			if (fndef == atomMissing) {
-				throw std::runtime_error("Function not found: " + details.str());
-			}
-			i->setFunction(details.nameArityStar);
-		}
+		SFLiteral_p fndef = getFnDef(chain, i, details);
 		SFList *args = i->getArguments();
 		SFList::iterator it = args->begin();
 		SFBasicList params;

@@ -25,6 +25,7 @@ namespace stackful {
 		SFLiteral_p doFunctionCall(SFLiteral_p chain, SFFunctionCall *i);
 		SFLiteral_p getParamValue(SFLiteral_p chain_p, SFLiteral_p p);
 	};
+	SFLiteral_p getFnDefFromClosure(SFClosure *closure, SFFunctionCall *i, const SFFunctionArity_t &details);
 }
 
 void interp_test();

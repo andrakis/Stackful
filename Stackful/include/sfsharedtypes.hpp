@@ -26,10 +26,10 @@ namespace stackful {
 		SFLiteral_p nameArity;
 		SFLiteral_p nameArityStar;
 		char paramCount;
-		bool isArityStar() {
+		bool isArityStar() const {
 			return paramCount == '*';
 		}
-		std::string str() {
+		std::string str() const {
 			if (isArityStar())
 				return nameStarStr;
 			else
