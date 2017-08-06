@@ -212,6 +212,9 @@ namespace stackful {
 	SFInteger::operator SFFloat*() const {
 		return new SFFloat((double)this->getRawValue());
 	}
+	SFFloat* SFInteger::getFloatValue() const {
+		return this->operator stackful::SFFloat*();
+	}
 	SFInteger::operator SFString*() const {
 		return new SFString(this->str());
 	}
@@ -246,6 +249,17 @@ namespace stackful {
 				}
 				else
 					throw std::runtime_error("Cannot add given type to integer");
+#ifndef _NO_PROMOTE
+				SFInteger_t iia = ia->getRawValue();
+				SFInteger_t iib = ib->getRawValue();
+				if (abs(iia) != 0 && abs(iib) != 0 && abs(iia) / abs(iib) == 0) {
+					SFFloat *fa = ia->getFloatValue();
+					SFFloat *fb = ib->getFloatValue();
+					SFLiteral_p fa_p(fa);
+					SFLiteral_p fb_p(fb);
+					return *fa + *fb;
+				}
+#endif
 				return *ia + *ib;
 			}
 			case Float:
@@ -311,6 +325,17 @@ namespace stackful {
 					ib = tmp;
 				}  else
 					throw std::runtime_error("Cannot subtract given type to integer");
+#ifndef _NO_PROMOTE
+				SFInteger_t iia = ia->getRawValue();
+				SFInteger_t iib = ib->getRawValue();
+				if (abs(iia) > 0 && abs(iib) > 0 && abs(iia) * abs(iib) <= 0) {
+					SFFloat *fa = ia->getFloatValue();
+					SFFloat *fb = ib->getFloatValue();
+					SFLiteral_p fa_p(fa);
+					SFLiteral_p fb_p(fb);
+					return *fa - *fb;
+				}
+#endif
 				return *ia - *ib;
 			}
 			case Float:
@@ -348,6 +373,18 @@ namespace stackful {
 					ib = tmp;
 				} else
 					throw std::runtime_error("Cannot multiply given type to integer");
+#ifndef _NO_PROMOTE
+				SFInteger_t iia = ia->getRawValue();
+				SFInteger_t iib = ib->getRawValue();
+				if (abs(iia) != 0 && abs(iib) != 0 && abs(iia) * abs(iib) <= 0) {
+					SFFloat *fa = ia->getFloatValue();
+					SFFloat *fb = ib->getFloatValue();
+					SFLiteral_p fa_p(fa);
+					SFLiteral_p fb_p(fb);
+					SFFloat *result = *fa * *fb;
+					return result;
+				}
+#endif
 				return *ia * *ib;
 			}
 			case Float:
@@ -385,6 +422,17 @@ namespace stackful {
 					ib = tmp;
 				} else
 					throw std::runtime_error("Cannot divide given type to integer");
+#ifndef _NO_PROMOTE
+				SFInteger_t iia = ia->getRawValue();
+				SFInteger_t iib = ib->getRawValue();
+				if (abs(iia) != 0 && abs(iib) != 0 && abs(iia) / abs(iib) == 0) {
+					SFFloat *fa = ia->getFloatValue();
+					SFFloat *fb = ib->getFloatValue();
+					SFLiteral_p fa_p(fa);
+					SFLiteral_p fb_p(fb);
+					return *fa / *fb;
+				}
+#endif
 				return *ia / *ib;
 			}
 			case Float:

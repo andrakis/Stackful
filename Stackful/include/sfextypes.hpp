@@ -95,6 +95,7 @@ namespace stackful {
 		}
 		operator SFFloat*() const;
 		operator SFString*() const;
+		SFFloat *getFloatValue() const;
 	protected:
 		std::string _str() const {
 			return operator[](1)->str();

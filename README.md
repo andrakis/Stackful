@@ -29,6 +29,10 @@ Some additional data types implemented with these constructs (MAY BE OUT OF DATE
 Status
 ------
 
+* *Version 0.32*:
+
+   Implements automatic type promotion when an integer overflow would occur.
+
 * *Version 0.30*:
 
    First fully working interpreter!
@@ -100,7 +104,7 @@ Continuous testing is performed for the following environments:
 
    * `CXX=or1k-linux-musl-g++` - cross compilation for `OpenRISC 1000` compiler suite
 
-   * `CXXFLAGS=-D_EXTREME` - make the test samples more extreme (eg, factorial of 50 instead of 10)
+   * `CXXFLAGS=-D_NO_PROMOTE` - disable automatic integer -> float conversion when an overflow would occur
 
    ***Note***: The output file will be `dist/($CONF)/stackful`.
 
