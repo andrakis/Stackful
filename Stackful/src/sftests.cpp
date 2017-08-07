@@ -59,7 +59,7 @@ void test_factorial() {
 	chain->push_back(SFLiteral_p(fcDef));
 
 #if !defined(_NO_PROMOTE) && !defined(_DEBUG)
-	SFLiteral_p X(new SFInteger(10));
+	SFLiteral_p X(new SFInteger(50));
 #else
 	SFLiteral_p X(new SFFloat(10.0));
 #endif
@@ -87,9 +87,93 @@ void test_factorial() {
 		std::chrono::duration_cast<std::chrono::milliseconds>(step3 - step2).count()
 		<< "ms" << std::endl;
 	debug << "Result: " << result->str() << std::endl;
-	
-	// (var N 10)
-	//SFFunctionCall fcVarN = new SFFunctionCall("var", )
+}
+
+void test_fibonacci() {
+	// Test a factorial function
+	// ((def fib #N :: (
+	//    (if (< N 2) (
+	//      (1)
+	//    ) (else (
+	//      (+ (fib (- N 1)) (fib (- N 2)))
+	//    )))
+	//  ))
+	//  (var X 10)
+	//  (print "Fac of" (get X) (fac (get X)))
+	// )
+	std::cerr << "Starting fibonacci test" << std::endl;
+	SFOpChain *chain = new SFOpChain();
+
+	auto start = std::chrono::steady_clock::now();
+
+	setupBuiltins();
+	chain->importClosure(getBuiltinDefinitions());
+	SFLiteral_p chain_p(chain);
+
+	auto step1 = std::chrono::steady_clock::now();
+	std::cerr << "Builtins imported in " <<
+		std::chrono::duration_cast<std::chrono::milliseconds>(step1 - start).count()
+		<< "ms" << std::endl;
+
+	SFOpChain *facBody = new SFOpChain(chain_p);
+	SFLiteral_p facBody_p(facBody);
+	SFFunctionCall *fcGetN = new SFFunctionCall("get", getAtomPtr("N"));
+	SFLiteral_p fcGetN_p(fcGetN);
+	SFFunctionCall *fcCompare = new SFFunctionCall("<=", fcGetN_p, SFLiteral_p(new SFInteger(2)));
+	SFOpChain *facBodyIf1True = new SFOpChain(facBody_p);
+	facBodyIf1True->push_back(SFLiteral_p(new SFInteger(1)));
+	SFOpChain *facBodyIf1False = new SFOpChain(facBody_p);
+	SFFunctionCall *fcFacBodyIf1False = new SFFunctionCall(
+		"+",
+		SFLiteral_p(new SFFunctionCall(
+			"fib", SFLiteral_p(new SFFunctionCall(
+				"-", fcGetN_p, SFLiteral_p(new SFInteger(1))
+				)))),
+		SFLiteral_p(new SFFunctionCall(
+			"fib", SFLiteral_p(new SFFunctionCall(
+				"-", fcGetN_p, SFLiteral_p(new SFInteger(2))
+				))))
+	);
+	facBodyIf1False->push_back(SFLiteral_p(fcFacBodyIf1False));
+	SFFunctionCall *fcIf = new SFFunctionCall(
+		"if", SFLiteral_p(fcCompare), SFLiteral_p(facBodyIf1True),
+		SFLiteral_p(new SFFunctionCall("else", SFLiteral_p(facBodyIf1False)))
+	);
+	facBody->push_back(SFLiteral_p(fcIf));
+	SFFunctionDefinition *fnDef = new SFFunctionDefinition(chain_p, "fib", { "N" }, facBody_p);
+	SFLiteral_p fnDef_p(fnDef);
+	SFFunctionCall *fcDef = new SFFunctionCall("def", getAtomPtr("fib"), fnDef_p);
+	chain->push_back(SFLiteral_p(fcDef));
+
+#if !defined(_NO_PROMOTE) && !defined(_DEBUG)
+	SFLiteral_p X(new SFInteger(15));
+#else
+	SFLiteral_p X(new SFInteger(10));
+#endif
+	SFFunctionCall *fcVarN = new SFFunctionCall("var", getAtomPtr("X"), X);
+	chain->push_back(SFLiteral_p(fcVarN));
+
+	SFFunctionCall *fcGetX = new SFFunctionCall("get", getAtomPtr("X"));
+	SFLiteral_p fcGetX_p(fcGetX);
+	SFFunctionCall *fcPrint = new SFFunctionCall("print/*",
+		SFLiteral_p(new SFString("Fib of")), fcGetX_p,
+		SFLiteral_p(new SFFunctionCall("fib", fcGetX_p))
+	);
+	chain->push_back(SFLiteral_p(fcPrint));
+	debug << chain->str() << std::endl;
+
+	SFInterpreter si;
+
+	auto step2 = std::chrono::steady_clock::now();
+	std::cerr << "Chain created in " <<
+		std::chrono::duration_cast<std::chrono::milliseconds>(step2 - step1).count()
+		<< "ms" << std::endl;
+	SFLiteral_p result = si.run(chain_p);
+	auto step3 = std::chrono::steady_clock::now();
+	std::cerr << "Code run in " <<
+		std::chrono::duration_cast<std::chrono::milliseconds>(step3 - step2).count()
+		<< "ms" << std::endl;
+	debug << "Result: " << result->str() << std::endl;
 }
 
 void test_comparison() {
@@ -154,6 +238,7 @@ void interp_test() {
 	//basic_test();
 	//test_comparison();
 	test_factorial();
+	test_fibonacci();
 }
 
 void basic_test() {
