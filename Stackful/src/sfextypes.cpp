@@ -254,8 +254,14 @@ namespace stackful {
 				SFInteger_t iib = ib->getRawValue();
 				if (abs(iia) != 0 && abs(iib) != 0 && abs(iia) / abs(iib) == 0) {
 					SFFloat *fa = ia->getFloatValue();
-					SFFloat *fb = ib->getFloatValue();
 					SFLiteral_p fa_p(fa);
+
+					if (b.getExtendedType() == Float) {
+						const SFFloat *fb = static_cast<const SFFloat*>(&b);
+						return *fa + *fb;
+					}
+
+					SFFloat *fb = ib->getFloatValue();
 					SFLiteral_p fb_p(fb);
 					return *fa + *fb;
 				}
@@ -330,8 +336,14 @@ namespace stackful {
 				SFInteger_t iib = ib->getRawValue();
 				if (abs(iia) > 0 && abs(iib) > 0 && abs(iia) * abs(iib) <= 0) {
 					SFFloat *fa = ia->getFloatValue();
-					SFFloat *fb = ib->getFloatValue();
 					SFLiteral_p fa_p(fa);
+
+					if (b.getExtendedType() == Float) {
+						const SFFloat *fb = static_cast<const SFFloat*>(&b);
+						return *fa - *fb;
+					}
+
+					SFFloat *fb = ib->getFloatValue();
 					SFLiteral_p fb_p(fb);
 					return *fa - *fb;
 				}
@@ -378,11 +390,16 @@ namespace stackful {
 				SFInteger_t iib = ib->getRawValue();
 				if (abs(iia) != 0 && abs(iib) != 0 && abs(iia) * abs(iib) <= 0) {
 					SFFloat *fa = ia->getFloatValue();
-					SFFloat *fb = ib->getFloatValue();
 					SFLiteral_p fa_p(fa);
+
+					if (b.getExtendedType() == Float) {
+						const SFFloat *fb = static_cast<const SFFloat*>(&b);
+						return *fa * *fb;
+					}
+
+					SFFloat *fb = ib->getFloatValue();
 					SFLiteral_p fb_p(fb);
-					SFFloat *result = *fa * *fb;
-					return result;
+					return *fa * *fb;
 				}
 #endif
 				return *ia * *ib;
