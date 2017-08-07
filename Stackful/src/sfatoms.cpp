@@ -11,7 +11,7 @@ namespace stackful {
 	atomsById_t atomsById;
 	atomsByName_t atomsByName;
 
-	SFInteger_t getAtom(std::string name) {
+	SFInteger_t getAtom(const std::string &name) {
 		atomsByName_t::iterator it = atomsByName.find(name);
 		if (it != atomsByName.end()) {
 			return it->second;

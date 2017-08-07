@@ -8,7 +8,7 @@
 
 namespace stackful {
 
-	SFInteger_t getAtom(std::string name);
+	SFInteger_t getAtom(const std::string &name);
 	std::string getAtom(SFInteger_t id);
 	extern SFInteger_t atomCounter;
 	extern atomsById_t atomsById;

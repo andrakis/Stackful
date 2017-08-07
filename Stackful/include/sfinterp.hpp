@@ -15,7 +15,7 @@ namespace stackful {
 		SFInteger_t getDepth() const { return depth; }
 		SFInteger_t getFunctionCalls() const { return functionCalls; }
 		bool getDebug() { return debugMode; }
-		SFLiteral_p invokeFunctionCall(SFLiteral_p fndef, const SFFnCallSignature_t &call);
+		SFLiteral_p invokeFunctionCall(const SFLiteral_p &fndef, const SFFnCallSignature_t &call);
 		std::string inspectObject(const SFBasicList &obj) const;
 		std::string inspectObject(const SFBasicList &obj, const std::string &pre, const std::string &post) const;
 	protected:

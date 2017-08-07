@@ -20,8 +20,8 @@ namespace stackful {
 		FunctionDefinitionNative
 	};
 
-	SFOpChain *toOpChain(SFLiteral_p opchain_p);
-	SFClosure *toClosure(SFLiteral_p closure_p);
+	SFOpChain *toOpChain(const SFLiteral_p &opchain_p);
+	SFClosure *toClosure(const SFLiteral_p &closure_p);
 
 	extern SFLiteral_p atomNil, atomFalse, atomTrue, atomMissing;
 
@@ -108,25 +108,27 @@ namespace stackful {
 			double valueDouble;
 			SFInteger_t valueInteger[sizeof(double) / sizeof(SFInteger_t)];
 		};
-		SFFloat(double value) : SFExtended(Float) {
+		SFFloat(const double _value) : SFExtended(Float), value(_value) {
 			push_back(Float);
 			doublebits b;
-			b.valueDouble = value;
+			b.valueDouble = _value;
 			SFBasicList *l = new SFBasicList();
 			for (unsigned int i = 0; i < sizeof(double) / sizeof(SFInteger_t); i++) {
 				l->push_back(b.valueInteger[i]);
 			}
+			value = _value;
 			push_back(l);
 		}
 		std::string extLiteral() const {
 			return str();
 		}
 		double getRawValue() const {
-			return bitsToDouble();
+			return value;
 		}
 		operator SFInteger*() const;
 		operator SFString*() const;
 	protected:
+		double value;
 		double bitsToDouble() const {
 			doublebits b = { 0 };
 			const SFBasicList &v = operator[](1)->ListClass();
@@ -227,7 +229,7 @@ namespace stackful {
 		SFDictionary(const SFBasicList &values) : SFExtended(Closure) {
 			ShallowCopy(values);
 		}
-		virtual SFLiteral_p get(SFLiteral_p key) const throw(std::runtime_error) {
+		virtual SFLiteral_p get(const SFLiteral_p &key) const throw(std::runtime_error) {
 			SFList_t::iterator find = getByKey(key);
 			if (find != end()) {
 				const SFBasicList &list = find->get()->ListClass();
@@ -235,7 +237,7 @@ namespace stackful {
 			}
 			throw std::runtime_error("Key not found: " + key->str());
 		}
-		virtual SFLiteral_p getOrMissing(SFLiteral_p key) const {
+		virtual SFLiteral_p getOrMissing(const SFLiteral_p &key) const {
 			SFList_t::iterator find = getByKey(key);
 			if (find != end()) {
 				const SFBasicList &list = find->get()->ListClass();
@@ -266,7 +268,7 @@ namespace stackful {
 	protected:
 		SFDictionary(ExtendedType _type) : SFExtended(_type) {
 		}
-		SFList_t::iterator getByKey(SFLiteral_p key) const {
+		SFList_t::iterator getByKey(const SFLiteral_p &key) const {
 			SFList_t::iterator find = this->value->begin();
 			for (; find != end(); ++find) {
 				// [key, value]
@@ -278,7 +280,7 @@ namespace stackful {
 			}
 			return find;
 		}
-		bool hasKey(SFLiteral_p key) const {
+		bool hasKey(const SFLiteral_p &key) const {
 			return getByKey(key) != end();
 		}
 		virtual bool trySet(SFLiteral_p key, SFLiteral_p _value) {
@@ -323,7 +325,7 @@ namespace stackful {
 		}
 		~SFClosure() {
 		}
-		SFLiteral_p get(SFLiteral_p key) const throw(std::runtime_error) {
+		SFLiteral_p get(const SFLiteral_p &key) const throw(std::runtime_error) {
 			SFList_t::iterator find = getByKey(key);
 			if (find != end()) {
 				const SFBasicList &list = find->get()->ListClass();
@@ -333,7 +335,7 @@ namespace stackful {
 				return getParentObject()->get(key);
 			throw std::runtime_error("Key not found: " + key->str());
 		}
-		SFLiteral_p getOrMissing(SFLiteral_p key) const {
+		SFLiteral_p getOrMissing(const SFLiteral_p &key) const {
 			SFLiteral_p value_p = SFDictionary::getOrMissing(key);
 			if (value_p != atomMissing)
 				return value_p;
@@ -481,7 +483,7 @@ namespace stackful {
 			SFLiteral_p args = at(1);
 			return static_cast<SFList*>(args.get());
 		}
-		SFFunctionArity_t getDetails() const { return details; }
+		const SFFunctionArity_t &getDetails() const { return details; }
 	protected:
 		std::string _str() const;
 		SFFunctionArity_t details;

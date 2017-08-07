@@ -19,10 +19,10 @@ namespace stackful {
 		return static_cast<const SFExtended*>(this);
 	}
 
-	SFOpChain *toOpChain(SFLiteral_p opchain_p) {
+	SFOpChain *toOpChain(const SFLiteral_p &opchain_p) {
 		return static_cast<SFOpChain*>(opchain_p.get());
 	}
-	SFClosure *toClosure(SFLiteral_p closure_p) {
+	SFClosure *toClosure(const SFLiteral_p &closure_p) {
 		return static_cast<SFClosure*>(closure_p.get());
 	}
 

@@ -53,7 +53,7 @@ stackful::SFBuiltinParams_t params(const std::string &p1, const std::string &p2,
 	return p;
 }
 
-void addBuiltin(std::string name, SFBuiltinParams_t parameters, SFBuiltin_f fn) {
+void addBuiltin(const std::string &name, const SFBuiltinParams_t &parameters, const SFBuiltin_f &fn) {
 	SFNativeFunctionAttributes_t attrs = { name, parameters, fn };
 	builtinDefinitions.push_back(attrs);
 
@@ -63,11 +63,18 @@ void addBuiltin(std::string name, SFBuiltinParams_t parameters, SFBuiltin_f fn) 
 }
 
 volatile bool definitionsDone = false;
-SFClosure *getClosure(SFLiteral_p chain) {
+SFClosure *getClosure(const SFLiteral_p &chain) {
 	return toOpChain(chain)->getClosureObject();
 }
-SFClosure *getClosure(SFOpChain *chain) {
-	return chain->getClosureObject();
+SFClosure *getClosure(const SFOpChain &chain) {
+	return chain.getClosureObject();
+}
+
+SFLiteral_p callImmediate(SFLiteral_p value_p, SFLiteral_p chain_p) {
+	const SFOpChain* chain = static_cast<const SFOpChain*>(value_p.get());
+	SFOpChain* immediate = new SFOpChain(chain_p, chain);
+	immediate->setImmediate(true);
+	return SFLiteral_p(immediate);
 }
 
 SFLiteral_p getIfResult(SFLiteral_p value_p, SFLiteral_p chain_p) {
@@ -75,10 +82,7 @@ SFLiteral_p getIfResult(SFLiteral_p value_p, SFLiteral_p chain_p) {
 	if (value->isExtended()) {
 		const SFExtended* ext = value->ExtClass();
 		if (ext->getExtendedType() == OpChain) {
-			const SFOpChain* chain = static_cast<const SFOpChain*>(ext);
-			SFOpChain* immediate = new SFOpChain(chain_p, chain);
-			immediate->setImmediate(true);
-			return SFLiteral_p(immediate);
+			return callImmediate(value_p, chain_p);
 		}
 	}
 	return value_p;
@@ -86,7 +90,7 @@ SFLiteral_p getIfResult(SFLiteral_p value_p, SFLiteral_p chain_p) {
 
 SFLiteral_p emptyChain;
 
-SFLiteral_p TestIf(SFLiteral_p Test, SFLiteral_p Action, SFLiteral_p Else, SFLiteral_p chain) {
+SFLiteral_p TestIf(const SFLiteral_p &Test, SFLiteral_p Action, SFLiteral_p Else, SFLiteral_p chain) {
 	if (Test == atomTrue)
 		return getIfResult(Action, chain);
 	else
@@ -197,6 +201,9 @@ void stackful::setupBuiltins() {
 	});
 	addBuiltin("if/3", params("Test", "Action", "Else"), [](const SFFnCallSignature_t &params) {
 		return TestIf(params.arguments[0], params.arguments[1], params.arguments[2], params.chain);
+	});
+	addBuiltin("else", params("Action"), [](const SFFnCallSignature_t &params) {
+		return callImmediate(params.arguments[0], params.chain);
 	});
 
 	addBuiltin("list/*", params(), [](const SFFnCallSignature_t &params) {

@@ -1,7 +1,7 @@
 #include "../include/sffndef.hpp"
 
 namespace stackful {
-	SFFunctionDefinitionNative::SFFunctionDefinitionNative(SFFnDefName _name, SFFnDefArgs _args, SFBuiltin_f _body)
+	SFFunctionDefinitionNative::SFFunctionDefinitionNative(const SFFnDefName &_name, const SFFnDefArgs &_args, const SFBuiltin_f &_body)
 	: SFFunctionDefinitionBase(FunctionDefinitionNative, _name, _args), body(_body) {
 	}
 
@@ -9,7 +9,7 @@ namespace stackful {
 		return body(_args);
 	}
 
-	SFFunctionDefinition::SFFunctionDefinition(SFLiteral_p parent, SFFnDefName _name, SFFnDefArgs _args, SFLiteral_p body)
+	SFFunctionDefinition::SFFunctionDefinition(SFLiteral_p parent, const SFFnDefName &_name, const SFFnDefArgs &_args, SFLiteral_p body)
 	: SFFunctionDefinitionBase(FunctionDefinition, _name, _args) {
 		this->push_back(body);
 	}

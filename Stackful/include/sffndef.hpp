@@ -21,7 +21,7 @@ namespace stackful {
 		SFFnDefArgsByAtom_t getArgsByAtom() const { return argsByAtom; }
 		virtual bool isNative() const = 0;
 	protected:
-		SFFunctionDefinitionBase(ExtendedType type, SFFnDefName _name, SFFnDefArgs _args)
+		SFFunctionDefinitionBase(ExtendedType type, const SFFnDefName &_name, const SFFnDefArgs &_args)
 		: SFExtended(type), name(_name), args(_args), scope(nullptr),
 		  attributes(getFunctionArity(_name, _args.size())) {
 			SFFnDefArgs::iterator it = args.begin();
@@ -44,7 +44,7 @@ namespace stackful {
 	// That is, one in the host language (C++). This is used for builtins.
 	class SFFunctionDefinitionNative : public SFFunctionDefinitionBase {
 	public:
-		SFFunctionDefinitionNative(SFFnDefName _name, SFFnDefArgs _args, SFBuiltin_f _body);
+		SFFunctionDefinitionNative(const SFFnDefName &_name, const SFFnDefArgs &_args, const SFBuiltin_f &_body);
 		SFLiteral_p invoke(const SFFnCallSignature_t &args);
 		bool isNative() const { return true; }
 	protected:
@@ -54,7 +54,7 @@ namespace stackful {
 	// A function definition which uses Stackful code.
 	class SFFunctionDefinition : public SFFunctionDefinitionBase {
 	public:
-		SFFunctionDefinition(SFLiteral_p parent, SFFnDefName _name, SFFnDefArgs _args, SFLiteral_p body);
+		SFFunctionDefinition(SFLiteral_p parent, const SFFnDefName &_name, const SFFnDefArgs &_args, SFLiteral_p body);
 		SFLiteral_p invoke(const SFFnCallSignature_t &args);
 		SFLiteral_p getBody() {
 			return at(0);

@@ -49,7 +49,8 @@ void test_factorial() {
 	);
 	facBodyIf1False->push_back(SFLiteral_p(fcFacBodyIf1False));
 	SFFunctionCall *fcIf = new SFFunctionCall(
-		"if", SFLiteral_p(fcCompare), SFLiteral_p(facBodyIf1True), SFLiteral_p(facBodyIf1False)
+		"if", SFLiteral_p(fcCompare), SFLiteral_p(facBodyIf1True),
+		SFLiteral_p(new SFFunctionCall("else", SFLiteral_p(facBodyIf1False)))
 	);
 	facBody->push_back(SFLiteral_p(fcIf));
 	SFFunctionDefinition *fnDef = new SFFunctionDefinition(chain_p, "fac", { "N" }, facBody_p);
@@ -57,10 +58,10 @@ void test_factorial() {
 	SFFunctionCall *fcDef = new SFFunctionCall("def", getAtomPtr("fac"), fnDef_p);
 	chain->push_back(SFLiteral_p(fcDef));
 
-#ifndef _NO_PROMOTE
-	SFLiteral_p X(new SFInteger(50));
+#if !defined(_NO_PROMOTE) && !defined(_DEBUG)
+	SFLiteral_p X(new SFInteger(10));
 #else
-	SFLiteral_p X(new SFFloat(50.0));
+	SFLiteral_p X(new SFFloat(10.0));
 #endif
 	SFFunctionCall *fcVarN = new SFFunctionCall("var", getAtomPtr("X"), X);
 	chain->push_back(SFLiteral_p(fcVarN));
