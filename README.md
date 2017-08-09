@@ -29,6 +29,12 @@ Some additional data types implemented with these constructs (MAY BE OUT OF DATE
 Status
 ------
 
+* *Version 0.34*:
+
+  * Implements fibonacci test
+
+  * Removes automatic type promotion, as it is not working correctly.
+
 * *Version 0.32*:
 
    Implements automatic type promotion when an integer overflow would occur.
@@ -103,8 +109,6 @@ Continuous testing is performed for the following environments:
    * `CONF=Release` - build release configuration (optimization, no debugging)
 
    * `CXX=or1k-linux-musl-g++` - cross compilation for `OpenRISC 1000` compiler suite
-
-   * `CXXFLAGS=-D_NO_PROMOTE` - disable automatic integer -> float conversion when an overflow would occur
 
    ***Note***: The output file will be `dist/($CONF)/stackful`.
 

@@ -146,7 +146,7 @@ void test_fibonacci() {
 	chain->push_back(SFLiteral_p(fcDef));
 
 #if !defined(_NO_PROMOTE) && !defined(_DEBUG)
-	SFLiteral_p X(new SFInteger(15));
+	SFLiteral_p X(new SFInteger(18));
 #else
 	SFLiteral_p X(new SFInteger(10));
 #endif
@@ -174,6 +174,7 @@ void test_fibonacci() {
 		std::chrono::duration_cast<std::chrono::milliseconds>(step3 - step2).count()
 		<< "ms" << std::endl;
 	debug << "Result: " << result->str() << std::endl;
+	std::cerr << "Stats: " << si.getStats() << std::endl;
 }
 
 void test_comparison() {
@@ -237,7 +238,7 @@ void basic_test();
 void interp_test() {
 	//basic_test();
 	//test_comparison();
-	test_factorial();
+	//test_factorial();
 	test_fibonacci();
 }
 
