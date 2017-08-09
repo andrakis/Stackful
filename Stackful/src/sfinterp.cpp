@@ -18,6 +18,12 @@ namespace stackful {
 	const SFInteger_t MaxDebugLen = 100;
 	const SFInteger_t MaxDebugArrayLen = 20;
 
+#ifdef _STATS
+#define STATS_INC(which)  do { ++this->stats.which; } while(0)
+#else
+#define STATS_INC(which)
+#endif
+
 	DebugBuiltins_t DebugBuiltins({
 		"while", "call", "try", "eval", "apply", "next", "recurse"
 	});
@@ -77,7 +83,7 @@ namespace stackful {
 		return value;
 	}
 
-	SFLiteral_p getFnDefFromClosure(SFClosure *closure, SFFunctionCall *i, const SFFunctionArity_t &details)
+	SFLiteral_p SFInterpreter::getFnDefFromClosure(SFClosure *closure, SFFunctionCall *i, const SFFunctionArity_t &details) const
 	{
 		SFLiteral_p fndef = closure->getOrMissing(i->getFunction());
 		if (fndef == atomMissing) {
@@ -90,15 +96,18 @@ namespace stackful {
 
 	}
 
-	SFLiteral_p getFnDef(const SFOpChain *chain, SFFunctionCall *i, const SFFunctionArity_t &details) throw(std::runtime_error) {
-		SFClosure *topmost = chain->getClosureObject()->getTopmostObject();
+	SFLiteral_p SFInterpreter::getFnDef(const SFOpChain *chain, SFFunctionCall *i, const SFFunctionArity_t &details) throw(std::runtime_error) {
 		SFClosure *current = chain->getClosureObject();
-		SFLiteral_p fndef = getFnDefFromClosure(topmost, i, details);
+		SFClosure *topmost = current->getTopmostObject();
+		SFLiteral_p fndef = this->getFnDefFromClosure(topmost, i, details);
 		if (fndef == atomMissing) {
-			fndef = getFnDefFromClosure(current, i, details);
+			STATS_INC(topmost_misses);
+			fndef = this->getFnDefFromClosure(current, i, details);
 			if (fndef == atomMissing) {
 				throw std::runtime_error("Function not found: " + details.str());
 			}
+		} else {
+			STATS_INC(topmost_hits);
 		}
 		return fndef;
 	}
@@ -119,7 +128,7 @@ namespace stackful {
 	SFLiteral_p SFInterpreter::doFunctionCall(SFLiteral_p chain_p, SFFunctionCall *i) {
 		SFFunctionArity_t details = i->getDetails();
 		SFOpChain *chain = toOpChain(chain_p);
-		SFLiteral_p fndef = getFnDef(chain, i, details);
+		SFLiteral_p fndef = this->getFnDef(chain, i, details);
 		SFList *args = i->getArguments();
 		SFList::iterator it = args->begin();
 		SFBasicList params;
@@ -132,6 +141,7 @@ namespace stackful {
 	}
 	SFLiteral_p SFInterpreter::getParamValue(SFLiteral_p chain_p, SFLiteral_p p) {
 		SFLiteral *basic = p.get();
+		STATS_INC(resolutions);
 		if (basic->isExtended()) {
 			SFExtended *ext = basic->ExtClass();
 			if(ext->getExtendedType() == FunctionCall) {
@@ -175,6 +185,7 @@ namespace stackful {
 		SFLiteral_p result;
 
 		++this->depth;
+		STATS_INC(function_calls);
 
 		if (debug.getEnabled()) {
 			std::string indent;

@@ -249,7 +249,7 @@ namespace stackful {
 				}
 				else
 					throw std::runtime_error("Cannot add given type to integer");
-#ifndef _NO_PROMOTE
+#ifdef _AUTO_PROMOTE
 				SFInteger_t iia = ia->getRawValue();
 				SFInteger_t iib = ib->getRawValue();
 				if (abs(iia) != 0 && abs(iib) != 0 && abs(iia) / abs(iib) == 0) {
@@ -331,7 +331,7 @@ namespace stackful {
 					ib = tmp;
 				}  else
 					throw std::runtime_error("Cannot subtract given type to integer");
-#ifndef _NO_PROMOTE
+#ifdef _AUTO_PROMOTE
 				SFInteger_t iia = ia->getRawValue();
 				SFInteger_t iib = ib->getRawValue();
 				if (abs(iia) > 0 && abs(iib) > 0 && abs(iia) * abs(iib) <= 0) {
@@ -385,7 +385,7 @@ namespace stackful {
 					ib = tmp;
 				} else
 					throw std::runtime_error("Cannot multiply given type to integer");
-#ifndef _NO_PROMOTE
+#ifdef _AUTO_PROMOTE
 				SFInteger_t iia = ia->getRawValue();
 				SFInteger_t iib = ib->getRawValue();
 				if (abs(iia) != 0 && abs(iib) != 0 && abs(iia) * abs(iib) <= 0) {
@@ -439,7 +439,7 @@ namespace stackful {
 					ib = tmp;
 				} else
 					throw std::runtime_error("Cannot divide given type to integer");
-#ifndef _NO_PROMOTE
+#ifdef _AUTO_PROMOTE
 				SFInteger_t iia = ia->getRawValue();
 				SFInteger_t iib = ib->getRawValue();
 				if (abs(iia) != 0 && abs(iib) != 0 && abs(iia) / abs(iib) == 0) {
