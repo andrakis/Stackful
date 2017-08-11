@@ -18,7 +18,7 @@ namespace stackful {
 	const SFInteger_t MaxDebugLen = 100;
 	const SFInteger_t MaxDebugArrayLen = 20;
 
-#ifdef _STATS
+#ifndef _NO_STATS
 #define STATS_INC(which)  do { ++this->stats.which; } while(0)
 #else
 #define STATS_INC(which)
@@ -209,7 +209,9 @@ namespace stackful {
 			// Mark opchain as function entry
 			SFOpChain *chain = toOpChain(call.chain);
 			chain->setFunctionEntry(details.nameArityStr);
-			debug << s.str() << std::endl;
+			if (debug.getEnabled()) {
+				debug << s.str() << std::endl;
+			}
 		}
 		result = def->invoke(call);
 		depth--;

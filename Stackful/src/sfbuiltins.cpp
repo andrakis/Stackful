@@ -203,7 +203,8 @@ void stackful::setupBuiltins() {
 		return TestIf(params.arguments[0], params.arguments[1], params.arguments[2], params.chain);
 	});
 	addBuiltin("else", params("Action"), [](const SFFnCallSignature_t &params) {
-		return callImmediate(params.arguments[0], params.chain);
+		// Optimization: don't use callImmediate
+		return params.arguments[0];
 	});
 
 	addBuiltin("list/*", params(), [](const SFFnCallSignature_t &params) {

@@ -61,7 +61,7 @@ void test_factorial() {
 #if !defined(_NO_PROMOTE) && !defined(_DEBUG)
 	SFLiteral_p X(new SFInteger(50));
 #else
-	SFLiteral_p X(new SFFloat(10.0));
+	SFLiteral_p X(new SFInteger(10));
 #endif
 	SFFunctionCall *fcVarN = new SFFunctionCall("var", getAtomPtr("X"), X);
 	chain->push_back(SFLiteral_p(fcVarN));
@@ -87,6 +87,7 @@ void test_factorial() {
 		std::chrono::duration_cast<std::chrono::milliseconds>(step3 - step2).count()
 		<< "ms" << std::endl;
 	debug << "Result: " << result->str() << std::endl;
+	std::cerr << "Stats: " << si.getStats() << std::endl;
 }
 
 void test_fibonacci() {
@@ -148,7 +149,7 @@ void test_fibonacci() {
 #if !defined(_NO_PROMOTE) && !defined(_DEBUG)
 	SFLiteral_p X(new SFInteger(18));
 #else
-	SFLiteral_p X(new SFInteger(10));
+	SFLiteral_p X(new SFInteger(5));
 #endif
 	SFFunctionCall *fcVarN = new SFFunctionCall("var", getAtomPtr("X"), X);
 	chain->push_back(SFLiteral_p(fcVarN));
@@ -238,7 +239,7 @@ void basic_test();
 void interp_test() {
 	//basic_test();
 	//test_comparison();
-	//test_factorial();
+	test_factorial();
 	test_fibonacci();
 }
 
@@ -277,18 +278,6 @@ SFBasicList xtolist(const std::string &str) {
 	}
 	return l;
 }
-
-class SFState {
-public:
-	SFState() {
-	}
-	virtual ~SFState() {
-		debug << "A state has died" << std::endl;
-	}
-protected:
-	SFBasicList ops;
-	SFLiteral_p value = SFLiteral_p(new SFBasicInteger(getAtom("nil")));
-};
 
 std::string tostring(bool value) {
 	return value ? "true" : "false";
