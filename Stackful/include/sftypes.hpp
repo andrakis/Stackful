@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../stdafx.h"
+#include <chrono>
 #include <exception>
 #include <inttypes.h>	// uint32_t
 #include <iostream>
@@ -63,11 +64,15 @@ namespace stackful {
 
 	protected:
 		SFLiteral(const SFType t) : type(t) {
+			start = std::chrono::system_clock::now();
 		}
 
 		virtual bool _isequal(const SFLiteral &other) const = 0;
 
 		const SFType type;
+#ifdef _LIFETIME
+		std::chrono::time_point<std::chrono::system_clock> start;
+#endif
 	};
 
 	// The specialised value
