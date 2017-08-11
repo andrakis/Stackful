@@ -14,12 +14,14 @@
                    projectFiles="true">
       <logicalFolder name="Stackful" displayName="Stackful" projectFiles="true">
         <logicalFolder name="include" displayName="include" projectFiles="true">
+          <itemPath>contrib/json.hpp</itemPath>
           <itemPath>Stackful/include/sfatoms.hpp</itemPath>
           <itemPath>Stackful/include/sfbuiltins.hpp</itemPath>
           <itemPath>Stackful/include/sfdebug.hpp</itemPath>
           <itemPath>Stackful/include/sfextypes.hpp</itemPath>
           <itemPath>Stackful/include/sffndef.hpp</itemPath>
           <itemPath>Stackful/include/sfinterp.hpp</itemPath>
+          <itemPath>Stackful/include/sfparser.hpp</itemPath>
           <itemPath>Stackful/include/sfsharedtypes.hpp</itemPath>
           <itemPath>Stackful/include/sftypes.hpp</itemPath>
         </logicalFolder>
@@ -30,6 +32,7 @@
           <itemPath>Stackful/src/sfextypes.cpp</itemPath>
           <itemPath>Stackful/src/sffndef.cpp</itemPath>
           <itemPath>Stackful/src/sfinterp.cpp</itemPath>
+          <itemPath>Stackful/src/sfparser.cpp</itemPath>
           <itemPath>Stackful/src/sfshared.cpp</itemPath>
           <itemPath>Stackful/src/sftests.cpp</itemPath>
           <itemPath>Stackful/src/sftypes.cpp</itemPath>
@@ -123,6 +126,8 @@
       </item>
       <item path="Stackful/include/sfinterp.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Stackful/include/sfparser.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Stackful/include/sfsharedtypes.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Stackful/include/sftypes.hpp" ex="false" tool="3" flavor2="0">
@@ -139,6 +144,8 @@
       </item>
       <item path="Stackful/src/sfinterp.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="Stackful/src/sfparser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="Stackful/src/sfshared.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Stackful/src/sftests.cpp" ex="false" tool="1" flavor2="0">
@@ -146,6 +153,8 @@
       <item path="Stackful/src/sftypes.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Stackful/stdafx.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="contrib/json.hpp" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -223,6 +232,8 @@
       </item>
       <item path="Stackful/include/sfinterp.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Stackful/include/sfparser.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Stackful/include/sfsharedtypes.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Stackful/include/sftypes.hpp" ex="false" tool="3" flavor2="0">
@@ -239,6 +250,8 @@
       </item>
       <item path="Stackful/src/sfinterp.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="Stackful/src/sfparser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="Stackful/src/sfshared.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Stackful/src/sftests.cpp" ex="false" tool="1" flavor2="0">
@@ -246,6 +259,8 @@
       <item path="Stackful/src/sftypes.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Stackful/stdafx.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="contrib/json.hpp" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

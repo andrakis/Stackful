@@ -42,6 +42,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Stackful/src/sfextypes.o \
 	${OBJECTDIR}/Stackful/src/sffndef.o \
 	${OBJECTDIR}/Stackful/src/sfinterp.o \
+	${OBJECTDIR}/Stackful/src/sfparser.o \
 	${OBJECTDIR}/Stackful/src/sfshared.o \
 	${OBJECTDIR}/Stackful/src/sftests.o \
 	${OBJECTDIR}/Stackful/src/sftypes.o
@@ -105,6 +106,11 @@ ${OBJECTDIR}/Stackful/src/sfinterp.o: Stackful/src/sfinterp.cpp
 	${MKDIR} -p ${OBJECTDIR}/Stackful/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -D_DEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfinterp.o Stackful/src/sfinterp.cpp
+
+${OBJECTDIR}/Stackful/src/sfparser.o: Stackful/src/sfparser.cpp
+	${MKDIR} -p ${OBJECTDIR}/Stackful/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -D_DEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfparser.o Stackful/src/sfparser.cpp
 
 ${OBJECTDIR}/Stackful/src/sfshared.o: Stackful/src/sfshared.cpp
 	${MKDIR} -p ${OBJECTDIR}/Stackful/src
