@@ -28,8 +28,14 @@ namespace stackful {
 	class SFAtom; class SFInteger; class SFFloat;
 	class SFString; class SFList;
 
+	std::string getReadableName(ExtendedType t);
+
 	class SFExtended : public SFBasicList {
 	public:
+		virtual ~SFExtended() {
+			std::cerr << "Extended " << getReadableName(this->getExtendedType()) << " dies" << std::endl;
+			this->clear();
+		}
 		ExtendedType getExtendedType() const {
 			return extendedType;
 		}

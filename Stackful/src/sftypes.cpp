@@ -1,16 +1,31 @@
 #include "../stdafx.h"
 #include <iostream>
+#include <sstream>
 #include "../include/sftypes.hpp"
 #include "../include/sfextypes.hpp"
 
 namespace stackful {
-
 	SFLiteral::~SFLiteral() {
 #ifdef PETTY_DEBUG
 		debug << "A ";
 		if (this->type == Basic_Integer) debug << "number " << this->IntegerClass()->getValue();
 		else if (this->type == Basic_List) debug << "list";
 		debug << " has died" << std::endl;
+#endif
+#ifdef _LIFETIME
+		auto now = std::chrono::system_clock::now();
+		std::stringstream ss;
+		ss << "A ";
+		if (this->type == Basic_Integer) {
+			ss << "basic number ";
+			ss << this->IntegerClass()->getValue();
+		} else if (this->type == Basic_List) {
+			ss << "basic list";
+		}
+		ss << " has died (lifetime: ";
+		ss << std::chrono::duration_cast<std::chrono::milliseconds>(now - this->start).count();
+		ss << "ms)";
+		std::cerr << ss.str() << std::endl;
 #endif
 	}
 

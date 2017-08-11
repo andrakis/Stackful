@@ -231,6 +231,8 @@ void test_comparison() {
 	SFInterpreter si;
 	SFLiteral_p result = si.run(chain_p);
 	debug << "Result: " << result->str() << std::endl;
+
+	delete chain;
 }
 
 void basic_test();
@@ -238,8 +240,8 @@ void basic_test();
 void interp_test() {
 	//basic_test();
 	//test_comparison();
-	//test_factorial();
-	test_fibonacci();
+	test_factorial();
+	//test_fibonacci();
 }
 
 void basic_test() {

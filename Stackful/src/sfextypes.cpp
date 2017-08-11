@@ -8,6 +8,22 @@
 #include "../include/sfextypes.hpp"
 
 namespace stackful {
+	std::string getReadableName(ExtendedType t) {
+		switch(t) {
+			case Atom: return "Atom";
+			case Integer: return "Integer";
+			case Float: return "Float";
+			case String: return "String";
+			case List: return "List";
+			case Dictionary: return "Dictionary";
+			case FunctionCall: return "FunctionCall";
+			case OpChain: return "OpChain";
+			case Closure: return "Closure";
+			case FunctionDefinition: return "FunctionDefinition";
+			case FunctionDefinitionNative: return "FunctionDefinitionNantive";
+		}
+	}
+
 	SFExtended* SFLiteral::ExtClass() {
 		if (this->type != Basic_List)
 			throw std::runtime_error("Not a list");
