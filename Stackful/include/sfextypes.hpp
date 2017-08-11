@@ -2,6 +2,8 @@
 
 // Extended types
 
+#include <chrono>
+
 #include "sfsharedtypes.hpp"
 #include "sfatoms.hpp"
 
@@ -32,10 +34,7 @@ namespace stackful {
 
 	class SFExtended : public SFBasicList {
 	public:
-		virtual ~SFExtended() {
-			std::cerr << "Extended " << getReadableName(this->getExtendedType()) << " dies" << std::endl;
-			this->clear();
-		}
+		virtual ~SFExtended();
 		ExtendedType getExtendedType() const {
 			return extendedType;
 		}
@@ -65,6 +64,10 @@ namespace stackful {
 			// Always convert to type a
 			return a;
 		}
+
+#ifdef _LIFETIME
+		std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
+#endif
 	};
 
 	class SFAtom : public SFExtended {

@@ -21,7 +21,22 @@ namespace stackful {
 			case Closure: return "Closure";
 			case FunctionDefinition: return "FunctionDefinition";
 			case FunctionDefinitionNative: return "FunctionDefinitionNantive";
+			default: return "INVALID_TYPE";
 		}
+	}
+
+	SFExtended::~SFExtended() {
+#ifdef _LIFETIME
+		auto now = std::chrono::system_clock::now();
+		std::stringstream ss;
+		ss << "A ";
+		ss << getReadableName(this->getExtendedType());
+		ss << " has died (lifetime: ";
+		ss << std::chrono::duration_cast<std::chrono::milliseconds>(now - this->start).count();
+		ss << "ms)";
+		std::cerr << ss.str() << std::endl;
+#endif
+		this->clear();
 	}
 
 	SFExtended* SFLiteral::ExtClass() {

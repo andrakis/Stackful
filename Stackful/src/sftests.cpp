@@ -86,6 +86,11 @@ void test_factorial() {
 	std::cerr << "Code run in " <<
 		std::chrono::duration_cast<std::chrono::milliseconds>(step3 - step2).count()
 		<< "ms" << std::endl;
+	chain->clear();
+	auto step4 = std::chrono::steady_clock::now();
+	std::cerr << "Memory free complete in " <<
+		std::chrono::duration_cast<std::chrono::milliseconds>(step4 - step3).count()
+		<< "ms" << std::endl;
 	debug << "Result: " << result->str() << std::endl;
 	std::cerr << "Stats: " << si.getStats() << std::endl;
 }
@@ -149,7 +154,7 @@ void test_fibonacci() {
 #if !defined(_NO_PROMOTE) && !defined(_DEBUG)
 	SFLiteral_p X(new SFInteger(18));
 #else
-	SFLiteral_p X(new SFInteger(5));
+	SFLiteral_p X(new SFInteger(10));
 #endif
 	SFFunctionCall *fcVarN = new SFFunctionCall("var", getAtomPtr("X"), X);
 	chain->push_back(SFLiteral_p(fcVarN));
@@ -173,6 +178,11 @@ void test_fibonacci() {
 	auto step3 = std::chrono::steady_clock::now();
 	std::cerr << "Code run in " <<
 		std::chrono::duration_cast<std::chrono::milliseconds>(step3 - step2).count()
+		<< "ms" << std::endl;
+	chain->clear();
+	auto step4 = std::chrono::steady_clock::now();
+	std::cerr << "Memory free complete in " <<
+		std::chrono::duration_cast<std::chrono::milliseconds>(step4 - step3).count()
 		<< "ms" << std::endl;
 	debug << "Result: " << result->str() << std::endl;
 	std::cerr << "Stats: " << si.getStats() << std::endl;
@@ -232,6 +242,7 @@ void test_comparison() {
 	SFInterpreter si;
 	SFLiteral_p result = si.run(chain_p);
 	debug << "Result: " << result->str() << std::endl;
+	chain->clear();
 }
 
 void basic_test();
