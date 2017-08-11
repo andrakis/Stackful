@@ -1,0 +1,1 @@
+[[["def","fac",{"code":[[["if",["==","0","N"],[["1"]],[["else",[["*","N",["fac",["-","N","1"]]]]]]]]],"_fndef":true,"_fnparams":["N"]}],["var","Test","10"],["print","\"factorial of \"","Test","\": \"",["fac","Test"]]]]
