@@ -217,6 +217,7 @@
     <ClInclude Include="include\sfextypes.hpp" />
     <ClInclude Include="include\sffndef.hpp" />
     <ClInclude Include="include\sfinterp.hpp" />
+    <ClInclude Include="include\sfparser.hpp" />
     <ClInclude Include="include\sfsharedtypes.hpp" />
     <ClInclude Include="include\sftypes.hpp" />
     <ClInclude Include="stdafx.h" />
@@ -229,6 +230,7 @@
     <ClCompile Include="src\sfextypes.cpp" />
     <ClCompile Include="src\sffndef.cpp" />
     <ClCompile Include="src\sfinterp.cpp" />
+    <ClCompile Include="src\sfparser.cpp" />
     <ClCompile Include="src\sfshared.cpp" />
     <ClCompile Include="src\sftests.cpp" />
     <ClCompile Include="src\sftypes.cpp" />
