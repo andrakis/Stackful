@@ -15,7 +15,7 @@ namespace stackful {
 		bool isScoped() const { return scope != nullptr; }
 		SFLiteral_p getScope() const { return scope; }
 		void setScope(SFLiteral_p _scope) {
-			scope = _scope;
+			scope.swap(_scope);
 		}
 		SFFunctionArity_t getAttributes() const { return attributes; }
 		SFFnDefArgsByAtom_t getArgsByAtom() const { return argsByAtom; }

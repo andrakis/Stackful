@@ -35,7 +35,7 @@ namespace stackful {
 		}
 	protected:
 		// Get the destination stream
-		std::ostream &getDestStream() const {
+		static std::ostream &getDestStream() {
 			return std::cerr;
 		}
 

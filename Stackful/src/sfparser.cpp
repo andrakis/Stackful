@@ -5,10 +5,12 @@
 #include <regex>
 #include <string>
 
+#include "../include/sftypes.hpp"
 #include "../include/sfextypes.hpp"
 #include "../include/sffndef.hpp"
-
 #include "../include/sfparser.hpp"
+
+using namespace stackful;
 
 namespace stackful {
 	ArityBuiltins_t ArityBuiltins = {

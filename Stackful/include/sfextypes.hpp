@@ -41,12 +41,10 @@ namespace stackful {
 		std::string str() const override {
 			return _str();
 		}
-		std::string extStr() const {
+		virtual std::string extStr() const {
 			return _str();
 		}
 		virtual std::string extLiteral() const = 0;
-		SFExtended(const SFExtended &copy) : SFBasicList(copy), extendedType(copy.getExtendedType()) {
-		}
 		typedef SFList_t::iterator iterator;
 		bool isExtended() const {
 			return true;
@@ -62,6 +60,7 @@ namespace stackful {
 
 		ExtendedType getPreferredType(ExtendedType a, ExtendedType b) {
 			// Always convert to type a
+			(void)b;
 			return a;
 		}
 
@@ -321,6 +320,12 @@ namespace stackful {
 		SFClosure(const SFClosure &copy) : SFDictionary(Closure), parent(copy.getParent()), topmost(copy.getTopmost()) {
 			ShallowCopy(copy);
 		}
+		SFClosure &operator =(const SFClosure &c) {
+			this->clear();
+			ShallowCopy(c);
+			this->parent = c.getParent();
+			return *this;
+		}
 		// Construct with ops and no parent
 		SFClosure(const SFBasicList &ops) : SFDictionary(Closure), parent(nullptr) {
 			ShallowCopy(ops);
@@ -363,7 +368,7 @@ namespace stackful {
 			return topmost;
 		}
 		void setTopmost(SFLiteral_p _topmost) {
-			this->topmost = _topmost;
+			this->topmost.swap(_topmost);
 		}
 		SFClosure *getTopmostObject() const {
 			return toClosure(this->topmost);
@@ -392,7 +397,7 @@ namespace stackful {
 				ss << p->str();
 			}
 			if (hasParent())
-				ss << "{Parent:" + getParentObject()->str() + "}";
+				ss << "{Parent:" + getParentObject()->str() + "}"; //-V522
 			ss << "}";
 			return ss.str();
 		}
@@ -404,20 +409,31 @@ namespace stackful {
 		// An empty OpChain
 		SFOpChain()
 		: SFExtended(OpChain), parent(nullptr), closure(new SFClosure()), immediate(false),
-		functionEntry("") {
+		functionEntry() {
 			this->getClosureObject()->setTopmost(this->getClosurePtr());
 		}
 		// Copy constructor
 		SFOpChain(const SFOpChain &copy)
 		: SFExtended(OpChain, copy), parent(copy.getParentPtr()), closure(copy.getClosurePtr()),
-		immediate(false), functionEntry("") {
+		immediate(false), functionEntry() {
 			if(this->getClosureObject()->getTopmost().get() == nullptr)
 				this->getClosureObject()->setTopmost(this->getClosurePtr());
+		}
+		SFOpChain &operator =(const SFOpChain &c) {
+			if (this == &c)
+				return *this;
+			this->clear();
+			ShallowCopy(c);
+			this->parent = c.getParentPtr();
+			this->closure = SFLiteral_p(new SFClosure(c.getClosureObject()));
+			if(this->getClosureObject()->getTopmost().get() == nullptr)
+				this->getClosureObject()->setTopmost(this->getClosurePtr());
+			return *this;
 		}
 		// Initialize with given parent
 		SFOpChain(SFLiteral_p _parent) : SFExtended(OpChain), parent(_parent),
 		closure(new SFClosure(toOpChain(_parent)->getClosurePtr())),
-		immediate(false), functionEntry("") {
+		immediate(false), functionEntry() {
 			if(this->getClosureObject()->getTopmost().get() == nullptr)
 				this->getClosureObject()->setTopmost(this->getClosurePtr());
 		}
@@ -425,7 +441,7 @@ namespace stackful {
 		SFOpChain(SFLiteral_p _parent, const SFOpChain *ops)
 		: SFExtended(OpChain, ops), parent(_parent),
 		closure(new SFClosure(toOpChain(_parent)->getClosurePtr())),
-		immediate(false), functionEntry("") {
+		immediate(false), functionEntry() {
 			if(this->getClosureObject()->getTopmost().get() == nullptr)
 				this->getClosureObject()->setTopmost(this->getClosurePtr());
 		}
@@ -473,6 +489,12 @@ namespace stackful {
 	class SFFunctionCall : public SFList {
 	public:
 		SFFunctionCall(const SFFunctionCall &copy) : SFList(FunctionCall, copy), details(copy.getDetails()) {
+		}
+		SFFunctionCall &operator =(const SFFunctionCall &c) {
+			this->clear();
+			ShallowCopy(c);
+			details = c.getDetails();
+			return *this;
 		}
 		SFFunctionCall(const std::string &fn);
 		SFFunctionCall(const std::string &fn, SFLiteral_p p1);

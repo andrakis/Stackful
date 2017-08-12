@@ -25,27 +25,27 @@ namespace stackful {
 	} SFStats_t;
 	class SFInterpreter {
 	public:
-		SFInterpreter() : depth(0), functionCalls(0), debugMode(true) { }
+		SFInterpreter() : functionCalls(0), depth(0), debugMode(true) { }
 		~SFInterpreter() { }
 		SFLiteral_p run(SFLiteral_p chain_p) throw(std::runtime_error);
 		SFInteger_t getDepth() const { return depth; }
 		SFInteger_t getFunctionCalls() const { return functionCalls; }
 		bool getDebug() { return debugMode; }
-		SFLiteral_p invokeFunctionCall(const SFLiteral_p &fndef, const SFFnCallSignature_t &call);
+		SFLiteral_p invokeFunctionCall(SFLiteral_p fndef, const SFFnCallSignature_t &call);
 		std::string inspectObject(const SFBasicList &obj) const;
 		std::string inspectObject(const SFBasicList &obj, const std::string &pre, const std::string &post) const;
 		std::string getStats() const { return stats.str(); };
 	protected:
-		int depth;
-		SFInteger_t functionCalls;
-		bool debugMode;
-		SFLiteral_p doFunctionCall(SFLiteral_p chain, SFFunctionCall *i);
-		SFLiteral_p getParamValue(SFLiteral_p chain_p, SFLiteral_p p);
-		SFLiteral_p getFnDefFromClosure(SFClosure *closure, SFFunctionCall *i, const SFFunctionArity_t &details) const;
-		SFLiteral_p getFnDef(const SFOpChain *chain, SFFunctionCall *i, const SFFunctionArity_t &details) throw(std::runtime_error);
 		SFStats_t stats;
+		SFInteger_t functionCalls;
+		int depth;
+		bool debugMode;
+
+		SFLiteral_p doFunctionCall(SFLiteral_p chain, const SFFunctionCall &i);
+		SFLiteral_p getParamValue(SFLiteral_p chain_p, SFLiteral_p p);
+		SFLiteral_p getFnDefFromClosure(const SFClosure &closure, const SFFunctionCall &i, const SFFunctionArity_t &details) const;
+		SFLiteral_p getFnDef(const SFOpChain &chain, const SFFunctionCall &i, const SFFunctionArity_t &details) throw(std::runtime_error);
 	};
-	SFLiteral_p getFnDefFromClosure(SFClosure *closure, SFFunctionCall *i, const SFFunctionArity_t &details);
 }
 
 void interp_test();

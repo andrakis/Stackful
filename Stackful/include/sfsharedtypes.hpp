@@ -36,7 +36,7 @@ namespace stackful {
 				return nameArityStr;
 		}
 	} SFFunctionArity_t;
-	SFFunctionArity_t getFunctionArity(const std::string &name, const int np);
+	SFFunctionArity_t getFunctionArity(const std::string &name, const size_t np);
 
 	// Builtin function param list
 	typedef std::vector<std::string> SFBuiltinParams_t;

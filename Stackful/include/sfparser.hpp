@@ -1,12 +1,14 @@
 #pragma once
 
+#include "sfatoms.hpp"
 #include "sfextypes.hpp"
 
 #include <map>
 #include <string>
 
-namespace stackful {
+#include "../include/jslistiterator.hpp"
 
+namespace stackful {
 	enum SFParserExpect {
 		EX_LITERAL = 1 << 0,             // Literal(1  2  "test")
 		EX_OPCHAIN = 1 << 1,             // opening OpChain '('
@@ -42,10 +44,50 @@ namespace stackful {
 
 	std::string GET_EX(const SFParserExpect val);
 
-	class SFParserState {
-	public:
+	typedef JSIterator<SFList*> ListIterator_t;
+	typedef std::vector<std::string> SFParserLines_t;
+	struct SFParserState {
+		SFParserState() :
+		ops(new SFList()), ops_p(ops), it(ops_p),
+		_current_word(), _expect(EX_OPCHAIN),
+		_depth(0), _in_variable(false), _in_atom(false),
+		_quote_type(0), _line(1), _character(1),
+		_lines(SFParserLines_t()) {
+			ops->push_back(new SFList());
+		}
+		~SFParserState() {
+			// ops will be deleted by shared_ptr after 'it' dies
+		}
+		std::string current_word() const { return _current_word; }
+		void current_word(const std::string &val) { _current_word = val; }
+		stackful::SFParserExpect expect() const { return _expect; }
+		void expect(stackful::SFParserExpect val) { _expect = val; }
+		unsigned depth() const { return _depth; }
+		void depth(unsigned val) { _depth = val; }
+		bool in_variable() const { return _in_variable; }
+		void in_variable(bool val) { _in_variable = val; }
+		bool in_atom() const { return _in_atom; }
+		void in_atom(bool val) { _in_atom = val; }
+		char quote_type() const { return _quote_type; }
+		void quote_type(char val) { _quote_type = val; }
+		unsigned line() const { return _line; }
+		void line(unsigned val) { _line = val; }
+		unsigned character() const { return _character; }
+		void character(unsigned val) { _character = val; }
+		SFParserLines_t& lines() { return _lines; }
 	protected:
-
+		SFList *ops;
+		SFLiteral_p ops_p;
+		ListIterator_t it;
+		std::string _current_word;
+		SFParserExpect _expect;
+		unsigned _depth;
+		bool _in_variable;
+		bool _in_atom;
+		char _quote_type;
+		unsigned _line;
+		unsigned _character;
+		SFParserLines_t _lines;
 	};
 
 	class SFParser
@@ -53,5 +95,10 @@ namespace stackful {
 	public:
 		SFParser();
 		~SFParser();
+		SFParserState& getState() {
+			return state;
+		}
+	protected:
+		SFParserState state;
 	};
 }

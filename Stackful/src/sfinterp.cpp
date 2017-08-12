@@ -40,8 +40,6 @@ namespace stackful {
 		SFLiteral_p value(new SFAtom("nil"));
 		SFOpChain *chain = toOpChain(chain_p);
 		while (chain->next() != nullptr) {
-			// Not const, as the instruction might be updated if it
-			// references a function with incorrect arity.
 			SFLiteral_p p = chain->get();
 			if(false == p->isExtended())
 				throw std::runtime_error("Invalid operation");
@@ -59,7 +57,7 @@ namespace stackful {
 				case FunctionCall:
 				{
 					SFFunctionCall *fncall = static_cast<SFFunctionCall*>(i);
-					SFLiteral_p result = doFunctionCall(chain_p, fncall);
+					SFLiteral_p result = doFunctionCall(chain_p, *fncall);
 					value.swap(result);
 					if (value.get() != nullptr && value->isExtended()) {
 						SFExtended *valueExt = value->ExtClass();
@@ -83,26 +81,25 @@ namespace stackful {
 		return value;
 	}
 
-	SFLiteral_p SFInterpreter::getFnDefFromClosure(SFClosure *closure, SFFunctionCall *i, const SFFunctionArity_t &details) const
+	SFLiteral_p SFInterpreter::getFnDefFromClosure(const SFClosure &closure, const SFFunctionCall &i, const SFFunctionArity_t &details) const
 	{
-		SFLiteral_p fndef = closure->getOrMissing(i->getFunction());
+		SFLiteral_p fndef = closure.getOrMissing(i.getFunction());
 		if (fndef == atomMissing) {
-			fndef = closure->getOrMissing(details.nameArityStar);
+			fndef = closure.getOrMissing(details.nameArityStar);
 			if (fndef == atomMissing)
 				return atomMissing;
-			i->setFunction(details.nameArityStar);
 		}
 		return fndef;
 
 	}
 
-	SFLiteral_p SFInterpreter::getFnDef(const SFOpChain *chain, SFFunctionCall *i, const SFFunctionArity_t &details) throw(std::runtime_error) {
-		SFClosure *current = chain->getClosureObject();
-		SFClosure *topmost = current->getTopmostObject();
-		SFLiteral_p fndef = this->getFnDefFromClosure(topmost, i, details);
+	SFLiteral_p SFInterpreter::getFnDef(const SFOpChain &chain, const SFFunctionCall &i, const SFFunctionArity_t &details) throw(std::runtime_error) {
+		const SFClosure *current = chain.getClosureObject();
+		const SFClosure *topmost = current->getTopmostObject();
+		SFLiteral_p fndef = this->getFnDefFromClosure(*topmost, i, details);
 		if (fndef == atomMissing) {
 			STATS_INC(topmost_misses);
-			fndef = this->getFnDefFromClosure(current, i, details);
+			fndef = this->getFnDefFromClosure(*current, i, details);
 			if (fndef == atomMissing) {
 				throw std::runtime_error("Function not found: " + details.str());
 			}
@@ -125,11 +122,11 @@ namespace stackful {
 	* the appropriate real value so that the function call
 	* can occur.
 	*/
-	SFLiteral_p SFInterpreter::doFunctionCall(SFLiteral_p chain_p, SFFunctionCall *i) {
-		SFFunctionArity_t details = i->getDetails();
+	SFLiteral_p SFInterpreter::doFunctionCall(SFLiteral_p chain_p, const SFFunctionCall &i) {
+		SFFunctionArity_t details = i.getDetails();
 		SFOpChain *chain = toOpChain(chain_p);
-		SFLiteral_p fndef = this->getFnDef(chain, i, details);
-		SFList *args = i->getArguments();
+		SFLiteral_p fndef = this->getFnDef(*chain, i, details);
+		SFList *args = i.getArguments();
 		SFList::iterator it = args->begin();
 		SFBasicList params;
 		for (; it != args->end(); ++it) {
@@ -146,7 +143,7 @@ namespace stackful {
 			SFExtended *ext = basic->ExtClass();
 			if(ext->getExtendedType() == FunctionCall) {
 				SFFunctionCall *fncall = static_cast<SFFunctionCall*>(ext);
-				return this->doFunctionCall(chain_p, fncall);
+				return this->doFunctionCall(chain_p, *fncall);
 			}
 		}
 		return p;
@@ -178,7 +175,7 @@ namespace stackful {
 	}
 
 	char indentSymbol = '|';
-	SFLiteral_p SFInterpreter::invokeFunctionCall(const SFLiteral_p &fndef, const SFFnCallSignature_t &call) {
+	SFLiteral_p SFInterpreter::invokeFunctionCall(SFLiteral_p fndef, const SFFnCallSignature_t &call) {
 		SFFunctionDefinitionBase *def = static_cast<SFFunctionDefinitionBase*>(fndef.get());
 		SFFunctionArity_t details = def->getAttributes();
 		std::stringstream s;

@@ -2,7 +2,7 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <data xmlns="http://www.netbeans.org/ns/make-project-private/1">
         <activeConfTypeElem>1</activeConfTypeElem>
-        <activeConfIndexElem>0</activeConfIndexElem>
+        <activeConfIndexElem>2</activeConfIndexElem>
     </data>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
@@ -10,6 +10,8 @@
             <file>file:/C:/Users/Daedalus/Documents/Visual%20Studio%202015/Projects/Stackful/Stackful/Stackful.cpp</file>
             <file>file:/C:/Users/Daedalus/Documents/Visual%20Studio%202015/Projects/Stackful/Makefile</file>
             <file>file:/C:/Users/Daedalus/Documents/Visual%20Studio%202015/Projects/Stackful/Stackful/src/sfextypes.cpp</file>
+            <file>file:/C:/Users/Daedalus/Documents/Visual%20Studio%202015/Projects/Stackful/Stackful/include/sfatoms.hpp</file>
+            <file>file:/C:/Users/Daedalus/Documents/Visual%20Studio%202015/Projects/Stackful/contrib/json.hpp</file>
             <file>file:/C:/Users/Daedalus/Documents/Visual%20Studio%202015/Projects/Stackful/Stackful/stdafx.h</file>
         </group>
     </open-files>

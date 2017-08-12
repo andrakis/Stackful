@@ -110,6 +110,12 @@
                             perm="755"
                             owner="root"
                             group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
         </packFileList>
       </packaging>
       <item path="Stackful/Stackful.cpp" ex="false" tool="1" flavor2="0">
@@ -186,6 +192,236 @@
         <packType>Tar</packType>
         <output>${CND_DISTDIR}/${CND_CONF}/package/stackful.tar</output>
         <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+        </packFileList>
+      </packaging>
+      <item path="Stackful/Stackful.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/include/sfatoms.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/include/sfbuiltins.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/include/sfdebug.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/include/sfextypes.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/include/sffndef.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/include/sfinterp.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/include/sfparser.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/include/sfsharedtypes.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/include/sftypes.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/src/sfatoms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sfbuiltins.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sfdebug.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sfextypes.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sffndef.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sfinterp.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sfparser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sfshared.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sftests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sftypes.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/stdafx.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="contrib/json.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release64" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+          <architecture>2</architecture>
+          <standard>8</standard>
+          <commandLine>-Wall -Wno-unused-parameter -Wextra</commandLine>
+          <preprocessorList>
+            <Elem>ARCH64</Elem>
+          </preprocessorList>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <linkerTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/stackful</output>
+        </linkerTool>
+      </compileType>
+      <packaging>
+        <packType>Tar</packType>
+        <output>${CND_DISTDIR}/${CND_CONF}/package/stackful.tar</output>
+        <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+        </packFileList>
+      </packaging>
+      <item path="Stackful/Stackful.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/include/sfatoms.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/include/sfbuiltins.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/include/sfdebug.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/include/sfextypes.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/include/sffndef.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/include/sfinterp.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/include/sfparser.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/include/sfsharedtypes.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/include/sftypes.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stackful/src/sfatoms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sfbuiltins.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sfdebug.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sfextypes.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sffndef.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sfinterp.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sfparser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sfshared.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sftests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/src/sftypes.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stackful/stdafx.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="contrib/json.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Debug64" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <architecture>2</architecture>
+          <standard>8</standard>
+          <preprocessorList>
+            <Elem>ARCH64</Elem>
+            <Elem>_DEBUG</Elem>
+          </preprocessorList>
+        </ccTool>
+        <linkerTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/stackful</output>
+          <stripSymbols>true</stripSymbols>
+        </linkerTool>
+      </compileType>
+      <packaging>
+        <packType>Tar</packType>
+        <output>${CND_DISTDIR}/${CND_CONF}/package/stackful.tar</output>
+        <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
                             from="${OUTPUT_PATH}.exe"

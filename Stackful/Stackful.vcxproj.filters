@@ -48,6 +48,9 @@
     <ClInclude Include="include\sfparser.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\jslistiterator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -89,5 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
+    <None Include="..\samples\factorial.ast" />
+    <None Include="..\samples\factorial.json" />
   </ItemGroup>
 </Project>

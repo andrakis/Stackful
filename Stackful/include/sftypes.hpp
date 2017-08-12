@@ -2,7 +2,7 @@
 
 #include "../stdafx.h"
 #include <exception>
-#include <inttypes.h>	// uint32_t
+#include <inttypes.h>
 #include <iostream>
 #include <memory>		// shared_ptr
 #include <numeric>
@@ -13,8 +13,16 @@
 
 namespace stackful {
 
-	// The size of our basic number type
+	// The size of our basic number type depends on compiler settings.
+	// We default to 64bit signed integer, but if MATCH_ARCH is defined
+	// then we match to the native word size.
+	// There is little speed difference between the two, even on 32bit
+	// architectures, and the increased size allows for large number ranges.
+#if defined(ARCH64) || !defined(MATCH_ARCH)
 	typedef int64_t SFInteger_t;
+#else
+	typedef int32_t SFInteger_t;
+#endif
 
 	// Forward declarations
 	class SFLiteral;

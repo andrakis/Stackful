@@ -32,7 +32,7 @@ namespace stackful {
 			// Converts args to [args]
 			SFBasicList tmpList;
 			tmpList.push_back(arguments);
-			arguments = tmpList;
+			arguments = tmpList; //-V820
 		}
 		// Set variables in new scope
 		for (; it != ourArgs.end(); ++it, ++position) {

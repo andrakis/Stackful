@@ -58,8 +58,12 @@ void test_factorial() {
 	SFFunctionCall *fcDef = new SFFunctionCall("def", getAtomPtr("fac"), fnDef_p);
 	chain->push_back(SFLiteral_p(fcDef));
 
-#if !defined(_NO_PROMOTE) && !defined(_DEBUG)
+#if !defined(_DEBUG)
+#ifdef ARCH64
 	SFLiteral_p X(new SFInteger(50));
+#else
+	SFLiteral_p X(new SFInteger(20));
+#endif
 #else
 	SFLiteral_p X(new SFInteger(10));
 #endif
@@ -328,7 +332,7 @@ void really_basic_tests() {
 	debug << "String test: " << sfvar("Testing ABC").str() << std::endl;
 
 	SFBasicList str1 = xtolist("Foobar whee");
-	SFBasicList str2 = xtolist("Foobar whee");
+	SFBasicList str2 = xtolist("Foobar whee"); //-V656
 	SFBasicList str3 = xtolist("Var humbug");
 
 	debug << "String test 1: " << tostring(str1 == str2) << std::endl;
@@ -374,7 +378,7 @@ void really_basic_tests() {
 	std::cout << "Integer added: " << integerAdded->str() << std::endl;
 	delete integerAdded;
 
-	SFLiteral *floatPi = new SFFloat(3.1415);
+	SFLiteral *floatPi = new SFFloat(3.1415); //-V624
 	SFLiteral *floatAdded = *floatPi + *integer1;
 	std::cout << "Float added: " << floatAdded->str() << std::endl;
 	delete floatPi;
