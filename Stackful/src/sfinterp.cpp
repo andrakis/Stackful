@@ -37,7 +37,7 @@ namespace stackful {
 	}
 
 	SFLiteral_p SFInterpreter::run(SFLiteral_p chain_p) throw(std::runtime_error) {
-		SFLiteral_p value(new SFAtom("nil"));
+		SFLiteral_p value(atomNil);
 		SFOpChain *chain = toOpChain(chain_p);
 		while (chain->next() != nullptr) {
 			SFLiteral_p p = chain->get();
@@ -51,14 +51,14 @@ namespace stackful {
 					SFOpChain *sub = new SFOpChain(chain_p, op);
 					SFLiteral_p sub_p(sub);
 					SFLiteral_p result = run(sub_p);
-					value.swap(result);
+					value = std::move(result);
 					break;
 				}
 				case FunctionCall:
 				{
-					SFFunctionCall *fncall = static_cast<SFFunctionCall*>(i);
-					SFLiteral_p result = doFunctionCall(chain_p, *fncall);
-					value.swap(result);
+					const SFFunctionCall &fncall = *static_cast<SFFunctionCall*>(i);
+					SFLiteral_p result = doFunctionCall(chain_p, fncall);
+					value = std::move(result);
 					if (value.get() != nullptr && value->isExtended()) {
 						SFExtended *valueExt = value->ExtClass();
 						if (valueExt->getExtendedType() == OpChain) {
@@ -67,7 +67,7 @@ namespace stackful {
 								SFOpChain *sub = new SFOpChain(chain_p, op);
 								SFLiteral_p sub_p(sub);
 								result = run(sub_p);
-								value.swap(result);
+								value = std::move(result);
 							}
 						}
 					}

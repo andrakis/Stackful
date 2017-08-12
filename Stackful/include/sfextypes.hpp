@@ -19,9 +19,14 @@ namespace stackful {
 		OpChain,
 		Closure,
 		FunctionDefinition,
-		FunctionDefinitionNative
+		FunctionDefinitionNative,
+		__Basic_Integer,
+		__Basic_List,
+		__Unknown
 	};
 
+	ExtendedType getExtendedType(const SFLiteral_p &p_p);
+	ExtendedType getExtendedType(const SFLiteral *p);
 	SFOpChain *toOpChain(const SFLiteral_p &opchain_p);
 	SFClosure *toClosure(const SFLiteral_p &closure_p);
 

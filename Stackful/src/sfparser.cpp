@@ -139,16 +139,25 @@ namespace stackful {
 		std::sregex_iterator iter(s.begin(), s.end(), rParseStringEscape);
 		std::sregex_iterator end;
 		if (iter != end) {
-			auto pre = (*iter)[1];
+			std::string pre = (*iter)[1].str();
 			std::string symbol = (*iter)[2].str();
 			// Skip the backspace
 			symbol = symbol.substr(1, std::string::npos);
-			if (isSupportedEscape(pre.str()))
-				return pre.str() + getEscape(symbol);
+			if (isSupportedEscape(pre))
+				return pre + getEscape(symbol);
 			else
 				throw std::runtime_error("Invalid escape: " + symbol);
 		}
 		return s;
+	}
+
+	SFLiteral_p SFParserState::mapParam(const json &P, const SFOpChain &chain, const std::string &fnName) const {
+		SFLiteral_p result = std::move(this->mapParamInner(P, chain, fnName));
+		return result;
+	}
+
+	SFLiteral_p SFParserState::mapParamInner(const json &P, const SFOpChain &chain, const std::string &fnName) const {
+
 	}
 
 	SFParser::SFParser()

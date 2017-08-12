@@ -8,6 +8,26 @@
 #include "../include/sfextypes.hpp"
 
 namespace stackful {
+	ExtendedType getExtendedType(const SFLiteral_p &p_p) {
+		const SFLiteral *p = p_p.get();
+		return getExtendedType(p);
+	}
+
+	ExtendedType getExtendedType(const SFLiteral *p) {
+		if (p->isExtended()) {
+			const SFExtended *p_e = p->ExtClass();
+			return p_e->getExtendedType();
+		} else {
+			switch (p->getType()) {
+				case Basic_Integer:
+					return __Basic_Integer;
+				case Basic_List:
+					return __Basic_List;
+				default: return __Unknown;
+			}
+		}
+	}
+
 	std::string getReadableName(ExtendedType t) {
 		switch(t) {
 			case Atom: return "Atom";

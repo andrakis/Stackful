@@ -7,6 +7,9 @@
 #include <string>
 
 #include "../include/jslistiterator.hpp"
+#include "../../contrib/json.hpp"
+
+using json = nlohmann::json;
 
 namespace stackful {
 	enum SFParserExpect {
@@ -75,6 +78,8 @@ namespace stackful {
 		unsigned character() const { return _character; }
 		void character(unsigned val) { _character = val; }
 		SFParserLines_t& lines() { return _lines; }
+		SFLiteral_p mapParam(const json &P, const SFOpChain &chain, const std::string &fnName) const;
+		SFLiteral_p mapParamInner(const json &P, const SFOpChain &chain, const std::string &fnName) const;
 	protected:
 		SFList *ops;
 		SFLiteral_p ops_p;
