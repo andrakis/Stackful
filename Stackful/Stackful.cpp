@@ -24,6 +24,10 @@ int main()
 	debug.setEnabled(true);
 #endif
 	interp_test();
+#ifdef _PAUSE
+	std::string s;
+	std::getline(std::cin, s);
+#endif
     return 0;
 }
 

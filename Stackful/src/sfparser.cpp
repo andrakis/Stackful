@@ -12,6 +12,16 @@
 
 using namespace stackful;
 
+const std::regex rReplaceNumberAtEnd(R"~(\d+$)~");
+const std::regex rParseStringEscape(R"~((.*?)(\\.))~");
+const std::regex rClassifyAtom(R"~(^[a-z][a-zA-Z0-9_]*$)~");
+const std::regex rClassifyVariable(R"~(^[A-Z][A-Za-z0-9_]*$)~");
+const std::regex rClassifyInteger(R"~(^-?[0-9e][0-9e]*$)~");
+const std::regex rClassifyFloat(R"~(^-?[0-9e][0-9e.]*$)~");
+const std::regex rClassifySingle(R"~(^\".*\"$)~");
+const std::regex rClassifyDouble(R"~(^'.*'$)~");
+const std::regex rFunctionDefinitionMatch(R"~(^([^A-Z][^/]*)(?:/([0-9]+|\*)))~");
+
 namespace stackful {
 	ArityBuiltins_t ArityBuiltins = {
 		{"print", "*"},
@@ -38,6 +48,22 @@ namespace stackful {
 		{"t", "\t"},
 		{"\\", "\\\\"},
 	};
+	bool isSupportedEscape(const std::string &symbol) {
+		SupportedEscapes_t::const_iterator it = SupportedEscapes.begin();
+		for (; it != SupportedEscapes.end(); ++it) {
+			if (it->first == symbol)
+				return true;
+		}
+		return false;
+	}
+	std::string getEscape(const std::string &symbol) {
+		SupportedEscapes_t::const_iterator it = SupportedEscapes.begin();
+		for (; it != SupportedEscapes.end(); ++it) {
+			if (it->first == symbol)
+				return it->second;
+		}
+		throw std::runtime_error("Invalid escape: " + symbol);
+	}
 
 	VarRefFunctions_t VarRefFunctions = {
 		"get", "set", "var"
@@ -107,6 +133,22 @@ namespace stackful {
 			}
 		}
 		return ss.str();
+	}
+
+	std::string parseString(const std::string &s) {
+		std::sregex_iterator iter(s.begin(), s.end(), rParseStringEscape);
+		std::sregex_iterator end;
+		if (iter != end) {
+			auto pre = (*iter)[1];
+			std::string symbol = (*iter)[2].str();
+			// Skip the backspace
+			symbol = symbol.substr(1, std::string::npos);
+			if (isSupportedEscape(pre.str()))
+				return pre.str() + getEscape(symbol);
+			else
+				throw std::runtime_error("Invalid escape: " + symbol);
+		}
+		return s;
 	}
 
 	SFParser::SFParser()
