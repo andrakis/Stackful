@@ -70,62 +70,62 @@ LDLIBSOPTIONS=
 
 ${CND_DISTDIR}/${CND_CONF}/stackful.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/stackful ${OBJECTFILES} ${LDLIBSOPTIONS} -s
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/stackful ${OBJECTFILES} ${LDLIBSOPTIONS} -flto -s
 
 ${OBJECTDIR}/Stackful/Stackful.o: Stackful/Stackful.cpp
 	${MKDIR} -p ${OBJECTDIR}/Stackful
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -D_DEBUG -DARCH64 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/Stackful.o Stackful/Stackful.cpp
+	$(COMPILE.cc) -g -DARCH64 -D_DEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/Stackful.o Stackful/Stackful.cpp
 
 ${OBJECTDIR}/Stackful/src/sfatoms.o: Stackful/src/sfatoms.cpp
 	${MKDIR} -p ${OBJECTDIR}/Stackful/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -D_DEBUG -DARCH64 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfatoms.o Stackful/src/sfatoms.cpp
+	$(COMPILE.cc) -g -DARCH64 -D_DEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfatoms.o Stackful/src/sfatoms.cpp
 
 ${OBJECTDIR}/Stackful/src/sfbuiltins.o: Stackful/src/sfbuiltins.cpp
 	${MKDIR} -p ${OBJECTDIR}/Stackful/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -D_DEBUG -DARCH64 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfbuiltins.o Stackful/src/sfbuiltins.cpp
+	$(COMPILE.cc) -g -DARCH64 -D_DEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfbuiltins.o Stackful/src/sfbuiltins.cpp
 
 ${OBJECTDIR}/Stackful/src/sfdebug.o: Stackful/src/sfdebug.cpp
 	${MKDIR} -p ${OBJECTDIR}/Stackful/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -D_DEBUG -DARCH64 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfdebug.o Stackful/src/sfdebug.cpp
+	$(COMPILE.cc) -g -DARCH64 -D_DEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfdebug.o Stackful/src/sfdebug.cpp
 
 ${OBJECTDIR}/Stackful/src/sfextypes.o: Stackful/src/sfextypes.cpp
 	${MKDIR} -p ${OBJECTDIR}/Stackful/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -D_DEBUG -DARCH64 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfextypes.o Stackful/src/sfextypes.cpp
+	$(COMPILE.cc) -g -DARCH64 -D_DEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfextypes.o Stackful/src/sfextypes.cpp
 
 ${OBJECTDIR}/Stackful/src/sffndef.o: Stackful/src/sffndef.cpp
 	${MKDIR} -p ${OBJECTDIR}/Stackful/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -D_DEBUG -DARCH64 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sffndef.o Stackful/src/sffndef.cpp
+	$(COMPILE.cc) -g -DARCH64 -D_DEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sffndef.o Stackful/src/sffndef.cpp
 
 ${OBJECTDIR}/Stackful/src/sfinterp.o: Stackful/src/sfinterp.cpp
 	${MKDIR} -p ${OBJECTDIR}/Stackful/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -D_DEBUG -DARCH64 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfinterp.o Stackful/src/sfinterp.cpp
+	$(COMPILE.cc) -g -DARCH64 -D_DEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfinterp.o Stackful/src/sfinterp.cpp
 
 ${OBJECTDIR}/Stackful/src/sfparser.o: Stackful/src/sfparser.cpp
 	${MKDIR} -p ${OBJECTDIR}/Stackful/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -D_DEBUG -DARCH64 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfparser.o Stackful/src/sfparser.cpp
+	$(COMPILE.cc) -g -DARCH64 -D_DEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfparser.o Stackful/src/sfparser.cpp
 
 ${OBJECTDIR}/Stackful/src/sfshared.o: Stackful/src/sfshared.cpp
 	${MKDIR} -p ${OBJECTDIR}/Stackful/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -D_DEBUG -DARCH64 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfshared.o Stackful/src/sfshared.cpp
+	$(COMPILE.cc) -g -DARCH64 -D_DEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sfshared.o Stackful/src/sfshared.cpp
 
 ${OBJECTDIR}/Stackful/src/sftests.o: Stackful/src/sftests.cpp
 	${MKDIR} -p ${OBJECTDIR}/Stackful/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -D_DEBUG -DARCH64 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sftests.o Stackful/src/sftests.cpp
+	$(COMPILE.cc) -g -DARCH64 -D_DEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sftests.o Stackful/src/sftests.cpp
 
 ${OBJECTDIR}/Stackful/src/sftypes.o: Stackful/src/sftypes.cpp
 	${MKDIR} -p ${OBJECTDIR}/Stackful/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -D_DEBUG -DARCH64 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sftypes.o Stackful/src/sftypes.cpp
+	$(COMPILE.cc) -g -DARCH64 -D_DEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stackful/src/sftypes.o Stackful/src/sftypes.cpp
 
 # Subprojects
 .build-subprojects:

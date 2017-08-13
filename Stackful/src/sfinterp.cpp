@@ -211,7 +211,7 @@ namespace stackful {
 			}
 		}
 		result = def->invoke(call);
-		depth--;
+		--this->depth;
 		if (debug.getEnabled()) {
 			s << " :: ";
 			SFBasicList inspector;

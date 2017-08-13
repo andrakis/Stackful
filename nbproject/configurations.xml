@@ -74,12 +74,19 @@
         <linkerTool>
           <output>${CND_DISTDIR}/${CND_CONF}/stackful</output>
           <stripSymbols>true</stripSymbols>
+          <commandLine>-flto</commandLine>
         </linkerTool>
       </compileType>
       <packaging>
         <packType>Tar</packType>
         <output>${CND_DISTDIR}/${CND_CONF}/package/stackful.tar</output>
         <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
                             from="${OUTPUT_PATH}.exe"
@@ -186,12 +193,19 @@
         </asmTool>
         <linkerTool>
           <output>${CND_DISTDIR}/${CND_CONF}/stackful</output>
+          <commandLine>-flto</commandLine>
         </linkerTool>
       </compileType>
       <packaging>
         <packType>Tar</packType>
         <output>${CND_DISTDIR}/${CND_CONF}/package/stackful.tar</output>
         <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
                             from="${OUTPUT_PATH}.exe"
@@ -303,12 +317,19 @@
         </asmTool>
         <linkerTool>
           <output>${CND_DISTDIR}/${CND_CONF}/stackful</output>
+          <commandLine>-flto</commandLine>
         </linkerTool>
       </compileType>
       <packaging>
         <packType>Tar</packType>
         <output>${CND_DISTDIR}/${CND_CONF}/package/stackful.tar</output>
         <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
                             from="${OUTPUT_PATH}.exe"
@@ -410,12 +431,19 @@
         <linkerTool>
           <output>${CND_DISTDIR}/${CND_CONF}/stackful</output>
           <stripSymbols>true</stripSymbols>
+          <commandLine>-flto</commandLine>
         </linkerTool>
       </compileType>
       <packaging>
         <packType>Tar</packType>
         <output>${CND_DISTDIR}/${CND_CONF}/package/stackful.tar</output>
         <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
                             from="${OUTPUT_PATH}.exe"
