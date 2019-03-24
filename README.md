@@ -1,6 +1,11 @@
 Stackful
 ========
 
+Current Status
+==============
+
+Current status: *****obsolete**, superceded by [Elispidae](https://github.com/andrakis/Elispidae).***
+
 A small and simple virtual machine written in pure C++ 11. No additional
 libraries (eg Boost) are used in this project. The aim is to be portable to
 any other C++ 11 compliant platform, particularly the [OpenRISC 1000 platform](https://openrisc.io/).
